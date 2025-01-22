@@ -1,0 +1,277 @@
+<html>
+<head>
+	<title>Duel Masters Card Database</title>
+	<style>
+		body, p, td, th { font-family: Arial, Helvetica, sans-serif; font-size: 9pt; text-align: left;}
+		.subtle { color: gray; text-decoration: none; font-size: 8pt; cursor: pointer;}
+		.small-symbol {
+			font-family: "Noto Sans Symbols", "Segoe UI Symbol", sans-serif;
+			font-size: 8pt;
+			cursor: pointer;
+		}
+		.info-box {
+			display: none;
+			position: absolute;
+			top: 130px;
+			left: 285px;
+			transform: translateX(-50%);
+			background-color: fffdd0;
+			border: 1px solid black;
+			padding: 10px;
+			font-size: 9pt;
+			box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+			max-width: 285px;
+			word-wrap: break-word;
+			white-space: normal;
+		}
+		body {
+			background-color: #990000;
+		}
+		table {
+			background-color: #EAEAEA;
+			border-color: #000000;
+			border-style: solid;
+			width: 750px;
+		}
+	</style>
+</head>
+<body>
+<img src="dmdb_banner.jpg">
+<form action="/search" method="get">
+	<table>
+		<tbody>
+				<tr>
+					<td>
+						<select id="color_filter" name="civilization" style="width:135px">
+							<option value="">All Civilizations</option>
+							<option value="light">Light</option>
+							<option value="water">Water</option>
+							<option value="darkness">Darkness</option>
+							<option value="fire">Fire</option>
+							<option value="nature">Nature</option>
+						</select>
+						<br>
+						<i>Filter by Civilizations</i>
+						<sub class="small-symbol" onclick="toggleInfoBox(event)">&#x24d8;</sub>
+						<div id="civ-search-info" class="info-box">When choosing to filter by more than one civilization, the search will return multi-civ cards that contain all of the chosen civilizations.</div>
+					</td>
+					<td>
+						<select id="cost_filter" name="cost" style="width:90px">
+							<option value="">All Costs</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+							<option value="9">9</option>
+							<option value="10">10</option>
+							<option value="11">11</option>
+							<option value="12">12</option>
+							<option value="13">13</option>
+						</select>
+						<br>
+						<i>Filter by Cost</i>
+					</td>
+					<td>
+						<select id="race_filter" name="race" style="width:135px">
+							<option value="">All Races</option>
+							<option value="angel_command">Angel Command</option>
+							<option value="armored_dragon">Armored Dragon</option>
+							<option value="armored_wyvern">Armored Wyvern</option>
+							<option value="armorloid">Armorloid</option>
+							<option value="balloon_mushroom">Balloon Mushroom</option>
+							<option value="beast_folk">Beast Folk</option>
+							<option value="berserker">Berserker</option>
+							<option value="brain_jacker">Brain Jacker</option>
+							<option value="chimera">Chimera</option>
+							<option value="colony_beetle">Colony Beetle</option>
+							<option value="cyber_cluster">Cyber Cluster</option>
+							<option value="cyber_lord">Cyber Lord</option>
+							<option value="cyber_moon">Cyber Moon</option>
+							<option value="cyber_virus">Cyber Virus</option>
+							<option value="dark_lord">Dark Lord</option>
+							<option value="death_puppet">Death Puppet</option>
+							<option value="demon_command">Demon Command</option>
+							<option value="devil_mask">Devil Mask</option>
+							<option value="dragonoid">Dragonoid</option>
+							<option value="dune_gecko">Dune Gecko</option>
+							<option value="earth_dragon">Earth Dragon</option>
+							<option value="earth_eater">Earth Eater</option>
+							<option value="fire_bird">Fire Bird</option>
+							<option value="fishy">Fish</option>
+							<option value="gel_fish">Gel Fish</option>
+							<option value="ghost">Ghost</option>
+							<option value="gianto">Giant</option>
+							<option value="giant_insect">Giant Insect</option>
+							<option value="gladiator">Gladiator</option>
+							<option value="guardian">Guardian</option>
+							<option value="hedrian">Hedrian</option>
+							<option value="horned_beast">Horned Beast</option>
+							<option value="human">Human</option>
+							<option value="initiate">Initiate</option>
+							<option value="leviathan">Leviathan</option>
+							<option value="light_bringer">Light Bringer</option>
+							<option value="liquid_people">Liquid People</option>
+							<option value="living_dead">Living Dead</option>
+							<option value="machine_eater">Machine Eater</option>
+							<option value="mecha_del_sol">Mecha Del Sol</option>
+							<option value="mecha_thunder">Mecha Thunder</option>
+							<option value="melt_warrior">Melt Warrior</option>
+							<option value="merfolk">Merfolk</option>
+							<option value="mystery_totem">Mystery Totem</option>
+							<option value="pandora's_box">Pandora's Box</option>
+							<option value="parasite_worm">Parasite Worm</option>
+							<option value="rainbow_phantom">Rainbow Phantom</option>
+							<option value="rock_beast">Rock Beast</option>
+							<option value="sea_hacker">Sea Hacker</option>
+							<option value="snow_faerie">Snow Faerie</option>
+							<option value="soltrooper">Soltrooper</option>
+							<option value="spirit_quartz">Spirit Quartz</option>
+							<option value="starlight_tree">Starlight Tree</option>
+							<option value="survivor">Survivor</option>
+							<option value="tree_folk">Tree Folk</option>
+							<option value="volcano_dragon">Volcano Dragon</option>
+							<option value="wild_veggies">Wild Veggies</option>
+							<option value="xenoparts">Xenoparts</option>
+							<option value="zombie_dragon">Zombie Dragon</option>
+						</select>
+						<br>
+						<i>Filter by Race</i>
+					</td>
+					<td>
+						<select id="set_filter" name="card_set" style="width:300px">
+							<option value="">All Sets</option>
+							<option value="promo">Exclusive Promos</option>
+							<option value="dm-01">DM-01 Base Set</option>
+							<option value="dm-02">DM-02 Evo-Crushinators of Doom</option>
+							<option value="dm-03">DM-03 Rampage of the Super Warriors</option>
+							<option value="dm-04">DM-04 Shadowclash of Blinding Night</option>
+							<option value="dm-05">DM-05 Survivors of the Megapocalypse</option>
+							<option value="dm-06">DM-06 Stomp-a-trons of Invincible Wrath</option>
+							<option value="dm-07">DM-07 Thundercharge of Ultra Destruction</option>
+							<option value="dm-08">DM-08 Epic Dragons of Hyperchaos</option>
+							<option value="dm-09">DM-09 Fatal Brood of Infinite Ruin</option>
+							<option value="dm-10">DM-10 Shockwaves of the Shattered Rainbow</option>
+							<option value="dm-11">DM-11 Blast-o-splosion of Gigantic Rage</option>
+							<option value="dm-12">DM-12 Thrash of the Hybrid Megacreatures</option>
+						</select>
+						<br>
+						<i>Filter by Set</i>
+					</td>
+				</tr>
+				<!-- Beginning of second row in search filter table. -->
+				<tr>
+					<td>
+						<select id="type_filter" name="card_type" style="width:135px">
+							<option value="">All Types</option>
+							<option value="spell">Spell</option>
+							<option value="creature">Creature</option>
+							<option value="evolution">Evolution Creature</option>
+						</select>
+						<br>
+						<i>Filter by Type</i>
+					</td>
+					<td>
+						<select id="rarity_filter" name="rarity" style="width:90px">
+							<option value="">All Rarities</option>
+							<option value="c">Common</option>
+							<option value="u">Uncommon</option>
+							<option value="r">Rare</option>
+							<option value="vr">Very Rare</option>
+							<option value="sr">Super Rare</option>
+						</select>
+						<br>
+						<i>Filter by Rarity</i>
+					</td>
+					<td>
+						<select id="keyword_filter" name="keywords" style="width:135px">
+							<option value="">All Keywords</option>
+							<option value="blocker">Blocker</option>
+							<option value="power_attack">Power Attacker</option>
+							<option value="double_break">Double Breaker</option>
+							<option value="triple_break">Triple Breaker</option>
+							<option value="crew_break">Crew Breaker</option>
+							<option value="shield_trigger">Shield Trigger</option>
+							<option value="slayer">Slayer</option>
+							<option value="speed_attack">Speed Attacker</option>
+							<option value="survivor">Survivor</option>
+							<option value="tap_ability">Tap Ability</option>
+							<option value="stealth">Stealth</option>
+							<option value="charger">Charger</option>
+							<option value="turbo_rush">Turbo Rush</option>
+							<option value="silent_skill">Silent Skill</option>
+							<option value="wave_striker">Wave Striker</option>
+							<option value="vortex_evo">Vortex Evolution</option>
+						</select>
+						<br>
+						<i>Filter by Keyword</i>
+					</td>
+					<td>
+						<select id="category_filter" name="categories" style="width:300px">
+								<option value="">All Categories</option>
+								<option value="draw">Draw cards</option>
+								<option value="ramp">Add cards to mana zone</option>
+							<optgroup label="Discard">
+								<option value="discard_opp">Discard from opponent's hand</option>
+								<option value="discard_own">Discard from your hand</option>
+							</optgroup>
+								<option value="add_shield">Add card to shields</option>
+						</select>
+						<br>
+						<i>Filter by Category</i>
+					</td>
+				</tr>
+				<!-- Beginning of third row in search filter table. -->
+				<tr>
+					<td colspan="2">
+						<input id="search_term" name="card_name" type="text" size="35" maxlength="35">
+						<br>
+						<i>Search for a card by name.</i>
+					</td>
+					<td>
+						<input type="submit" value="Search!">
+						<br>
+						<div class="subtle" onclick="refreshPage()">(Clear)</div>
+					</td>
+					<td>
+						<select id="sort_by" style="width:200px">
+							<option value="set" selected>Sort by Set and Collector #</option>
+							<option value="name">Sort by Name</option>
+							<option value="civilization">Sort by Civilization</option>
+							<option value="cost">Sort by Cost</option>
+							<option value="type">Sort by Type</option>
+							<option value="race">Sort by Race</option>
+							<option value="power">Sort by Power</option>
+							<option value="rarity">Sort by Rarity</option>
+						</select>
+						<input type="button" onclick="sort()" value="Sort">
+						<br>
+						<i>Pick sort order</i>
+					</td>
+				</tr>
+		</tbody>
+	</table>
+</form>
+<script>
+function toggleInfoBox(event) {
+	event.stopPropagation();
+	const infobox = document.getElementById('civ-search-info');
+	infobox.style.display = "block";
+}
+
+document.addEventListener('click', (event) => {
+	const infobox = document.getElementById('civ-search-info');
+	if (infobox.style.display == "block" && !infobox.contains(event.target)) {
+		infobox.style.display = "none";
+	}
+});
+
+function refreshPage() {
+	location.reload();
+}
+</script>
+</body>
+</html>

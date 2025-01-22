@@ -11,11 +11,11 @@ import java.net.URI;
 
 public class DmdbHomeHandler implements HttpHandler {
 	
-	private String baseHtml;
+	protected String baseHtml;
 	
 	public DmdbHomeHandler() {
 		try {
-			this.baseHtml = loadFile("static/dmdb.html");
+			this.baseHtml = loadFile("resources/dmdb.html");
 		}
 		catch (IOException ioe) {
 			this.baseHtml = "<html><body><p>Error loading HTML file.</p></body></html>";
@@ -35,7 +35,7 @@ public class DmdbHomeHandler implements HttpHandler {
 			}
 		}
 		else {
-			File fil = new File("static" + requestPath);
+			File fil = new File("resources" + requestPath);
 			if(fil.exists()) {
 				String fileContentType = getContentType(fil);
 				exchange.getResponseHeaders().set("Content-Type", fileContentType);
@@ -55,7 +55,7 @@ public class DmdbHomeHandler implements HttpHandler {
 		}
 	}
 	
-	private String loadFile(String filePath) throws IOException {
+	public String loadFile(String filePath) throws IOException {
 		StringBuilder bobTheHtmlBuilder = new StringBuilder();
 		try(BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
 			String line;
@@ -66,7 +66,7 @@ public class DmdbHomeHandler implements HttpHandler {
 		return bobTheHtmlBuilder.toString();
 	}
 	
-	private String getContentType(File file) {
+	public String getContentType(File file) {
 		String fileName = file.getName().toLowerCase();
 		if(fileName.endsWith(".html")) {
 			return "text/html";

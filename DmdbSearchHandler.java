@@ -11,15 +11,14 @@ import java.io.OutputStream;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
-public class DmdbSearchHandler implements HttpHandler {
+public class DmdbSearchHandler extends DmdbHomeHandler implements HttpHandler {
 	
 	private Connection conn;
-	private String baseHtml;
 	
 	public DmdbSearchHandler() throws SQLException {
-		this.conn = DriverManager.getConnection("jdbc:sqlite:duelmasters.db");
+		conn = DriverManager.getConnection("jdbc:sqlite:duelmasters.db");
 		try {
-			this.baseHtml = loadFile("static/dmdb.html");
+			this.baseHtml = loadFile("resources/dmdb.html");
 		}
 		catch (IOException ioe) {
 			ioe.printStackTrace();
@@ -46,28 +45,36 @@ public class DmdbSearchHandler implements HttpHandler {
 		}
 	}
 	
-	private String[][] parseQueryParams(String query) {
+	public String[][] parseQueryParams(String query) {
 		String[] queryComponents = query.split("&");
-		String[][] queryElements = new String[queryComponents.length][2];
+		String[][] queryElements = new String[queryComponents.length][];
 		for(int i = 0; i<queryComponents.length; i++) {
 			queryElements[i] = queryComponents[i].split("=");
 		}
 		return queryElements;
 	}
 	
-	private ResultSet queryDmdb(String[][] params) throws SQLException {
+	public ResultSet queryDmdb(String[][] params) throws SQLException {
 		StringBuilder sqlQueryBuilder = new StringBuilder();
 		sqlQueryBuilder.append("SELECT * FROM Card");
-		if(params[0].length>1&&params[0][1]!=null) sqlQueryBuilder.append(" WHERE ");
+		int count = 0;
 		for(int i = 0; i<params.length; i++) {
-			String sKey = new String();
-			String sVal = new String();
-			if(params[i].length>1&&params[i][1]!=null) {
+			if(count>0 && params[i].length>1 && params[i][1]!=null && params[i][1].length()>0) {
+				sqlQueryBuilder.append(" AND ");
+				count++;
+			}
+			else if(count==0 && params[i].length>1 && params[i][1]!=null && params[i][1].length()>0) {
+				sqlQueryBuilder.append(" WHERE ");
+				count++;
+			}
+			String sKey = "";
+			String sVal = "";
+			if(params[i].length>1 && params[i][1]!=null) {
 				sKey = params[i][0];
 				sVal = params[i][1];
 			}
 			if("civilization".equals(sKey) || "race".equals(sKey) || "keywords".equals(sKey) || "categories".equals(sKey) || "card_name".equals(sKey)) {
-					sqlQueryBuilder.append(sKey + " LIKE '%" + sVal +  "%'");
+					sqlQueryBuilder.append(sKey + " LIKE \"%" + sVal +  "%\"");
 				}
 			else if("rarity".equals(sKey) || "card_set".equals(sKey)) {
 				sVal = sVal.toUpperCase();
@@ -78,9 +85,6 @@ public class DmdbSearchHandler implements HttpHandler {
 				sqlQueryBuilder.append(sKey + " = '" + sVal + "'");
 			}
 			else if("cost".equals(sKey)) sqlQueryBuilder.append(sKey + " = '" + sVal + "'");
-			if(params.length>0 && i!=(params.length-1)) {
-				sqlQueryBuilder.append(" AND ");
-			}
 		}
 		String sqlQuery = sqlQueryBuilder.toString();
 		System.out.println(sqlQuery);
@@ -89,10 +93,10 @@ public class DmdbSearchHandler implements HttpHandler {
 		return rs;
 	}
 	
-	private String buildResultsTable(ResultSet rs) throws SQLException {
+	public String buildResultsTable(ResultSet rs) throws SQLException {
 		StringBuilder resultsTableBuilder = new StringBuilder();
-		String[] arr = baseHtml.split("</table>");
-		String responseHead = arr[0] + "</table><br>";
+		String[] arr = baseHtml.split("</form>");
+		String responseHead = arr[0] + "</form><br>";
 		String responseFoot = arr[1];
 		resultsTableBuilder.append(responseHead)
 						   .append("<div style='float: left; margin-right: 20px;'>")
@@ -125,7 +129,9 @@ public class DmdbSearchHandler implements HttpHandler {
 					}
 				}
 			}
-			resultsTableBuilder.append("<td>" + raceBuilder.toString() + "</td>");
+			race = raceBuilder.toString();
+			if(race.endsWith("Fishy")||race.endsWith("Gianto")) race = race.substring(0,race.length()-1);
+			resultsTableBuilder.append("<td>" + race + "</td>");
 			String card_power = rs.getString("power");
 			if(card_power==null) {
 				card_power = "";
@@ -142,18 +148,7 @@ public class DmdbSearchHandler implements HttpHandler {
 		return resultsTable;
 	}
 	
-	private String loadFile(String filePath) throws IOException {
-		StringBuilder bobTheHtmlBuilder = new StringBuilder();
-		try(BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-			String line;
-			while((line = reader.readLine()) != null) {
-				bobTheHtmlBuilder.append(line).append("\n");
-			}
-		}
-		return bobTheHtmlBuilder.toString();
-	}
-	
-	private void sendErrorResponse(HttpExchange exchange, int statusCode, String errorMessage) throws IOException {
+	public void sendErrorResponse(HttpExchange exchange, int statusCode, String errorMessage) throws IOException {
 		exchange.sendResponseHeaders(statusCode, errorMessage.length());
 		try (OutputStream stream = exchange.getResponseBody()) {
 			stream.write(errorMessage.getBytes());
