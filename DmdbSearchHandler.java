@@ -10,26 +10,24 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.HashMap;
+import java.util.Map;
 
-public class DmdbSearchHandler extends DmdbHomeHandler implements HttpHandler {
+public class DmdbSearchHandler implements HttpHandler {
 	
-	private Connection conn;
+	private Connection conn;	
+	private HashMap<String, String> optionMap;
 	
 	public DmdbSearchHandler() throws SQLException {
 		conn = DriverManager.getConnection("jdbc:sqlite:duelmasters.db");
-		try {
-			this.baseHtml = loadFile("resources/dmdb.html");
-		}
-		catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
 	}
 	
 	public void handle(HttpExchange exchange) throws IOException {
 		try {
 			String[][] params = parseQueryParams(exchange.getRequestURI().getQuery());
 			ResultSet rs = queryDmdb(params);
-			String htmlResponse = buildResultsTable(rs);
+			String resultsTable = buildResultsTable(rs);
+			String htmlResponse = buildHtmlResponse("resources/dmdb.html", resultsTable);
 			exchange.sendResponseHeaders(200, htmlResponse.getBytes().length);
 			try (OutputStream stream = exchange.getResponseBody()) {
 				stream.write(htmlResponse.getBytes());
@@ -48,8 +46,14 @@ public class DmdbSearchHandler extends DmdbHomeHandler implements HttpHandler {
 	public String[][] parseQueryParams(String query) {
 		String[] queryComponents = query.split("&");
 		String[][] queryElements = new String[queryComponents.length][];
+		optionMap = new HashMap<>();
 		for(int i = 0; i<queryComponents.length; i++) {
 			queryElements[i] = queryComponents[i].split("=");
+			if (queryElements[i].length>1) {
+				String param = queryElements[i][0];
+				String value = queryElements[i][1];
+				optionMap.put(param, value);
+			}
 		}
 		return queryElements;
 	}
@@ -95,11 +99,7 @@ public class DmdbSearchHandler extends DmdbHomeHandler implements HttpHandler {
 	
 	public String buildResultsTable(ResultSet rs) throws SQLException {
 		StringBuilder resultsTableBuilder = new StringBuilder();
-		String[] arr = baseHtml.split("</form>");
-		String responseHead = arr[0] + "</form><br>";
-		String responseFoot = arr[1];
-		resultsTableBuilder.append(responseHead)
-						   .append("<div style='float: left; margin-right: 20px;'>")
+		resultsTableBuilder.append("<div style='float: left; margin-right: 20px;'>")
 						   .append("<table id='resultsTable' cellpadding='3' cellspacing='1' width='750'")
 						   .append("<thead><tr bgcolor='#C5C5C5'><th><b>#</b></th><th><b>Name</b></th><th><b>Civilization</b></th>")
 						   .append("<th><b>Cost</b></th><th><b>Type</b></th><th><b>Race</b></th><th><b>Power</b></th><th><b>Rarity</b></th>")
@@ -142,10 +142,29 @@ public class DmdbSearchHandler extends DmdbHomeHandler implements HttpHandler {
 							   .append("<td>" + rs.getString("card_set") + "</td>")
 							   .append("</tr>");
 		}
-		resultsTableBuilder.append("</tbody></table></div>")
-						   .append(responseFoot);
-		String resultsTable = resultsTableBuilder.toString();
-		return resultsTable;
+		resultsTableBuilder.append("</tbody></table></div>");
+		return resultsTableBuilder.toString();
+	}
+	
+	public String buildHtmlResponse(String baseFilePath, String resultsTable) throws IOException {
+		StringBuilder htmlResponseBuilder = new StringBuilder();
+		try (BufferedReader reader = new BufferedReader(new FileReader(baseFilePath))) {
+			String line;
+			while((line = reader.readLine())!=null) {
+				if(line.contains("option value")) {
+					String[] optionTag = line.split("\"");
+					if(optionTag[1].length()>0&&optionMap.containsValue(optionTag[1])&&optionTag.length==3) {
+						htmlResponseBuilder.append(optionTag[0] + "\"" + optionTag[1] + "\" selected" + optionTag[2]).append("\n");
+					}
+					else htmlResponseBuilder.append(line).append("\n");
+				}
+				else if(line.contains("/form")) {
+					htmlResponseBuilder.append(line).append("\n<br>\n").append(resultsTable);
+				}
+				else htmlResponseBuilder.append(line).append("\n");
+			}
+		}
+		return htmlResponseBuilder.toString();
 	}
 	
 	public void sendErrorResponse(HttpExchange exchange, int statusCode, String errorMessage) throws IOException {

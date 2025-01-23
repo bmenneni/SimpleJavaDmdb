@@ -15,7 +15,7 @@ public class DmdbHomeHandler implements HttpHandler {
 	
 	public DmdbHomeHandler() {
 		try {
-			this.baseHtml = loadFile("resources/dmdb.html");
+			this.baseHtml = loadHtmlFile("resources/dmdb.html");
 		}
 		catch (IOException ioe) {
 			this.baseHtml = "<html><body><p>Error loading HTML file.</p></body></html>";
@@ -55,7 +55,7 @@ public class DmdbHomeHandler implements HttpHandler {
 		}
 	}
 	
-	public String loadFile(String filePath) throws IOException {
+	public String loadHtmlFile(String filePath) throws IOException {
 		StringBuilder bobTheHtmlBuilder = new StringBuilder();
 		try(BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
 			String line;

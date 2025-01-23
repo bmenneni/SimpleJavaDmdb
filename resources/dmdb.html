@@ -1,39 +1,8 @@
 <html>
 <head>
 	<title>Duel Masters Card Database</title>
-	<style>
-		body, p, td, th { font-family: Arial, Helvetica, sans-serif; font-size: 9pt; text-align: left;}
-		.subtle { color: gray; text-decoration: none; font-size: 8pt; cursor: pointer;}
-		.small-symbol {
-			font-family: "Noto Sans Symbols", "Segoe UI Symbol", sans-serif;
-			font-size: 8pt;
-			cursor: pointer;
-		}
-		.info-box {
-			display: none;
-			position: absolute;
-			top: 130px;
-			left: 285px;
-			transform: translateX(-50%);
-			background-color: fffdd0;
-			border: 1px solid black;
-			padding: 10px;
-			font-size: 9pt;
-			box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-			max-width: 285px;
-			word-wrap: break-word;
-			white-space: normal;
-		}
-		body {
-			background-color: #990000;
-		}
-		table {
-			background-color: #EAEAEA;
-			border-color: #000000;
-			border-style: solid;
-			width: 750px;
-		}
-	</style>
+	<link rel="stylesheet" href="dmdb-styles.css">
+	<script src="dmdb-scripts.js" defer></script>
 </head>
 <body>
 <img src="dmdb_banner.jpg">
@@ -42,7 +11,7 @@
 		<tbody>
 				<tr>
 					<td>
-						<select id="color_filter" name="civilization" style="width:135px">
+						<select id="civ_filter" name="civilization" style="width:135px">
 							<option value="">All Civilizations</option>
 							<option value="light">Light</option>
 							<option value="water">Water</option>
@@ -234,18 +203,18 @@
 					<td>
 						<input type="submit" value="Search!">
 						<br>
-						<div class="subtle" onclick="refreshPage()">(Clear)</div>
+						<div class="subtle" onclick="clearPage()">(Clear)</div>
 					</td>
 					<td>
 						<select id="sort_by" style="width:200px">
-							<option value="set" selected>Sort by Set and Collector #</option>
-							<option value="name">Sort by Name</option>
-							<option value="civilization">Sort by Civilization</option>
-							<option value="cost">Sort by Cost</option>
-							<option value="type">Sort by Type</option>
-							<option value="race">Sort by Race</option>
-							<option value="power">Sort by Power</option>
-							<option value="rarity">Sort by Rarity</option>
+							<option class="other" value="set">Sort by Set and Collector #</option>
+							<option class="other" value="name">Sort by Name</option>
+							<option class="other" value="civilization">Sort by Civilization</option>
+							<option class="other" value="cost">Sort by Cost</option>
+							<option class="other" value="type">Sort by Type</option>
+							<option class="other" value="race">Sort by Race</option>
+							<option class="other" value="power">Sort by Power</option>
+							<option class="other" value="rarity">Sort by Rarity</option>
 						</select>
 						<input type="button" onclick="sort()" value="Sort">
 						<br>
@@ -255,23 +224,5 @@
 		</tbody>
 	</table>
 </form>
-<script>
-function toggleInfoBox(event) {
-	event.stopPropagation();
-	const infobox = document.getElementById('civ-search-info');
-	infobox.style.display = "block";
-}
-
-document.addEventListener('click', (event) => {
-	const infobox = document.getElementById('civ-search-info');
-	if (infobox.style.display == "block" && !infobox.contains(event.target)) {
-		infobox.style.display = "none";
-	}
-});
-
-function refreshPage() {
-	location.reload();
-}
-</script>
 </body>
 </html>
