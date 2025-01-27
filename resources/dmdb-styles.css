@@ -3,6 +3,18 @@ body, p, td, th {
 	font-size: 9pt; 
 	text-align: left;
 }
+body {
+	background-color: #990000;
+}
+thead > tr {
+	background-color: #C5C5C5;
+}
+thead > tr > th {
+	padding: 3px;
+}
+select optgroup {
+	font-style: normal;
+}
 .subtle { 
 	color: gray; 
 	text-decoration: none; 
@@ -14,13 +26,19 @@ body, p, td, th {
 	font-size: 8pt;
 	cursor: pointer;
 }
+#filter-table {
+	background-color: #EAEAEA;
+	border-color: #000000;
+	border-style: solid;
+	width: 750px;
+}
 #civ-search-info {
 	display: none;
 	position: absolute;
 	top: 130px;
 	left: 285px;
 	transform: translateX(-50%);
-	background-color: fffdd0;
+	background-color: #fffdd0;
 	border: 1px solid black;
 	padding: 10px;
 	font-size: 9pt;
@@ -29,12 +47,17 @@ body, p, td, th {
 	word-wrap: break-word;
 	white-space: normal;
 }
-body {
-	background-color: #990000;
+#results-container {
+	float: left;
+	margin-right: 20px;
 }
-table {
-	background-color: #EAEAEA;
-	border-color: #000000;
-	border-style: solid;
+#results-table {
+	border-spacing: 1px;
 	width: 750px;
+}
+#results-table > tbody > tr {
+	cursor: pointer;
+}
+#results-table > tbody > tr > td {
+	padding: 3px;
 }

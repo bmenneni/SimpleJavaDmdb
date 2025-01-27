@@ -1,28 +1,42 @@
-function toggleInfoBox(event) {
-	event.stopPropagation();
-	const infobox = document.getElementById('civ-search-info');
-	infobox.style.display = "block";
-}
-
-document.addEventListener('click', (event) => {
-	const infobox = document.getElementById('civ-search-info');
-	if (infobox.style.display == "block" && !infobox.contains(event.target)) {
+document.addEventListener("click", (event) => {
+	const infobox = document.getElementById("civ-search-info");
+	if(infobox.style.display == "block" && !infobox.contains(event.target)) {
 		infobox.style.display = "none";
 	}
 });
+
+document.getElementById("filter-form").addEventListener("submit", function (event) {
+    const form = event.target;
+    const selectElements = form.querySelectorAll("select");
+    const searchByName = document.getElementById("search_term");
+    selectElements.forEach((select) => {
+        if(select.value.length===0) {
+            select.removeAttribute("name");
+        }
+    });
+    if(searchByName.value.length===0) {
+        searchByName.removeAttribute("name");
+    }
+});
+
+function toggleInfoBox(event) {
+    event.stopPropagation();
+    const infobox = document.getElementById("civ-search-info");
+    infobox.style.display = "block";
+}
 
 function clearPage() {
 	window.location = window.location.origin;
 }
 
-function openCard(rowElement, event) {
+function openCard(rowElement) {
     var card_name = rowElement.getElementsByTagName('td')[1].textContent;
     var wikiURL = "https://duelmasters.fandom.com/wiki/" + card_name;
     window.open(wikiURL, '_blank');
 }
 
 function sort() {
-    var sortParameter = document.getElementById('sort_by').value;
+    var sortParameter = document.getElementById("sort_by").value;
     var columnIndex;
     switch(sortParameter) {
         case 'set':
@@ -50,7 +64,7 @@ function sort() {
             columnIndex = 7;
     }
     
-    var resultsTable = document.getElementById('resultsTable');
+    var resultsTable = document.getElementById("results-table");
     var resultsBody = resultsTable.querySelector('tbody');
     var rows = Array.from(resultsBody.getElementsByTagName('tr'));
     
@@ -101,6 +115,18 @@ function sort() {
     
     rows.forEach(row => {
         cardNum++;
+        if(cardNum%2==1) {
+            row.style.backgroundColor = "#ffffff";
+            row.onmouseout = function() {
+                this.style.backgroundColor = "#ffffff";
+            }
+        }
+        else {
+            row.style.backgroundColor = "#eaeaea";
+            row.onmouseout = function() {
+                this.style.backgroundColor = "#eaeaea";
+            }
+        }
         row.getElementsByTagName('td')[0].textContent = cardNum + '.';
         resultsBody.appendChild(row);
     });

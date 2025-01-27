@@ -62,12 +62,13 @@ public class DmdbSearchHandler implements HttpHandler {
 		StringBuilder sqlQueryBuilder = new StringBuilder();
 		sqlQueryBuilder.append("SELECT * FROM Card");
 		int count = 0;
+		String compareOperator = "";
 		for(int i = 0; i<params.length; i++) {
-			if(count>0 && params[i].length>1 && params[i][1]!=null && params[i][1].length()>0) {
+			if(count>0 && params[i].length>1 && params[i][1]!=null && params[i][1].length()>0 && !"compare".equals(params[i][0])) {
 				sqlQueryBuilder.append(" AND ");
 				count++;
 			}
-			else if(count==0 && params[i].length>1 && params[i][1]!=null && params[i][1].length()>0) {
+			else if(count==0 && params[i].length>1 && params[i][1]!=null && params[i][1].length()>0 && !"compare".equals(params[i][0])) {
 				sqlQueryBuilder.append(" WHERE ");
 				count++;
 			}
@@ -88,7 +89,22 @@ public class DmdbSearchHandler implements HttpHandler {
 				sVal = sVal.substring(0,1).toUpperCase() + sVal.substring(1);
 				sqlQueryBuilder.append(sKey + " = '" + sVal + "'");
 			}
-			else if("cost".equals(sKey)) sqlQueryBuilder.append(sKey + " = '" + sVal + "'");
+			else if("compare".equals(sKey)&&compareOperator.equals("")) {
+				switch (sVal) {
+					case "greater_or_equal": 
+						compareOperator = ">=";
+						break;
+					case "less_or_equal":
+						compareOperator = "<=";
+						break;
+				}
+			}
+			else if("cost".equals(sKey)) {
+				if(">=".equals(compareOperator)||"<=".equals(compareOperator)) {
+					sqlQueryBuilder.append(sKey + compareOperator + sVal);
+				}
+				else sqlQueryBuilder.append(sKey + "=" + sVal);
+			}
 		}
 		String sqlQuery = sqlQueryBuilder.toString();
 		System.out.println(sqlQuery);
@@ -99,20 +115,36 @@ public class DmdbSearchHandler implements HttpHandler {
 	
 	public String buildResultsTable(ResultSet rs) throws SQLException {
 		StringBuilder resultsTableBuilder = new StringBuilder();
-		resultsTableBuilder.append("<div style='float: left; margin-right: 20px;'>")
-						   .append("<table id='resultsTable' cellpadding='3' cellspacing='1' width='750'")
-						   .append("<thead><tr bgcolor='#C5C5C5'><th><b>#</b></th><th><b>Name</b></th><th><b>Civilization</b></th>")
-						   .append("<th><b>Cost</b></th><th><b>Type</b></th><th><b>Race</b></th><th><b>Power</b></th><th><b>Rarity</b></th>")
-						   .append("<th><b>Col #</b></th><th><b>Set</b></th></tr></thead><tbody>");
+		resultsTableBuilder.append("<div id=\"results-container\">\n")
+						   .append("<table id=\"results-table\">\n")
+						   .append("<thead>\n\t<tr>\n\t\t<th>\n\t\t\t<b>#</b>\n\t\t</th>\n")
+						   .append("\t\t<th>\n\t\t\t<b>Name</b>\n\t\t</th>\n")
+						   .append("\t\t<th>\n\t\t\t<b>Civilization</b>\n\t\t</th>\n")
+						   .append("\t\t<th>\n\t\t\t<b>Cost</b>\n\t\t</th>\n")
+						   .append("\t\t<th>\n\t\t\t<b>Type</b>\n\t\t</th>\n")
+						   .append("\t\t<th>\n\t\t\t<b>Race</b>\n\t\t</th>\n")
+						   .append("\t\t<th>\n\t\t\t<b>Power</b>\n\t\t</th>\n")
+						   .append("\t\t<th>\n\t\t\t<b>Rarity</b>\n\t\t</th>\n")
+						   .append("\t\t<th>\n\t\t\t<b>Col #</b>\n\t\t</th>\n")
+						   .append("\t\t<th>\n\t\t\t<b>Set</b>\n\t\t</th>\n\t</tr>\n</thead>\n<tbody>\n");
 		int rowCount = 0;
 		while (rs.next()) {
 			rowCount++;
-			resultsTableBuilder.append("<tr onclick='openCard(this, event)'>")
-							   .append("<td>" + rowCount + ". </td>")
-							   .append("<td>" + rs.getString("card_name") + "</td>")
-							   .append("<td>" + rs.getString("civilization") + "</td>")
-							   .append("<td>" + rs.getInt("cost") + "</td>")
-							   .append("<td>" + rs.getString("card_type") + "</td>");
+			if(rowCount%2==1) {
+			resultsTableBuilder.append("\t<tr style=\"background-color: rgb(255, 255, 255);\" ")
+							   .append("onmouseout=\"this.style.backgroundColor='#FFFFFF'\" ");
+			}
+			else {
+			resultsTableBuilder.append("\t<tr style=\"background-color: rgb(234, 234, 234);\" ")
+							   .append("onmouseout=\"this.style.backgroundColor='#EAEAEA'\" ");
+			}
+			resultsTableBuilder.append("onmouseover=\"this.style.backgroundColor='#C5C5C5'\" ")
+							   .append("onclick=\"openCard(this)\">\n")
+							   .append("\t\t<td>" + rowCount + ". </td>\n")
+							   .append("\t\t<td>" + rs.getString("card_name") + "</td>\n")
+							   .append("\t\t<td>" + rs.getString("civilization") + "</td>\n")
+							   .append("\t\t<td>" + rs.getInt("cost") + "</td>\n")
+							   .append("\t\t<td>" + rs.getString("card_type") + "</td>\n");
 			String race = rs.getString("race");
 			StringBuilder raceBuilder = new StringBuilder();
 			if(race!=null) {
@@ -131,18 +163,18 @@ public class DmdbSearchHandler implements HttpHandler {
 			}
 			race = raceBuilder.toString();
 			if(race.endsWith("Fishy")||race.endsWith("Gianto")) race = race.substring(0,race.length()-1);
-			resultsTableBuilder.append("<td>" + race + "</td>");
+			resultsTableBuilder.append("\t\t<td>" + race + "</td>\n");
 			String card_power = rs.getString("power");
 			if(card_power==null) {
 				card_power = "";
 			}
-			resultsTableBuilder.append("<td>" + card_power + "</td>")
-							   .append("<td>" + rs.getString("rarity") + "</td>")
-							   .append("<td>" + rs.getString("coll_num") + "</td>")
-							   .append("<td>" + rs.getString("card_set") + "</td>")
-							   .append("</tr>");
+			resultsTableBuilder.append("\t\t<td>" + card_power + "</td>\n")
+							   .append("\t\t<td>" + rs.getString("rarity") + "</td>\n")
+							   .append("\t\t<td>" + rs.getString("coll_num") + "</td>\n")
+							   .append("\t\t<td>" + rs.getString("card_set") + "</td>\n")
+							   .append("\t</tr>\n");
 		}
-		resultsTableBuilder.append("</tbody></table></div>");
+		resultsTableBuilder.append("</tbody>\n</table>\n</div>\n");
 		return resultsTableBuilder.toString();
 	}
 	

@@ -6,8 +6,8 @@
 </head>
 <body>
 <img src="dmdb_banner.jpg">
-<form action="/search" method="get">
-	<table>
+<form id="filter-form" action="/search" method="get">
+	<table id="filter-table">
 		<tbody>
 				<tr>
 					<td>
@@ -25,8 +25,13 @@
 						<div id="civ-search-info" class="info-box">When choosing to filter by more than one civilization, the search will return multi-civ cards that contain all of the chosen civilizations.</div>
 					</td>
 					<td>
-						<select id="cost_filter" name="cost" style="width:90px">
-							<option value="">All Costs</option>
+						<select id="compare_filter" name="compare" style="width:42px">
+							<option value="">=</option>
+							<option value="greater_or_equal">>=</option>
+							<option value="less_or_equal"><=</option>
+						</select>
+						<select id="cost_filter" name="cost" style="width:42px">
+							<option value="">All</option>
 							<option value="1">1</option>
 							<option value="2">2</option>
 							<option value="3">3</option>
@@ -166,7 +171,7 @@
 							<option value="shield_trigger">Shield Trigger</option>
 							<option value="slayer">Slayer</option>
 							<option value="speed_attack">Speed Attacker</option>
-							<option value="survivor">Survivor</option>
+							<option value="survivor_kw">Survivor</option>
 							<option value="tap_ability">Tap Ability</option>
 							<option value="stealth">Stealth</option>
 							<option value="charger">Charger</option>
@@ -182,12 +187,93 @@
 						<select id="category_filter" name="categories" style="width:300px">
 								<option value="">All Categories</option>
 								<option value="draw">Draw cards</option>
-								<option value="ramp">Add cards to mana zone</option>
-							<optgroup label="Discard">
-								<option value="discard_opp">Discard from opponent's hand</option>
-								<option value="discard_own">Discard from your hand</option>
+								<option value="ramp">Ramp (add cards to mana)</option>
+							<optgroup label="Effect trigger categories">
+								<option value="etb_effect">ETB (enter battle zone) effect</option>
+								<option value="atk_effect">Attack effect</option>
+								<option value="destruction_effect">Destruction effect</option>
+								<option value="leavebz_effect">Leave the battle zone effect</option>
+								<option value="block_effect">Block effect</option>
 							</optgroup>
+							<optgroup label="Removal categories">
+								<option value="removal_destroy_creature">Destroy creature</option>
+								<option value="bounce">Bounce creature to hand</option>
+								<option value="removal_to_mana">Send creature to mana</option>
+								<option value="removal_power_based">Power-based removal</option>
+								<option value="spot_removal">Spot removal</option>
+								<option value="mass_removal">Mass removal</option>
+								<option value="removal">All removal effects</option>
+							</optgroup>
+								<option value="destroy_creature_own">Destroy your own creature</option>
+								<option value="tap_opp">Tap creature</option>
+								<option value="untaps">Untap creature</option>
+								<option value="attack_untapped">Attack untapped creatures</option>
+							<optgroup label="Attack restriction categories">
+								<option value="cant_attack_any">Can't attack (unconditional)</option>
+								<option value="cant_attack_players">Can't attack players</option>
+								<option value="cant_attack_creatures">Can't attack creatures</option>
+								<option value="cant_attack">All attack restrictions</option>
+							</optgroup>
+								<option value="must_attack">Must attack if able</option>
+								<option value="must_block">Must block if able</option>
+								<option value="suicide">Destroyed upon winning a battle</option>
+								<option value="break_more_shields">Break more shields</option>
+								<option value="breaks_when_blocked">Break shield when blocked</option>
+								<option value="anti_blocker">Anti-blocker</option>
+								<option value="unblockable_anypower">Unblockable</option>
+								<option value="unblockable_power_based">Unblockable (power-based)</option>
+								<option value="unchoosable">Unchoosable</option>
+							<optgroup label="Search categories">
+								<option value="search_any">Search for any</option>
+								<option value="search_creature">Search for creature</option>
+								<option value="search_spell">Search for spell</option>
+								<option value="search">All search</option>
+							</optgroup>
+								<option value="hand_instead_grave">Goes to hand when would be destroyed</option>
+								<option value="mana_instead_grave">Goes to mana when would be destroyed</option>
+								<option value="returns_to_hand">Returns to hand at end of turn</option>
+								<option value="reduce_cost">Reduce mana most</option>
+							<optgroup label="Discard categories">
+								<option value="discard_opp">Discard from opponent's hand</option>
+								<option value="discard_own">Discard from your own hand</option>
+								<option value="anti_discard">Counteract discard effects</option>
+							</optgroup>
+								<option value="mana_to_hand_opp">Send opponent's mana to hand</option>
+								<option value="mana_to_hand_own">Send own mana to hand</option>
+								<option value="manaburn_opp">Send opponent's mana to grave</option>
+								<option value="manaburn_own">Send own mana to grave</option>
+								<option value="grave_to_hand_creature">Get creature from grave</option>
+								<option value="grave_to_hand_spell">Get spell from grave</option>
+							<optgroup label="Support categories">
+								<option value="support_tribal">Tribal support (race-based effects)</option>
+								<option value="support_mono">Mono-civ support</option>
+								<option value="support_civ">Civ-based support</option>
+								<option value="civ_hate">Civ-based hate (anti-support)</option>
+							</optgroup>
+							<optgroup label="Give power or abilities">
+								<option value="gives_power">Give power to creature</option>
+								<option value="gives_unblockable">Give unblockable</option>
+								<option value="gives_blocker">Give blocker</option>
+								<option value="gives_slayer">Give slayer</option>
+							</optgroup>
+							<optgroup label="Shield interaction effects">
 								<option value="add_shield">Add card to shields</option>
+								<option value="shields_to_hand">Put card from shields to hand</option>
+								<option value="shields_to_grave_own">Send own shields to grave</option>
+								<option value="shields_to_grave_opp">Send opponent's shields to grave</option>
+								<option value="anti_shield_trigger">Counteract shield trigger effects</option>
+								<option value="save_shields">Save shield by destroying creature</option>
+							</optgroup>
+							<optgroup label="Peek effects">
+								<option value="peek_shield">Peek at shield</option>
+								<option value="peek_hand">Peek at opponent's hand</option>
+								<option value="peek_topdeck">Peek at top of deck</option>
+							</optgroup>
+							<optgroup label="Other metacategories">
+								<option value="targets">Targeting effects</option>
+								<option value="nontargeting">Nontargeting effects</option>
+								<option value="oppchooses">Opponent chooses</option>
+							</optgroup>
 						</select>
 						<br>
 						<i>Filter by Category</i>
