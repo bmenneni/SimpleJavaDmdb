@@ -38,7 +38,7 @@ select optgroup {
 #civ-search-info {
 	display: none;
 	position: absolute;
-	top: 130px;
+	top: 250px;
 	left: 285px;
 	transform: translateX(-50%);
 	background-color: #fffdd0;

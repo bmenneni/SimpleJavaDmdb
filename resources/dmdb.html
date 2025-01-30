@@ -11,20 +11,6 @@
 		<tbody>
 				<tr>
 					<td>
-						<select id="civ_filter" name="civilization" style="width:135px">
-							<option value="">All Civilizations</option>
-							<option value="light">Light</option>
-							<option value="water">Water</option>
-							<option value="darkness">Darkness</option>
-							<option value="fire">Fire</option>
-							<option value="nature">Nature</option>
-						</select>
-						<br>
-						<i>Filter by Civilizations</i>
-						<sub class="small-symbol" onclick="toggleInfoBox(event)">&#x24d8;</sub>
-						<div id="civ-search-info" class="info-box">When choosing to filter by more than one civilization, the search will return multi-civ cards that contain all of the chosen civilizations.</div>
-					</td>
-					<td>
 						<select id="compare_filter" name="compare" style="width:42px">
 							<option value="">=</option>
 							<option value="greater_or_equal">>=</option>
@@ -48,6 +34,16 @@
 						</select>
 						<br>
 						<i>Filter by Cost</i>
+					</td>
+					<td>
+						<select id="type_filter" name="card_type" style="width:135px">
+							<option value="">All Types</option>
+							<option value="spell">Spell</option>
+							<option value="creature">Creature</option>
+							<option value="evolution">Evolution Creature</option>
+						</select>
+						<br>
+						<i>Filter by Type</i>
 					</td>
 					<td>
 						<select id="race_filter" name="race" style="width:135px">
@@ -138,17 +134,7 @@
 				</tr>
 				<!-- Beginning of second row in search filter table. -->
 				<tr>
-					<td>
-						<select id="type_filter" name="card_type" style="width:135px">
-							<option value="">All Types</option>
-							<option value="spell">Spell</option>
-							<option value="creature">Creature</option>
-							<option value="evolution">Evolution Creature</option>
-						</select>
-						<br>
-						<i>Filter by Type</i>
-					</td>
-					<td>
+					<td style="vertical-align: top;">
 						<select id="rarity_filter" name="rarity" style="width:90px">
 							<option value="">All Rarities</option>
 							<option value="nr">No Rarity</option>
@@ -162,33 +148,50 @@
 						<i>Filter by Rarity</i>
 					</td>
 					<td>
-						<select id="keyword_filter" name="keywords" style="width:135px">
-							<option value="">All Keywords</option>
+						<select id="civ_filter" name="civilization" multiple size="6" style="width:135px">
+							<option value="" selected>All Civilizations</option>
+							<option value="light">Light</option>
+							<option value="water">Water</option>
+							<option value="darkness">Darkness</option>
+							<option value="fire">Fire</option>
+							<option value="nature">Nature</option>
+						</select>
+						<br>
+						<i>Filter by Civilizations</i>
+						<sub class="small-symbol" onclick="toggleInfoBox(event)">&#x24d8;</sub>
+						<div id="civ-search-info" class="info-box">When choosing to filter by more than one civilization, the search will return multi-civ cards that contain all of the chosen civilizations.</div>
+					</td>
+					<td>
+						<select id="keyword_filter" name="keywords" multiple size="6" style="width:135px">
+							<option value="" selected>All Keywords</option>
 							<option value="blocker">Blocker</option>
-							<option value="power_attack">Power Attacker</option>
-							<option value="double_break">Double Breaker</option>
-							<option value="triple_break">Triple Breaker</option>
+							<option value="charger">Charger</option>
 							<option value="crew_break">Crew Breaker</option>
+							<option value="double_break">Double Breaker</option>
+							<option value="power_attack">Power Attacker</option>
 							<option value="shield_trigger">Shield Trigger</option>
+							<option value="silent_skill">Silent Skill</option>
 							<option value="slayer">Slayer</option>
 							<option value="speed_attack">Speed Attacker</option>
+							<option value="stealth">Stealth</option>
 							<option value="survivor_kw">Survivor</option>
 							<option value="tap_ability">Tap Ability</option>
-							<option value="stealth">Stealth</option>
-							<option value="charger">Charger</option>
+							<option value="triple_break">Triple Breaker</option>
 							<option value="turbo_rush">Turbo Rush</option>
-							<option value="silent_skill">Silent Skill</option>
-							<option value="wave_striker">Wave Striker</option>
 							<option value="vortex_evo">Vortex Evolution</option>
+							<option value="wave_striker">Wave Striker</option>
 						</select>
 						<br>
 						<i>Filter by Keyword</i>
 					</td>
 					<td>
-						<select id="category_filter" name="categories" style="width:300px">
-								<option value="">All Categories</option>
+						<select id="category_filter" name="categories" multiple size="6" style="width:300px">
+								<option value="" selected>All Categories</option>
 								<option value="draw">Draw cards</option>
 								<option value="ramp">Ramp (add cards to mana)</option>
+								<option value="tap_opp">Tap creature</option>
+								<option value="untaps">Untap creature</option>
+								<option value="attack_untapped">Attack untapped creatures</option>
 							<optgroup label="Effect trigger categories">
 								<option value="etb_effect">ETB (enter battle zone) effect</option>
 								<option value="atk_effect">Attack effect</option>
@@ -205,10 +208,6 @@
 								<option value="mass_removal">Mass removal</option>
 								<option value="removal">All removal effects</option>
 							</optgroup>
-								<option value="destroy_creature_own">Destroy your own creature</option>
-								<option value="tap_opp">Tap creature</option>
-								<option value="untaps">Untap creature</option>
-								<option value="attack_untapped">Attack untapped creatures</option>
 							<optgroup label="Attack restriction categories">
 								<option value="cant_attack_any">Can't attack (unconditional)</option>
 								<option value="cant_attack_players">Can't attack players</option>
@@ -217,6 +216,7 @@
 							</optgroup>
 								<option value="must_attack">Must attack if able</option>
 								<option value="must_block">Must block if able</option>
+								<option value="destroy_creature_own">Destroy your own creature</option>
 								<option value="suicide">Destroyed upon winning a battle</option>
 								<option value="break_more_shields">Break more shields</option>
 								<option value="breaks_when_blocked">Break shield when blocked</option>
