@@ -26,6 +26,9 @@ select optgroup {
 	font-size: 8pt;
 	cursor: pointer;
 }
+.set-td {
+	text-align: center;
+}
 #filter-table {
 	background-color: #EAEAEA;
 	border-color: #000000;

@@ -30,18 +30,15 @@ function clearPage() {
 }
 
 function openCard(rowElement) {
-    var card_name = rowElement.getElementsByTagName('td')[1].textContent;
-    var wikiURL = "https://duelmasters.fandom.com/wiki/" + card_name;
+    const card_name = rowElement.getElementsByTagName('td')[1].textContent;
+    const wikiURL = "https://duelmasters.fandom.com/wiki/" + card_name;
     window.open(wikiURL, '_blank');
 }
 
 function sort() {
-    var sortParameter = document.getElementById("sort_by").value;
-    var columnIndex;
+    const sortParameter = document.getElementById("sort_by").value;
+    let columnIndex;
     switch(sortParameter) {
-        case 'set':
-            columnIndex = 9;
-            break;
         case 'name':
             columnIndex = 1;
             break;
@@ -64,54 +61,99 @@ function sort() {
             columnIndex = 7;
     }
     
-    var resultsTable = document.getElementById("results-table");
-    var resultsBody = resultsTable.querySelector('tbody');
-    var rows = Array.from(resultsBody.getElementsByTagName('tr'));
-    
-    rows.sort((a, b) => {
-        var aValue = a.getElementsByTagName('td')[columnIndex].textContent;
-        var bValue = b.getElementsByTagName('td')[columnIndex].textContent;
-        if(sortParameter=='rarity') {
-            function mapRarity(rarity) {
-                var rarityMapping = {
-                    'C': 1,
-                    'U': 2,
-                    'R': 3,
-                    'VR': 4,
-                    'SR': 5
-                };
-                return rarityMapping[rarity];
-            }
-            var aNumer = mapRarity(aValue);
-            var bNumer = mapRarity(bValue);
-            return aNumer - bNumer;
-        }
-        else return aValue.localeCompare(bValue);
-    });
+    const resultsTable = document.getElementById("results-table");
+    const resultsBody = resultsTable.querySelector('tbody');
+    const rows = Array.from(resultsBody.getElementsByTagName('tr'));
     
     if(sortParameter=='set') {
-        function collNumNormalize(row) {
-            var setName = row.getElementsByTagName('td')[9].textContent;
-            var setBonus;
-            if(setName=='Promos') setBonus = 9000;
-            else setBonus = (parseInt(setName.substring(setName.length-2))-1) * 120;
-            var collNum = row.getElementsByTagName('td')[8].textContent;
+        function setCollNumSort(row) {
+            const iconSrc = row.querySelector('img').getAttribute('src');
+            console.log(iconSrc);
+            const splitSrc = iconSrc.split("/")[1];
+            const setName = splitSrc.split(".")[0];
+            const splitSetName = setName.split("-");
+            let setNumber = 1;
+            let sortVal = 0;
+            if(setName=='promo') sortVal += 9000;
+            else if(splitSetName.length===2) {
+                setNumber = parseInt(splitSetName[1]);
+            }
+            let collNum = row.getElementsByTagName('td')[8].textContent;
             for(let i = 0; i<collNum.length; i++) {
-                if(collNum.charAt(i)=='/'&&collNum.charAt(0)=='S') {
-                    let val = parseInt(collNum.substring(1,i));
-                    return val + setBonus;
-                }
-                else if(collNum.charAt(i)=='/') {
-                    let val = parseInt(collNum.substring(0,i));
-                    return val + setBonus;
+                if(collNum.charAt(i)=='/') {
+                    if(collNum.charAt(0)=='S') {
+                        sortVal += parseInt(collNum.substring(1,i));
+                    }
+                    else if(i+2<collNum.length&&collNum.charAt(i+1)=='Y') {
+                        sortVal += parseInt(collNum.substring(1,i));
+                        if(collNum.charAt(0)=='L'&&collNum.charAt(collNum.length-1)=='2') {
+                            sortVal += 20;
+                        }
+                        else if(collNum.charAt(0)=='M') sortVal += 50;
+                        else if(collNum.charAt(0)=='P') sortVal += 100;
+                    }
+                    else {
+                        const val = parseInt(collNum.substring(0,i));
+                        sortVal += (val+10);
+                    }
                 }
             }
+            sortVal += ((setNumber-1)*120);
+            return sortVal;
         }
-        rows.sort((a, b) => collNumNormalize(a) - collNumNormalize(b));
+        rows.sort((a, b) => setCollNumSort(a) - setCollNumSort(b));
+    }
+
+    else if(sortParameter=='cost') {
+        rows.sort((a, b) => {
+            let aInt = parseInt(a.getElementsByTagName('td')[columnIndex].textContent);
+            let bInt = parseInt(b.getElementsByTagName('td')[columnIndex].textContent);
+            return aInt - bInt;
+        });
+    }
+
+    else if(sortParameter=='power') {
+        rows.sort((a, b) => {
+            let aInt;
+            let bint;
+            if((a.getElementsByTagName('td')[columnIndex].textContent)==="") {
+                aInt = -100;
+            }
+            else aInt = parseInt(a.getElementsByTagName('td')[columnIndex].textContent);
+            if((b.getElementsByTagName('td')[columnIndex].textContent)==="") {
+                bInt = -100;
+            }
+            else bInt = parseInt(b.getElementsByTagName('td')[columnIndex].textContent);
+            return bInt - aInt;
+        });     
+    }
+
+    else {
+        rows.sort((a, b) => {
+            let aValue = a.getElementsByTagName('td')[columnIndex].textContent;
+            let bValue = b.getElementsByTagName('td')[columnIndex].textContent;
+            if(sortParameter=='rarity') {
+                function mapRarity(rarity) {
+                    const rarityMapping = {
+                        'NR': 0,
+                        'C': 1,
+                        'U': 2,
+                        'R': 3,
+                        'VR': 4,
+                        'SR': 5
+                    };
+                    return rarityMapping[rarity];
+                }
+                const aNumer = mapRarity(aValue);
+                const bNumer = mapRarity(bValue);
+                return bNumer - aNumer;
+            }
+            else return aValue.localeCompare(bValue);
+        });
     }
     
     resultsBody.innerHTML = "";
-    var cardNum = 0;
+    let cardNum = 0;
     
     rows.forEach(row => {
         cardNum++;

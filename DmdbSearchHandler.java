@@ -78,25 +78,14 @@ public class DmdbSearchHandler implements HttpHandler {
 				sKey = params[i][0];
 				sVal = params[i][1];
 			}
-			if("civilization".equals(sKey) || "race".equals(sKey) || "keywords".equals(sKey) || "categories".equals(sKey) || "card_name".equals(sKey)) {
-					sqlQueryBuilder.append(sKey + " LIKE \"%" + sVal +  "%\"");
-				}
-			else if("rarity".equals(sKey) || "card_set".equals(sKey)) {
-				sVal = sVal.toUpperCase();
-				sqlQueryBuilder.append(sKey + " = '" + sVal + "'");
-			}
-			else if("card_type".equals(sKey)) {
-				sVal = sVal.substring(0,1).toUpperCase() + sVal.substring(1);
-				sqlQueryBuilder.append(sKey + " = '" + sVal + "'");
-			}
-			else if("compare".equals(sKey)&&compareOperator.equals("")) {
+			if("compare".equals(sKey)&&compareOperator.equals("")) {
 				switch (sVal) {
-					case "greater_or_equal": 
-						compareOperator = ">=";
-						break;
-					case "less_or_equal":
-						compareOperator = "<=";
-						break;
+				case "greater_or_equal": 
+					compareOperator = ">=";
+					break;
+				case "less_or_equal":
+					compareOperator = "<=";
+					break;
 				}
 			}
 			else if("cost".equals(sKey)) {
@@ -104,6 +93,15 @@ public class DmdbSearchHandler implements HttpHandler {
 					sqlQueryBuilder.append(sKey + compareOperator + sVal);
 				}
 				else sqlQueryBuilder.append(sKey + "=" + sVal);
+			}
+			else if("rarity".equals(sKey)) {
+				sqlQueryBuilder.append(sKey + " = '" + sVal.toUpperCase() + "'");
+			}
+			else if("card_set".equals(sKey)) {
+				sqlQueryBuilder.append(sKey + " = '" + sVal + "'");
+			}
+			else if(sKey.length()>0) {
+				sqlQueryBuilder.append(sKey + " LIKE \"%" + sVal + "%\"");
 			}
 		}
 		String sqlQuery = sqlQueryBuilder.toString();
@@ -170,8 +168,9 @@ public class DmdbSearchHandler implements HttpHandler {
 			}
 			resultsTableBuilder.append("\t\t<td>" + card_power + "</td>\n")
 							   .append("\t\t<td>" + rs.getString("rarity") + "</td>\n")
-							   .append("\t\t<td>" + rs.getString("coll_num") + "</td>\n")
-							   .append("\t\t<td>" + rs.getString("card_set") + "</td>\n")
+							   .append("\t\t<td>" + rs.getString("coll_num") + "</td>\n");
+			String card_set = rs.getString("card_set");
+			resultsTableBuilder.append("\t\t<td class=\"set-td\"><img src=\"icons/" + card_set + ".png\" title=\"" + card_set.toUpperCase() + "\"></td>\n")
 							   .append("\t</tr>\n");
 		}
 		resultsTableBuilder.append("</tbody>\n</table>\n</div>\n");
