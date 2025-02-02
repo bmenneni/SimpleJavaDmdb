@@ -100,6 +100,23 @@ public class DmdbSearchHandler implements HttpHandler {
 			else if("card_set".equals(sKey)) {
 				sqlQueryBuilder.append(sKey + " = '" + sVal + "'");
 			}
+			else if("card_name".equals(sKey)) {
+				char[] chars = sVal.toCharArray();
+				for(int j = 0; j<chars.length; j++) {
+					switch (chars[j]) {
+						case '+': 
+							chars[j]=' ';
+							break;
+						case '"':
+							chars[j]='\'';
+							break;
+						case '\u00DC':
+							chars[j]='U';
+					}
+				}
+				String cardname = new String(chars);
+				sqlQueryBuilder.append(sKey + " LIKE \"%" + cardname + "%\"");
+			}
 			else if(sKey.length()>0) {
 				sqlQueryBuilder.append(sKey + " LIKE \"%" + sVal + "%\"");
 			}
@@ -138,8 +155,12 @@ public class DmdbSearchHandler implements HttpHandler {
 			}
 			resultsTableBuilder.append("onmouseover=\"this.style.backgroundColor='#C5C5C5'\" ")
 							   .append("onclick=\"openCard(this)\">\n")
-							   .append("\t\t<td>" + rowCount + ". </td>\n")
-							   .append("\t\t<td>" + rs.getString("card_name") + "</td>\n")
+							   .append("\t\t<td>" + rowCount + ". </td>\n");
+			String cardname = rs.getString("card_name");
+			if(cardname.length()>4&&"Uber".equals(cardname.substring(0,4))) {
+				cardname = "\u00DCber" + cardname.substring(4);
+			}
+			resultsTableBuilder.append("\t\t<td>" + cardname + "</td>\n")
 							   .append("\t\t<td>" + rs.getString("civilization") + "</td>\n")
 							   .append("\t\t<td>" + rs.getInt("cost") + "</td>\n")
 							   .append("\t\t<td>" + rs.getString("card_type") + "</td>\n");
