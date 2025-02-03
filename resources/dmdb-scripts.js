@@ -68,7 +68,6 @@ function sort() {
     if(sortParameter=='set') {
         function setCollNumSort(row) {
             const iconSrc = row.querySelector('img').getAttribute('src');
-            console.log(iconSrc);
             const splitSrc = iconSrc.split("/")[1];
             const setName = splitSrc.split(".")[0];
             const splitSetName = setName.split("-");

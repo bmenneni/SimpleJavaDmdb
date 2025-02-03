@@ -26,6 +26,9 @@ select optgroup {
 	font-size: 8pt;
 	cursor: pointer;
 }
+.vertical-td {
+	vertical-align: top;
+}
 .set-td {
 	text-align: center;
 }

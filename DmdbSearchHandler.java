@@ -10,13 +10,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class DmdbSearchHandler implements HttpHandler {
 	
 	private Connection conn;	
-	private HashMap<String, String> optionMap;
 	
 	public DmdbSearchHandler() throws SQLException {
 		conn = DriverManager.getConnection("jdbc:sqlite:duelmasters.db");
@@ -24,10 +22,10 @@ public class DmdbSearchHandler implements HttpHandler {
 	
 	public void handle(HttpExchange exchange) throws IOException {
 		try {
-			String[][] params = parseQueryParams(exchange.getRequestURI().getQuery());
+			HashMap<String, List<String>> params = parseQueryParams(exchange.getRequestURI().getQuery());
 			ResultSet rs = queryDmdb(params);
 			String resultsTable = buildResultsTable(rs);
-			String htmlResponse = buildHtmlResponse("resources/dmdb.html", resultsTable);
+			String htmlResponse = buildHtmlResponse("resources/dmdb.html", params, resultsTable);
 			exchange.sendResponseHeaders(200, htmlResponse.getBytes().length);
 			try (OutputStream stream = exchange.getResponseBody()) {
 				stream.write(htmlResponse.getBytes());
@@ -43,82 +41,109 @@ public class DmdbSearchHandler implements HttpHandler {
 		}
 	}
 	
-	public String[][] parseQueryParams(String query) {
+	public HashMap<String, List<String>> parseQueryParams(String query) {
+		HashMap<String, List<String>> paramsMap = new HashMap<>();
 		String[] queryComponents = query.split("&");
-		String[][] queryElements = new String[queryComponents.length][];
-		optionMap = new HashMap<>();
 		for(int i = 0; i<queryComponents.length; i++) {
-			queryElements[i] = queryComponents[i].split("=");
-			if (queryElements[i].length>1) {
-				String param = queryElements[i][0];
-				String value = queryElements[i][1];
-				optionMap.put(param, value);
+			String paramKey = queryComponents[i].split("=")[0];
+			if(paramsMap.containsKey(paramKey)) continue;
+			else {
+				ArrayList<String> paramVals = new ArrayList<>();
+				for(String component : queryComponents) {
+					String[] queryElements = component.split("=");
+					if(queryElements.length>1&&queryElements[0].equals(paramKey)) {
+						paramVals.add(queryElements[1]);
+					}
+				}
+				if(paramKey.length()>0&&!paramVals.isEmpty()) {
+					paramsMap.put(paramKey, paramVals);					
+				}
 			}
 		}
-		return queryElements;
+		return paramsMap;
 	}
 	
-	public ResultSet queryDmdb(String[][] params) throws SQLException {
+	public ResultSet queryDmdb(HashMap<String, List<String>> paramsMap) throws SQLException {
 		StringBuilder sqlQueryBuilder = new StringBuilder();
 		sqlQueryBuilder.append("SELECT * FROM Card");
-		int count = 0;
+		boolean initialParam = true;
 		String compareOperator = "";
-		for(int i = 0; i<params.length; i++) {
-			if(count>0 && params[i].length>1 && params[i][1]!=null && params[i][1].length()>0 && !"compare".equals(params[i][0])) {
-				sqlQueryBuilder.append(" AND ");
-				count++;
-			}
-			else if(count==0 && params[i].length>1 && params[i][1]!=null && params[i][1].length()>0 && !"compare".equals(params[i][0])) {
+		Set<Map.Entry<String, List<String>>> paramsSet = paramsMap.entrySet();
+		for(Map.Entry<String, List<String>> entry : paramsSet) {
+			String sKey = entry.getKey();
+			List<String> sVals = entry.getValue();
+			if(initialParam&&!paramsSet.isEmpty()&&!"compare".equals(sKey)) {
 				sqlQueryBuilder.append(" WHERE ");
-				count++;
+				initialParam = false;
 			}
-			String sKey = "";
-			String sVal = "";
-			if(params[i].length>1 && params[i][1]!=null) {
-				sKey = params[i][0];
-				sVal = params[i][1];
+			else if(!initialParam&&!"compare".equals(sKey)) {
+				sqlQueryBuilder.append(" AND ");
 			}
 			if("compare".equals(sKey)&&compareOperator.equals("")) {
-				switch (sVal) {
-				case "greater_or_equal": 
-					compareOperator = ">=";
-					break;
-				case "less_or_equal":
-					compareOperator = "<=";
-					break;
+				String compareVal = sVals.get(0);
+				switch (compareVal) {
+					case "greater_or_equal":
+						compareOperator = ">=";
+						break;
+					case "less_or_equal":
+						compareOperator = "<=";
 				}
 			}
 			else if("cost".equals(sKey)) {
 				if(">=".equals(compareOperator)||"<=".equals(compareOperator)) {
-					sqlQueryBuilder.append(sKey + compareOperator + sVal);
+					sqlQueryBuilder.append(sKey + compareOperator + sVals.get(0));
 				}
-				else sqlQueryBuilder.append(sKey + "=" + sVal);
+				else sqlQueryBuilder.append(sKey + "=" + sVals.get(0));
 			}
 			else if("rarity".equals(sKey)) {
-				sqlQueryBuilder.append(sKey + " = '" + sVal.toUpperCase() + "'");
-			}
-			else if("card_set".equals(sKey)) {
-				sqlQueryBuilder.append(sKey + " = '" + sVal + "'");
+				sqlQueryBuilder.append(sKey + "= '" + sVals.get(0).toUpperCase() + "'");
 			}
 			else if("card_name".equals(sKey)) {
-				char[] chars = sVal.toCharArray();
-				for(int j = 0; j<chars.length; j++) {
-					switch (chars[j]) {
-						case '+': 
-							chars[j]=' ';
+				char[] chars = sVals.get(0).toCharArray();
+				for(int i = 0; i<chars.length; i++) {
+					switch(chars[i]) {
+						case '+':
+							chars[i]=' ';
 							break;
 						case '"':
-							chars[j]='\'';
+							chars[i]='\'';
 							break;
 						case '\u00DC':
-							chars[j]='U';
+							chars[i]='U';
 					}
 				}
 				String cardname = new String(chars);
 				sqlQueryBuilder.append(sKey + " LIKE \"%" + cardname + "%\"");
 			}
-			else if(sKey.length()>0) {
-				sqlQueryBuilder.append(sKey + " LIKE \"%" + sVal + "%\"");
+			else if("card_set".equals(sKey)) {
+				if(sVals.size()>1) {
+					String[] setVals = new String[sVals.size()];
+					setVals = sVals.toArray(setVals);
+					sqlQueryBuilder.append("(");
+					for(int i = 0; i<setVals.length; i++) {
+						if(i>0) {
+							sqlQueryBuilder.append(" OR ");
+						}
+						sqlQueryBuilder.append(sKey + " = '" + setVals[i] + "'"); 
+					}
+					sqlQueryBuilder.append(")");
+				}
+				else {
+					sqlQueryBuilder.append(sKey + "= '" + sVals.get(0) + "'");
+				}
+			}
+			else if("civilization".equals(sKey)||"keywords".equals(sKey)||"categories".equals(sKey)) {
+				String[] arr = new String[sVals.size()];
+				arr = sVals.toArray(arr);
+				for(int i = 0; i<arr.length; i++) {
+					if(i>0) {
+						sqlQueryBuilder.append(" AND ");
+					}
+					sqlQueryBuilder.append(sKey + " LIKE \"%" + arr[i] + "%\"");
+				}
+			}
+			else if("race".equals(sKey)||"card_type".equals(sKey)) {
+				sqlQueryBuilder.append(sKey + " LIKE \"%" + sVals.get(0) + "%\""); 
 			}
 		}
 		String sqlQuery = sqlQueryBuilder.toString();
@@ -198,14 +223,23 @@ public class DmdbSearchHandler implements HttpHandler {
 		return resultsTableBuilder.toString();
 	}
 	
-	public String buildHtmlResponse(String baseFilePath, String resultsTable) throws IOException {
+	public String buildHtmlResponse(String baseFilePath, HashMap<String, List<String>> params, String resultsTable) throws IOException {
 		StringBuilder htmlResponseBuilder = new StringBuilder();
 		try (BufferedReader reader = new BufferedReader(new FileReader(baseFilePath))) {
 			String line;
-			while((line = reader.readLine())!=null) {
-				if(line.contains("option value")) {
+			while((line = reader.readLine()) != null) {
+				if(line.contains("option value=\"\" selected")) {
+					if((line.contains("All Sets")&&params.containsKey("card_set"))
+					    || (line.contains("All Civilizations")&&params.containsKey("civilization"))
+						|| (line.contains("All Keywords")&&params.containsKey("keywords"))
+						|| (line.contains("All Categories")&&params.containsKey("categories"))) {
+							String[] arr = line.split("selected");
+							htmlResponseBuilder.append(arr[0]+arr[1]+"\n");
+						} else htmlResponseBuilder.append(line).append("\n");
+					}
+				else if(line.contains("option value")) {
 					String[] optionTag = line.split("\"");
-					if(optionTag[1].length()>0&&optionMap.containsValue(optionTag[1])&&optionTag.length==3) {
+					if(optionTag[1].length()>0&&params.values().stream().anyMatch(list -> list.contains(optionTag[1]))) {
 						htmlResponseBuilder.append(optionTag[0] + "\"" + optionTag[1] + "\" selected" + optionTag[2]).append("\n");
 					}
 					else htmlResponseBuilder.append(line).append("\n");

@@ -10,7 +10,7 @@
 	<table id="filter-table">
 		<tbody>
 				<tr>
-					<td>
+					<td class="vertical-td">
 						<select id="compare_filter" name="compare" style="width:42px">
 							<option value="">=</option>
 							<option value="greater_or_equal">>=</option>
@@ -35,7 +35,7 @@
 						<br>
 						<i>Filter by Cost</i>
 					</td>
-					<td>
+					<td class="vertical-td">
 						<select id="type_filter" name="card_type" style="width:135px">
 							<option value="">All Types</option>
 							<option value="spell">Spell</option>
@@ -45,7 +45,7 @@
 						<br>
 						<i>Filter by Type</i>
 					</td>
-					<td>
+					<td class="vertical-td">
 						<select id="race_filter" name="race" style="width:135px">
 							<option value="">All Races</option>
 							<option value="angel_command">Angel Command</option>
@@ -112,8 +112,8 @@
 						<i>Filter by Race</i>
 					</td>
 					<td>
-						<select id="set_filter" name="card_set" style="width:300px">
-							<option value="">All Sets</option>
+						<select id="set_filter" name="card_set" multiple style="width:300px">
+							<option value="" selected>All Sets</option>
 							<option value="promo">Exclusive Promos</option>
 							<option value="dm-01">DM-01 Base Set</option>
 							<option value="dm-02">DM-02 Evo-Crushinators of Doom</option>
@@ -134,7 +134,7 @@
 				</tr>
 				<!-- Beginning of second row in search filter table. -->
 				<tr>
-					<td style="vertical-align: top;">
+					<td class="vertical-td">
 						<select id="rarity_filter" name="rarity" style="width:90px">
 							<option value="">All Rarities</option>
 							<option value="nr">No Rarity</option>
@@ -254,8 +254,8 @@
 							<optgroup label="Give power or abilities">
 								<option value="gives_power">Give power to creature</option>
 								<option value="gives_unblockable">Give unblockable</option>
-								<option value="gives_blocker">Give blocker</option>
-								<option value="gives_slayer">Give slayer</option>
+								<option value="gives_blocker">Give 'blocker'</option>
+								<option value="gives_slayer">Give 'slayer'</option>
 							</optgroup>
 							<optgroup label="Shield interaction effects">
 								<option value="add_shield">Add card to shields</option>
