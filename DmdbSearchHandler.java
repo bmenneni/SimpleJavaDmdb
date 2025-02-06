@@ -26,9 +26,10 @@ public class DmdbSearchHandler implements HttpHandler {
 			ResultSet rs = queryDmdb(params);
 			String resultsTable = buildResultsTable(rs);
 			String htmlResponse = buildHtmlResponse("resources/dmdb.html", params, resultsTable);
-			exchange.sendResponseHeaders(200, htmlResponse.getBytes().length);
+			exchange.getResponseHeaders().set("Content-Type", "text/html; charset=UTF-8");
+			exchange.sendResponseHeaders(200, htmlResponse.getBytes("UTF-8").length);
 			try (OutputStream stream = exchange.getResponseBody()) {
-				stream.write(htmlResponse.getBytes());
+				stream.write(htmlResponse.getBytes("UTF-8"));
 			}
 		}
 		catch (SQLException sqle) {

@@ -28,7 +28,7 @@ public class DmdbHomeHandler implements HttpHandler {
 		String requestPath = exchange.getRequestURI().getPath();
 		
 		if("/".equals(requestPath)) {
-			exchange.getResponseHeaders().set("Content-Type", "text/html");
+			exchange.getResponseHeaders().set("Content-Type", "text/html; charset=UTF-8");
 			exchange.sendResponseHeaders(200, baseHtml.length());
 			try(OutputStream stream = exchange.getResponseBody()) {
 				stream.write(baseHtml.getBytes());
@@ -69,7 +69,7 @@ public class DmdbHomeHandler implements HttpHandler {
 	public String getContentType(File file) {
 		String fileName = file.getName().toLowerCase();
 		if(fileName.endsWith(".html")) {
-			return "text/html";
+			return "text/html; charset=UTF-8";
 		}
 		else if(fileName.endsWith(".jpg")) {
 			return "image/jpeg";
