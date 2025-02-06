@@ -1,5 +1,6 @@
 <html>
 <head>
+	<meta charset="UTF-8">
 	<title>Duel Masters Card Database</title>
 	<link rel="stylesheet" href="dmdb-styles.css">
 	<script src="dmdb-scripts.js" defer></script>
@@ -9,44 +10,9 @@
 <form id="filter-form" action="/search" method="get" accept-charset="UTF-8">
 	<table id="filter-table">
 		<tbody>
-				<tr>
-					<td class="vertical-td">
-						<select id="compare_filter" name="compare" style="width:42px">
-							<option value="">=</option>
-							<option value="greater_or_equal">>=</option>
-							<option value="less_or_equal"><=</option>
-						</select>
-						<select id="cost_filter" name="cost" style="width:42px">
-							<option value="">All</option>
-							<option value="1">1</option>
-							<option value="2">2</option>
-							<option value="3">3</option>
-							<option value="4">4</option>
-							<option value="5">5</option>
-							<option value="6">6</option>
-							<option value="7">7</option>
-							<option value="8">8</option>
-							<option value="9">9</option>
-							<option value="10">10</option>
-							<option value="11">11</option>
-							<option value="12">12</option>
-							<option value="13">13</option>
-						</select>
-						<br>
-						<i>Filter by Cost</i>
-					</td>
-					<td class="vertical-td">
-						<select id="type_filter" name="card_type" style="width:135px">
-							<option value="">All Types</option>
-							<option value="spell">Spell</option>
-							<option value="creature">Creature</option>
-							<option value="evolution">Evolution Creature</option>
-						</select>
-						<br>
-						<i>Filter by Type</i>
-					</td>
-					<td class="vertical-td">
-						<select id="race_filter" name="race" style="width:135px">
+				<tr>	
+					<td id="top-left-td">
+						<select id="race_filter" name="race" style="width:150px">
 							<option value="">All Races</option>
 							<option value="angel_command">Angel Command</option>
 							<option value="armored_dragon">Armored Dragon</option>
@@ -111,7 +77,32 @@
 						<br>
 						<i>Filter by Race</i>
 					</td>
-					<td>
+					<td class="top-td">
+						<select id="compare_filter" name="compare" style="width:48px">
+							<option value="">=</option>
+							<option value="greater_or_equal">>=</option>
+							<option value="less_or_equal"><=</option>
+						</select>
+						<select id="cost_filter" name="cost" style="width:48px">
+							<option value="">All</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+							<option value="9">9</option>
+							<option value="10">10</option>
+							<option value="11">11</option>
+							<option value="12">12</option>
+							<option value="13">13</option>
+						</select>
+						<br>
+						<i>Filter by Cost</i>
+					</td>
+					<td rowspan="2">
 						<select id="set_filter" name="card_set" multiple style="width:300px">
 							<option value="" selected>All Sets</option>
 							<option value="promo">Exclusive Promos</option>
@@ -132,10 +123,20 @@
 						<i>Filter by Set</i>
 					</td>
 				</tr>
-				<!-- Beginning of second row in search filter table. -->
+				<!--Beginning of second row in search filter table. -->
 				<tr>
-					<td class="vertical-td">
-						<select id="rarity_filter" name="rarity" style="width:90px">
+					<td class="left-td">
+						<select id="type_filter" name="card_type" style="width:150px">
+							<option value="">All Types</option>
+							<option value="spell">Spell</option>
+							<option value="creature">Creature</option>
+							<option value="evolution">Evolution Creature</option>
+						</select>
+						<br>
+						<i>Filter by Type</i>
+					</td>
+					<td>
+						<select id="rarity_filter" name="rarity" style="width:100px">
 							<option value="">All Rarities</option>
 							<option value="nr">No Rarity</option>
 							<option value="c">Common</option>
@@ -147,8 +148,11 @@
 						<br>
 						<i>Filter by Rarity</i>
 					</td>
-					<td>
-						<select id="civ_filter" name="civilization" multiple size="6" style="width:135px">
+				</tr>
+				<!-- Beginning of third row in search filter table. -->
+				<tr>
+					<td class="left-td">
+						<select id="civ_filter" name="civilization" multiple size="6" style="width:150px">
 							<option value="" selected>All Civilizations</option>
 							<option value="light">Light</option>
 							<option value="water">Water</option>
@@ -159,7 +163,7 @@
 						<br>
 						<i>Filter by Civilizations</i>
 						<sub class="small-symbol" onclick="toggleInfoBox(event)">&#x24d8;</sub>
-						<div id="civ-search-info" class="info-box">When choosing to filter by more than one civilization, the search will return multi-civ cards that contain all of the chosen civilizations.</div>
+						<div id="civ-search-info">When choosing to filter by more than one civilization, the search will return multi-civ cards that contain all of the chosen civilizations.</div>
 					</td>
 					<td>
 						<select id="keyword_filter" name="keywords" multiple size="6" style="width:135px">
@@ -201,7 +205,7 @@
 							</optgroup>
 							<optgroup label="Removal categories">
 								<option value="removal_destroy_creature">Destroy creature</option>
-								<option value="bounce">Bounce creature to hand</option>
+								<option value="bounce">Bounce creature</option>
 								<option value="removal_to_mana">Send creature to mana</option>
 								<option value="removal_power_based">Power-based removal</option>
 								<option value="spot_removal">Spot removal</option>
@@ -280,19 +284,22 @@
 						<i>Filter by Category</i>
 					</td>
 				</tr>
-				<!-- Beginning of third row in search filter table. -->
+				<!-- Beginning of fourth row in search filter table. -->
 				<tr>
-					<td colspan="2">
+					<td id="name-field-td" class="vert-td">
 						<input id="search_term" name="card_name" type="text" size="35" maxlength="35">
 						<br>
 						<i>Search for a card by name.</i>
 					</td>
-					<td>
-						<input type="submit" value="Search!">
-						<br>
-						<div class="subtle" onclick="clearPage()">(Clear)</div>
+					<td class="vert-td">
+						<div style="display: inline-block;">
+							<input type="submit" value="Search!">
+						</div>
+						<div style="display: inline-block; margin-left: 5px;">
+							<input type="button" onclick="resetPage()" value="Reset">
+						</div>
 					</td>
-					<td>
+					<td class="vert-td">
 						<select id="sort_by" style="width:200px">
 							<option class="other" value="set">Sort by Set and Collector #</option>
 							<option class="other" value="name">Sort by Name</option>

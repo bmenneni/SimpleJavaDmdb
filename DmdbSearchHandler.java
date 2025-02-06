@@ -235,19 +235,19 @@ public class DmdbSearchHandler implements HttpHandler {
 						|| (line.contains("All Categories")&&params.containsKey("categories"))) {
 							String[] arr = line.split("selected");
 							htmlResponseBuilder.append(arr[0]+arr[1]+"\n");
-						} else htmlResponseBuilder.append(line).append("\n");
+						} else htmlResponseBuilder.append(line + "\n");
 					}
 				else if(line.contains("option value")) {
 					String[] optionTag = line.split("\"");
 					if(optionTag[1].length()>0&&params.values().stream().anyMatch(list -> list.contains(optionTag[1]))) {
 						htmlResponseBuilder.append(optionTag[0] + "\"" + optionTag[1] + "\" selected" + optionTag[2]).append("\n");
 					}
-					else htmlResponseBuilder.append(line).append("\n");
+					else htmlResponseBuilder.append(line + "\n");
 				}
 				else if(line.contains("/form")) {
 					htmlResponseBuilder.append(line).append("\n<br>\n").append(resultsTable);
 				}
-				else htmlResponseBuilder.append(line).append("\n");
+				else htmlResponseBuilder.append(line + "\n");
 			}
 		}
 		return htmlResponseBuilder.toString();

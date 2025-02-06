@@ -25,7 +25,7 @@ function toggleInfoBox(event) {
     infobox.style.display = "block";
 }
 
-function clearPage() {
+function resetPage() {
 	window.location = window.location.origin;
 }
 
