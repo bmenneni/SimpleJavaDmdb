@@ -21,22 +21,13 @@ select optgroup {
 	cursor: pointer;
 }
 .left-td {
-	padding-left: 5px;
-}
-.top-td {
-	vertical-align: top;
-	padding-top: 5px;
+	padding-left: 15px;
 }
 .vert-td {
 	vertical-align: top;
 }
 .set-td {
 	text-align: center;
-}
-#top-left-td {
-	vertical-align: top;
-	padding-left: 5px;
-	padding-top: 5px;
 }
 #filter-table {
 	background-color: #EAEAEA;
