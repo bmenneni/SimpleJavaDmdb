@@ -29,9 +29,15 @@ public class DmdbHomeHandler implements HttpHandler {
 		
 		if("/".equals(requestPath)) {
 			exchange.getResponseHeaders().set("Content-Type", "text/html; charset=UTF-8");
-			exchange.sendResponseHeaders(200, baseHtml.length());
-			try(OutputStream stream = exchange.getResponseBody()) {
-				stream.write(baseHtml.getBytes());
+			String rm = exchange.getRequestMethod();
+			if("GET".equals(rm)) {
+				exchange.sendResponseHeaders(200, baseHtml.length());
+				try(OutputStream stream = exchange.getResponseBody()) {
+					stream.write(baseHtml.getBytes());
+				}			
+			}
+			else if("HEAD".equals(rm)) {
+				exchange.sendResponseHeaders(200, -1);
 			}
 		}
 		else {

@@ -5,6 +5,7 @@ body, p, td, th {
 }
 body {
 	background-color: #990000;
+	margin-left: 15px;
 }
 thead > tr {
 	background-color: #C5C5C5;
@@ -52,7 +53,7 @@ select optgroup {
 }
 #results-container {
 	float: left;
-	margin-right: 20px;
+	margin-right: 15px;
 }
 #results-table {
 	border-spacing: 1px;
