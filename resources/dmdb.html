@@ -6,6 +6,8 @@
 	<script src="dmdb-scripts.js" defer></script>
 </head>
 <body>
+<p class="headline">NEW: English Sets DM-13 to DM-17 have been added, and card images now display when hovering over a search result. Check it out!</p>
+<div id="left-panel-div">
 <img src="dmdb_banner.jpg">
 <form id="filter-form" action="/search" method="get" accept-charset="utf-8">
 	<table id="filter-table">
@@ -21,9 +23,11 @@
 							<option value="balloon_mushroom">Balloon Mushroom</option>
 							<option value="beast_folk">Beast Folk</option>
 							<option value="berserker">Berserker</option>
+							<option value="big_muscle">Big Muscle</option>
 							<option value="brain_jacker">Brain Jacker</option>
 							<option value="chimera">Chimera</option>
 							<option value="colony_beetle">Colony Beetle</option>
+							<option value="cosmo_walker">Cosmo Walker</option>
 							<option value="cyber_cluster">Cyber Cluster</option>
 							<option value="cyber_lord">Cyber Lord</option>
 							<option value="cyber_moon">Cyber Moon</option>
@@ -71,6 +75,7 @@
 							<option value="tree_folk">Tree Folk</option>
 							<option value="volcano_dragon">Volcano Dragon</option>
 							<option value="wild_veggies">Wild Veggies</option>
+							<option value="wonder_trick">Wonder Trick</option>
 							<option value="xenoparts">Xenoparts</option>
 							<option value="zombie_dragon">Zombie Dragon</option>
 						</select>
@@ -105,6 +110,7 @@
 					<td rowspan="2">
 						<select id="set_filter" name="card_set" multiple style="width:300px">
 							<option value="" selected>All Sets</option>
+							<option value="tcg_only">Original TCG Sets Only</option>
 							<option value="promo">Exclusive Promos</option>
 							<option value="dm-01">DM-01 Base Set</option>
 							<option value="dm-02">DM-02 Evo-Crushinators of Doom</option>
@@ -118,6 +124,11 @@
 							<option value="dm-10">DM-10 Shockwaves of the Shattered Rainbow</option>
 							<option value="dm-11">DM-11 Blast-o-splosion of Gigantic Rage</option>
 							<option value="dm-12">DM-12 Thrash of the Hybrid Megacreatures</option>
+							<option value="dm-13">DM-13 Maelstrom of Mutated Monstrosities</option>
+							<option value="dm-14">DM-14 Grinding Gears of Gigadevastation</option>
+							<option value="dm-15">DM-15 Attack of the Apex Accelerators</option>
+							<option value="dm-16">DM-16 Zerg-a-crushers of Zero Mercy</option>
+							<option value="dm-17">DM-17 Culmination of Chaotic Catastrophe</option>
 						</select>
 						<br>
 						<i>Filter by Set</i>
@@ -130,7 +141,9 @@
 							<option value="">All Types</option>
 							<option value="spell">Spell</option>
 							<option value="creature">Creature</option>
-							<option value="evolution">Evolution Creature</option>
+							<option value="cross_gear">Cross Gear</option>
+							<option value="evolution_creature">Evolution Creature</option>
+							<option value="evolution_cross_gear">Evolution Cross Gear</option>
 						</select>
 						<br>
 						<i>Filter by Type</i>
@@ -168,17 +181,23 @@
 					<td>
 						<select id="keyword_filter" name="keywords" multiple size="6" style="width:135px">
 							<option value="" selected>All Keywords</option>
+							<option value="accelerator">Accelerator</option>
 							<option value="blocker">Blocker</option>
 							<option value="charger">Charger</option>
 							<option value="crew_break">Crew Breaker</option>
 							<option value="double_break">Double Breaker</option>
+							<option value="gravity_zero">Gravity Zero</option>
+							<option value="metamorph">Metamorph</option>
 							<option value="power_attack">Power Attacker</option>
+							<option value="saver">Saver</option>
 							<option value="shield_trigger">Shield Trigger</option>
 							<option value="silent_skill">Silent Skill</option>
 							<option value="slayer">Slayer</option>
 							<option value="speed_attack">Speed Attacker</option>
 							<option value="stealth">Stealth</option>
+							<option value="strike_back">Strike Back</option>
 							<option value="survivor_kw">Survivor</option>
+							<option value="sympathy">Sympathy</option>
 							<option value="tap_ability">Tap Ability</option>
 							<option value="triple_break">Triple Breaker</option>
 							<option value="turbo_rush">Turbo Rush</option>
@@ -202,14 +221,16 @@
 								<option value="destruction_effect">Destruction effect</option>
 								<option value="leavebz_effect">Leave the battle zone effect</option>
 								<option value="block_effect">Block effect</option>
+								<option value="blocked_effect">Blocked effect</option>
 							</optgroup>
 							<optgroup label="Removal categories">
 								<option value="removal_destroy_creature">Destroy creature</option>
-								<option value="bounce">Bounce creature</option>
+								<option value="removal_bounce">Bounce creature</option>
 								<option value="removal_to_mana">Send creature to mana</option>
 								<option value="removal_power_based">Power-based removal</option>
 								<option value="spot_removal">Spot removal</option>
 								<option value="mass_removal">Mass removal</option>
+								<option value="cross_gear_removal">Cross gear removal</option>
 								<option value="removal">All removal effects</option>
 							</optgroup>
 							<optgroup label="Attack restriction categories">
@@ -231,11 +252,13 @@
 							<optgroup label="Search categories">
 								<option value="search_any">Search for any</option>
 								<option value="search_creature">Search for creature</option>
+								<option value="search_cross_gear">Search for cross gear</option>
 								<option value="search_spell">Search for spell</option>
 								<option value="search">All search</option>
 							</optgroup>
-								<option value="hand_instead_grave">Goes to hand when would be destroyed</option>
-								<option value="mana_instead_grave">Goes to mana when would be destroyed</option>
+								<option value="mana_instead_grave">Put in mana when would be destroyed</option>
+								<option value="hand_instead_grave">Returns to hand when would be destroyed</option>
+								<option value="bz_instead_grave">Stays in battle zone when would be destroyed</option>
 								<option value="returns_to_hand">Returns to hand at end of turn</option>
 								<option value="reduce_cost">Reduce mana cost</option>
 							<optgroup label="Discard categories">
@@ -250,16 +273,20 @@
 								<option value="grave_to_hand_creature">Get creature from grave</option>
 								<option value="grave_to_hand_spell">Get spell from grave</option>
 							<optgroup label="Support categories">
-								<option value="support_tribal">Tribal support (race-based effects)</option>
-								<option value="support_mono">Mono-civ support</option>
+								<option value="tribal">Tribal support (race-based effects)</option>
+								<option value="tribal_dragons">Tribal Dragon support</option>
 								<option value="support_civ">Civ-based support</option>
+								<option value="support_mono">Mono-civ support</option>
 								<option value="civ_hate">Civ-based hate (anti-support)</option>
+								<option value="support_evo">Evolution support</option>
+								<option value="support_cross_gear">Cross gear support</option>
 							</optgroup>
 							<optgroup label="Give power or abilities">
 								<option value="gives_power">Give power to creature</option>
 								<option value="gives_unblockable">Give unblockable</option>
 								<option value="gives_blocker">Give 'blocker'</option>
 								<option value="gives_slayer">Give 'slayer'</option>
+								<option value="gives">All give effects</option>
 							</optgroup>
 							<optgroup label="Shield interaction effects">
 								<option value="add_shield">Add card to shields</option>
@@ -287,9 +314,9 @@
 				<!-- Beginning of fourth row in search filter table. -->
 				<tr>
 					<td id="name-field-td" class="vert-td">
-						<input id="search_term" name="card_name" type="text" size="35" maxlength="35">
+						<input id="search-term" name="card_name" type="text" size="35" maxlength="35">
 						<br>
-						<i>Search for a card by name.</i>
+						<label for="search-term"><i>Search for a card by name.</i></label>
 					</td>
 					<td class="vert-td">
 						<div style="display: inline-block;">
@@ -318,5 +345,9 @@
 		</tbody>
 	</table>
 </form>
+</div>
+<div id="image-panel-div">
+	<img id="card-image" src="">
+</div>
 </body>
 </html>

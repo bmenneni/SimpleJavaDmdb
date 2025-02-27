@@ -1,3 +1,6 @@
 *.class
 *.jar
+*.sql
+*.sqbpro
+*.xlsx
 JAR-app/

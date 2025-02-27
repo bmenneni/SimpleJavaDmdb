@@ -44,21 +44,11 @@ public class DmdbSearchHandler implements HttpHandler {
 	
 	public HashMap<String, List<String>> parseQueryParams(String query) {
 		HashMap<String, List<String>> paramsMap = new HashMap<>();
-		String[] queryComponents = query.split("&");
-		for(int i = 0; i<queryComponents.length; i++) {
-			String paramKey = queryComponents[i].split("=")[0];
-			if(paramsMap.containsKey(paramKey)) continue;
-			else {
-				ArrayList<String> paramVals = new ArrayList<>();
-				for(String component : queryComponents) {
-					String[] queryElements = component.split("=");
-					if(queryElements.length>1&&queryElements[0].equals(paramKey)) {
-						paramVals.add(queryElements[1]);
-					}
-				}
-				if(paramKey.length()>0&&!paramVals.isEmpty()) {
-					paramsMap.put(paramKey, paramVals);					
-				}
+		if(query==null||query.length()==0) return paramsMap;
+		for(String param : query.split("&")) {
+			String[] pair = param.split("=");
+			if(pair.length>1) {
+				paramsMap.computeIfAbsent(pair[0], k -> new ArrayList<>()).add(pair[1]);
 			}
 		}
 		return paramsMap;
@@ -117,17 +107,29 @@ public class DmdbSearchHandler implements HttpHandler {
 				sqlQueryBuilder.append(sKey + " LIKE \"%" + cardname + "%\"");
 			}
 			else if("card_set".equals(sKey)) {
-				if(sVals.size()>1) {
+				boolean tcgOnly = false;
+				String tcgOnlyQuery = "(card_id<901 OR (card_id>9000 AND card_id<9081))";
+				if(sVals.size()==1&&sVals.contains("tcg_only")) {
+					sqlQueryBuilder.append(tcgOnlyQuery);
+				}
+				else if(sVals.size()>1) {
 					String[] setVals = new String[sVals.size()];
 					setVals = sVals.toArray(setVals);
 					sqlQueryBuilder.append("(");
+					boolean firstSet = true;
 					for(int i = 0; i<setVals.length; i++) {
-						if(i>0) {
+						if("tcg_only".equals(setVals[i])) {
+							tcgOnly = true;
+							continue;
+						}
+						if(!firstSet) {
 							sqlQueryBuilder.append(" OR ");
 						}
-						sqlQueryBuilder.append(sKey + " = '" + setVals[i] + "'"); 
+						sqlQueryBuilder.append(sKey + " = '" + setVals[i] + "'");
+						if(firstSet) firstSet = false;
 					}
 					sqlQueryBuilder.append(")");
+					if(tcgOnly) sqlQueryBuilder.append(" AND " + tcgOnlyQuery);
 				}
 				else {
 					sqlQueryBuilder.append(sKey + "= '" + sVals.get(0) + "'");
@@ -156,8 +158,7 @@ public class DmdbSearchHandler implements HttpHandler {
 	
 	public String buildResultsTable(ResultSet rs) throws SQLException {
 		StringBuilder resultsTableBuilder = new StringBuilder();
-		resultsTableBuilder.append("<div id=\"results-container\">\n")
-						   .append("<table id=\"results-table\">\n")
+		resultsTableBuilder.append("<table id=\"results-table\">\n")
 						   .append("<thead>\n\t<tr>\n\t\t<th>\n\t\t\t<b>#</b>\n\t\t</th>\n")
 						   .append("\t\t<th>\n\t\t\t<b>Name</b>\n\t\t</th>\n")
 						   .append("\t\t<th>\n\t\t\t<b>Civilization</b>\n\t\t</th>\n")
@@ -171,19 +172,21 @@ public class DmdbSearchHandler implements HttpHandler {
 		int rowCount = 0;
 		while (rs.next()) {
 			rowCount++;
-			if(rowCount%2==1) {
-			resultsTableBuilder.append("\t<tr style=\"background-color: rgb(255, 255, 255);\" ")
-							   .append("onmouseout=\"this.style.backgroundColor='#FFFFFF'\" ");
+			resultsTableBuilder.append("\t<tr class=\"results-row\" ")
+							   .append("onclick=\"openCard(this)\" ");
+			String card_id = rs.getString("card_id");
+			if(card_id.length()<4) {
+				StringBuilder idBuilder = new StringBuilder();
+				for(int i = 0; i<4-card_id.length(); i++) {
+					idBuilder.append('0');
+				}
+				idBuilder.append(card_id);
+				card_id = idBuilder.toString();
 			}
-			else {
-			resultsTableBuilder.append("\t<tr style=\"background-color: rgb(234, 234, 234);\" ")
-							   .append("onmouseout=\"this.style.backgroundColor='#EAEAEA'\" ");
-			}
-			resultsTableBuilder.append("onmouseover=\"this.style.backgroundColor='#C5C5C5'\" ")
-							   .append("onclick=\"openCard(this)\">\n")
+			resultsTableBuilder.append("data-id=\"" + card_id + "\">\n")
 							   .append("\t\t<td>" + rowCount + ". </td>\n");
 			String cardname = rs.getString("card_name");
-			if(cardname.length()>4&&"Uber".equals(cardname.substring(0,4))) {
+			if(cardname.length()>10&&"Uberdragon".equals(cardname.substring(0,10))) {
 				cardname = "\u00DCber" + cardname.substring(4);
 			}
 			resultsTableBuilder.append("\t\t<td>" + cardname + "</td>\n")
@@ -213,14 +216,36 @@ public class DmdbSearchHandler implements HttpHandler {
 			if(card_power==null) {
 				card_power = "";
 			}
-			resultsTableBuilder.append("\t\t<td>" + card_power + "</td>\n")
-							   .append("\t\t<td>" + rs.getString("rarity") + "</td>\n")
-							   .append("\t\t<td>" + rs.getString("coll_num") + "</td>\n");
+			resultsTableBuilder.append("\t\t<td>" + card_power + "</td>\n");
+			if(rs.getString("rarity").equals("NR")) {
+				resultsTableBuilder.append("\t\t<td class=\"center-td\" title=\"No Rarity\">NR</td>\n");
+			} else {
+				String rarity = rs.getString("rarity").toLowerCase();
+				String rarityFullName = "";
+				switch(rarity) {
+					case "c":
+						rarityFullName = "Common";
+						break;
+					case "u":
+						rarityFullName = "Uncommon";
+						break;
+					case "r":
+						rarityFullName = "Rare";
+						break;
+					case "vr":
+						rarityFullName = "Very Rare";
+						break;
+					case "sr":
+						rarityFullName = "Super Rare";
+				}
+				resultsTableBuilder.append("\t\t<td class=\"center-td\"><img src=\"icons/rarity-" + rarity + ".png\" title=\"" + rarityFullName + "\"></td>\n");
+			}
+			resultsTableBuilder.append("\t\t<td>" + rs.getString("coll_num") + "</td>\n");
 			String card_set = rs.getString("card_set");
-			resultsTableBuilder.append("\t\t<td class=\"set-td\"><img src=\"icons/" + card_set + ".png\" title=\"" + card_set.toUpperCase() + "\"></td>\n")
+			resultsTableBuilder.append("\t\t<td class=\"center-td\"><img src=\"icons/" + card_set + ".png\" title=\"" + card_set.toUpperCase() + "\"></td>\n")
 							   .append("\t</tr>\n");
 		}
-		resultsTableBuilder.append("</tbody>\n</table>\n</div>\n");
+		resultsTableBuilder.append("</tbody>\n</table>\n");
 		return resultsTableBuilder.toString();
 	}
 	

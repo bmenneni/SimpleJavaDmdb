@@ -8,7 +8,7 @@ document.addEventListener("click", (event) => {
 document.getElementById("filter-form").addEventListener("submit", function (event) {
     const form = event.target;
     const selectElements = form.querySelectorAll("select");
-    const searchByName = document.getElementById("search_term");
+    const searchByName = document.getElementById("search-term");
     selectElements.forEach((select) => {
         if(select.value.length===0) {
             select.removeAttribute("name");
@@ -17,6 +17,19 @@ document.getElementById("filter-form").addEventListener("submit", function (even
     if(searchByName.value.length===0) {
         searchByName.removeAttribute("name");
     }
+});
+
+document.getElementById("results-table").querySelectorAll("tbody tr").forEach(row => {
+    row.addEventListener("mouseenter", function() {
+        let card_id = this.dataset.id;
+        const card_image = document.getElementById("card-image");
+        const image_panel = card_image.parentElement;
+        card_image.src = "https://d2d61uxafrrtdf.cloudfront.net/" + card_id + ".webp";
+        image_panel.style.display = "inline-block";
+    });
+    row.addEventListener("mouseleave", function() {
+        document.getElementById("image-panel-div").style.display = "none";
+    });
 });
 
 function toggleInfoBox(event) {
@@ -56,51 +69,44 @@ function sort() {
             break;
         case 'power':
             columnIndex = 6;
-            break;
-        case 'rarity':
-            columnIndex = 7;
     }
     
     const resultsTable = document.getElementById("results-table");
     const resultsBody = resultsTable.querySelector('tbody');
     const rows = Array.from(resultsBody.getElementsByTagName('tr'));
-    
+
     if(sortParameter=='set') {
-        function setCollNumSort(row) {
-            const iconSrc = row.querySelector('img').getAttribute('src');
-            const splitSrc = iconSrc.split("/")[1];
-            const setName = splitSrc.split(".")[0];
-            const splitSetName = setName.split("-");
-            let setNumber = 1;
-            let sortVal = 0;
-            if(setName=='promo') sortVal += 9000;
-            else if(splitSetName.length===2) {
-                setNumber = parseInt(splitSetName[1]);
+        rows.sort((a, b) => {
+            return a.dataset.id - b.dataset.id;
+        });
+    }
+
+    else if(sortParameter=='rarity') {
+        function getRarityValue(row) {
+            const rarity = row.querySelector('img').getAttribute('src').split("/")[1].split(".")[0].split("-")[1];
+            let rarityValue;
+            switch(rarity) {
+                case 'nr' :
+                    rarityValue = 0;
+                    break;
+                case 'c':
+                    rarityValue = 1;
+                    break;
+                case 'u':
+                    rarityValue = 2;
+                    break;
+                case 'r':
+                    rarityValue = 3;
+                    break;
+                case 'vr':
+                    rarityValue = 4;
+                    break;
+                case 'sr':
+                    rarityValue = 5;
             }
-            let collNum = row.getElementsByTagName('td')[8].textContent;
-            for(let i = 0; i<collNum.length; i++) {
-                if(collNum.charAt(i)=='/') {
-                    if(collNum.charAt(0)=='S') {
-                        sortVal += parseInt(collNum.substring(1,i));
-                    }
-                    else if(i+2<collNum.length&&collNum.charAt(i+1)=='Y') {
-                        sortVal += parseInt(collNum.substring(1,i));
-                        if(collNum.charAt(0)=='L'&&collNum.charAt(collNum.length-1)=='2') {
-                            sortVal += 20;
-                        }
-                        else if(collNum.charAt(0)=='M') sortVal += 50;
-                        else if(collNum.charAt(0)=='P') sortVal += 100;
-                    }
-                    else {
-                        const val = parseInt(collNum.substring(0,i));
-                        sortVal += (val+10);
-                    }
-                }
-            }
-            sortVal += ((setNumber-1)*120);
-            return sortVal;
+            return rarityValue;
         }
-        rows.sort((a, b) => setCollNumSort(a) - setCollNumSort(b));
+        rows.sort((a, b) => getRarityValue(b) - getRarityValue(a));
     }
 
     else if(sortParameter=='cost') {
@@ -131,23 +137,7 @@ function sort() {
         rows.sort((a, b) => {
             let aValue = a.getElementsByTagName('td')[columnIndex].textContent;
             let bValue = b.getElementsByTagName('td')[columnIndex].textContent;
-            if(sortParameter=='rarity') {
-                function mapRarity(rarity) {
-                    const rarityMapping = {
-                        'NR': 0,
-                        'C': 1,
-                        'U': 2,
-                        'R': 3,
-                        'VR': 4,
-                        'SR': 5
-                    };
-                    return rarityMapping[rarity];
-                }
-                const aNumer = mapRarity(aValue);
-                const bNumer = mapRarity(bValue);
-                return bNumer - aNumer;
-            }
-            else return aValue.localeCompare(bValue);
+            return aValue.localeCompare(bValue);
         });
     }
     
@@ -156,18 +146,6 @@ function sort() {
     
     rows.forEach(row => {
         cardNum++;
-        if(cardNum%2==1) {
-            row.style.backgroundColor = "#ffffff";
-            row.onmouseout = function() {
-                this.style.backgroundColor = "#ffffff";
-            }
-        }
-        else {
-            row.style.backgroundColor = "#eaeaea";
-            row.onmouseout = function() {
-                this.style.backgroundColor = "#eaeaea";
-            }
-        }
         row.getElementsByTagName('td')[0].textContent = cardNum + '.';
         resultsBody.appendChild(row);
     });

@@ -5,16 +5,21 @@ body, p, td, th {
 }
 body {
 	background-color: #990000;
-	margin-left: 15px;
+	margin-left: 20px;
 }
 thead > tr {
-	background-color: #C5C5C5;
+	background-color: #c5c5c5;
 }
 thead > tr > th {
 	padding: 3px;
 }
 select optgroup {
 	font-style: normal;
+}
+.headline {
+	font-size: 12pt;
+	color: #ffffff;
+	font-weight: bold;
 }
 .small-symbol {
 	font-family: "Noto Sans Symbols", "Segoe UI Symbol", sans-serif;
@@ -27,8 +32,17 @@ select optgroup {
 .vert-td {
 	vertical-align: top;
 }
-.set-td {
+.center-td {
 	text-align: center;
+}
+#left-panel-div {
+	vertical-align: top;
+	margin-right: 50px;
+	display: inline-block;
+}
+#image-panel-div {
+	position: fixed;
+	display: none;
 }
 #filter-table {
 	background-color: #EAEAEA;
@@ -51,17 +65,22 @@ select optgroup {
 	word-wrap: break-word;
 	white-space: normal;
 }
-#results-container {
-	float: left;
-	margin-right: 15px;
-}
 #results-table {
 	border-spacing: 1px;
 	width: 750px;
 }
-#results-table > tbody > tr {
+.results-row {
 	cursor: pointer;
 }
-#results-table > tbody > tr > td {
+.results-row:nth-child(odd) {
+	background-color: #ffffff;
+}
+.results-row:nth-child(even) {
+	background-color: #eaeaea;
+}
+.results-row:hover {
+	background-color: #c5c5c5;
+}
+.results-row > td {
 	padding: 3px;
 }

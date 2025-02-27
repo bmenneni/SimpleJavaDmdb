@@ -26,20 +26,21 @@ public class DmdbHomeHandler implements HttpHandler {
 	public void handle(HttpExchange exchange) throws IOException {	
 
 		String requestPath = exchange.getRequestURI().getPath();
+		String requestMethod = exchange.getRequestMethod();
 		
 		if("/".equals(requestPath)) {
 			exchange.getResponseHeaders().set("Content-Type", "text/html; charset=UTF-8");
-			String rm = exchange.getRequestMethod();
-			if("GET".equals(rm)) {
+			if("GET".equals(requestMethod)) {
 				exchange.sendResponseHeaders(200, baseHtml.length());
 				try(OutputStream stream = exchange.getResponseBody()) {
 					stream.write(baseHtml.getBytes());
 				}			
 			}
-			else if("HEAD".equals(rm)) {
+			else if("HEAD".equals(requestMethod)) {
 				exchange.sendResponseHeaders(200, -1);
 			}
 		}
+		else if("HEAD".equals(requestMethod)) exchange.sendResponseHeaders(404, -1);
 		else {
 			File fil = new File("resources" + requestPath);
 			if(fil.exists()) {
@@ -82,6 +83,9 @@ public class DmdbHomeHandler implements HttpHandler {
 		}
 		else if(fileName.endsWith(".png")) {
 			return "image/png";
+		}
+		else if(fileName.endsWith(".webp")) {
+			return "image/webp";
 		}
 		else if(fileName.endsWith(".css")) {
 			return "text/css";
