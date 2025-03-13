@@ -30,6 +30,8 @@ public class DmdbSearchHandler implements HttpHandler {
 			exchange.sendResponseHeaders(200, htmlResponse.getBytes("UTF-8").length);
 			try (OutputStream stream = exchange.getResponseBody()) {
 				stream.write(htmlResponse.getBytes("UTF-8"));
+			} finally {
+				exchange.close();
 			}
 		}
 		catch (SQLException sqle) {
@@ -125,14 +127,14 @@ public class DmdbSearchHandler implements HttpHandler {
 						if(!firstSet) {
 							sqlQueryBuilder.append(" OR ");
 						}
-						sqlQueryBuilder.append(sKey + " = '" + setVals[i] + "'");
+						sqlQueryBuilder.append(sKey + "='" + setVals[i] + "'");
 						if(firstSet) firstSet = false;
 					}
 					sqlQueryBuilder.append(")");
 					if(tcgOnly) sqlQueryBuilder.append(" AND " + tcgOnlyQuery);
 				}
 				else {
-					sqlQueryBuilder.append(sKey + "= '" + sVals.get(0) + "'");
+					sqlQueryBuilder.append(sKey + "='" + sVals.get(0) + "'");
 				}
 			}
 			else if("civilization".equals(sKey)||"keywords".equals(sKey)||"categories".equals(sKey)) {
@@ -172,8 +174,7 @@ public class DmdbSearchHandler implements HttpHandler {
 		int rowCount = 0;
 		while (rs.next()) {
 			rowCount++;
-			resultsTableBuilder.append("\t<tr class=\"results-row\" ")
-							   .append("onclick=\"openCard(this)\" ");
+			resultsTableBuilder.append("\t<tr class=\"results-row\" ");
 			String card_id = rs.getString("card_id");
 			if(card_id.length()<4) {
 				StringBuilder idBuilder = new StringBuilder();
@@ -283,6 +284,8 @@ public class DmdbSearchHandler implements HttpHandler {
 		exchange.sendResponseHeaders(statusCode, errorMessage.length());
 		try (OutputStream stream = exchange.getResponseBody()) {
 			stream.write(errorMessage.getBytes());
+		} finally {
+			exchange.close();
 		}
 	}
 }

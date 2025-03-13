@@ -20,15 +20,26 @@ document.getElementById("filter-form").addEventListener("submit", function (even
 });
 
 document.getElementById("results-table").querySelectorAll("tbody tr").forEach(row => {
+    const card_id = row.dataset.id;
+    const card_image = document.getElementById("card-image");
+    const image_panel = card_image.parentElement;
+    const imgURL = "https://d2d61uxafrrtdf.cloudfront.net/" + card_id + ".webp";
     row.addEventListener("mouseenter", function() {
-        let card_id = this.dataset.id;
-        const card_image = document.getElementById("card-image");
-        const image_panel = card_image.parentElement;
-        card_image.src = "https://d2d61uxafrrtdf.cloudfront.net/" + card_id + ".webp";
+        card_image.src = imgURL;
         image_panel.style.display = "inline-block";
     });
     row.addEventListener("mouseleave", function() {
-        document.getElementById("image-panel-div").style.display = "none";
+        image_panel.style.display = "none";
+    });
+    row.addEventListener("click", function(event) {
+        if(event.shiftKey) {
+            window.open(imgURL, '_blank');
+        }
+        else {
+            const card_name = row.getElementsByTagName('td')[1].textContent;
+            const wikiURL = "https://duelmasters.fandom.com/wiki/" + card_name;
+            window.open(wikiURL, '_blank');
+        }
     });
 });
 
@@ -40,12 +51,6 @@ function toggleInfoBox(event) {
 
 function resetPage() {
 	window.location = window.location.origin;
-}
-
-function openCard(rowElement) {
-    const card_name = rowElement.getElementsByTagName('td')[1].textContent;
-    const wikiURL = "https://duelmasters.fandom.com/wiki/" + card_name;
-    window.open(wikiURL, '_blank');
 }
 
 function sort() {

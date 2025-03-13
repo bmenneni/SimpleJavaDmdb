@@ -34,7 +34,7 @@ public class DmdbHomeHandler implements HttpHandler {
 				exchange.sendResponseHeaders(200, baseHtml.length());
 				try(OutputStream stream = exchange.getResponseBody()) {
 					stream.write(baseHtml.getBytes());
-				}			
+				}
 			}
 			else if("HEAD".equals(requestMethod)) {
 				exchange.sendResponseHeaders(200, -1);
@@ -58,8 +58,9 @@ public class DmdbHomeHandler implements HttpHandler {
 				try(OutputStream stream = exchange.getResponseBody()) {
 					stream.write(errorMsg.getBytes());
 				}
-			}
+			}		
 		}
+		exchange.close();
 	}
 	
 	public String loadHtmlFile(String filePath) throws IOException {
