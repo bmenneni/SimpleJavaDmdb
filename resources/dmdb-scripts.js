@@ -9,6 +9,8 @@ document.getElementById("filter-form").addEventListener("submit", function (even
     const form = event.target;
     const selectElements = form.querySelectorAll("select");
     const searchByName = document.getElementById("search-term");
+    const sortParameter = document.getElementById("sort_by");
+    const sortMode = document.getElementById("sort_mode");
     selectElements.forEach((select) => {
         if(select.value.length===0) {
             select.removeAttribute("name");
@@ -16,6 +18,10 @@ document.getElementById("filter-form").addEventListener("submit", function (even
     });
     if(searchByName.value.length===0) {
         searchByName.removeAttribute("name");
+    }
+    if(sortParameter.value=='set') {
+        sortParameter.removeAttribute("name");
+        if(sortMode.value=='asc') sortMode.removeAttribute("name");
     }
 });
 
@@ -55,9 +61,10 @@ function resetPage() {
 
 function sort() {
     const sortParameter = document.getElementById("sort_by").value;
+    const sortMode = document.getElementById("sort_mode").value;
     let columnIndex;
     switch(sortParameter) {
-        case 'name':
+        case 'card_name':
             columnIndex = 1;
             break;
         case 'civilization':
@@ -66,7 +73,7 @@ function sort() {
         case 'cost':
             columnIndex = 3;
             break;
-        case 'type':
+        case 'card_type':
             columnIndex = 4;
             break;
         case 'race':
@@ -82,50 +89,62 @@ function sort() {
 
     if(sortParameter=='set') {
         rows.sort((a, b) => {
-            return a.dataset.id - b.dataset.id;
+            if(sortMode=='desc') {
+                return b.dataset.id - a.dataset.id;
+            } else {
+                return a.dataset.id - b.dataset.id;               
+            }
         });
     }
 
     else if(sortParameter=='rarity') {
         function getRarityValue(row) {
-            const rarity = row.querySelector('img').getAttribute('src').split("/")[1].split(".")[0].split("-")[1];
+            let rarity;
             let rarityValue;
+            if(row.dataset.id>9005) {
+                rarityValue = 0;
+            } else {
+                rarity = row.querySelector('img').title;
+            }
             switch(rarity) {
-                case 'nr' :
-                    rarityValue = 0;
-                    break;
-                case 'c':
+                case "Common":
                     rarityValue = 1;
                     break;
-                case 'u':
+                case "Uncommon":
                     rarityValue = 2;
                     break;
-                case 'r':
+                case "Rare":
                     rarityValue = 3;
                     break;
-                case 'vr':
+                case "Very Rare":
                     rarityValue = 4;
                     break;
-                case 'sr':
+                case "Super Rare":
                     rarityValue = 5;
             }
             return rarityValue;
         }
-        rows.sort((a, b) => getRarityValue(b) - getRarityValue(a));
+        if(sortMode=='asc') {
+            rows.sort((a, b) => getRarityValue(a) - getRarityValue(b));
+        } else {
+            rows.sort((a, b) => getRarityValue(b) - getRarityValue(a));
+        }
     }
 
     else if(sortParameter=='cost') {
         rows.sort((a, b) => {
             let aInt = parseInt(a.getElementsByTagName('td')[columnIndex].textContent);
             let bInt = parseInt(b.getElementsByTagName('td')[columnIndex].textContent);
-            return aInt - bInt;
+            if(sortMode=='desc') {
+                return bInt - aInt;
+            } else return aInt - bInt;
         });
     }
 
     else if(sortParameter=='power') {
         rows.sort((a, b) => {
             let aInt;
-            let bint;
+            let bInt;
             if((a.getElementsByTagName('td')[columnIndex].textContent)==="") {
                 aInt = -100;
             }
@@ -134,7 +153,9 @@ function sort() {
                 bInt = -100;
             }
             else bInt = parseInt(b.getElementsByTagName('td')[columnIndex].textContent);
-            return bInt - aInt;
+            if(sortMode=='asc') {
+                return aInt - bInt;
+            } else return bInt - aInt;
         });     
     }
 
@@ -142,7 +163,11 @@ function sort() {
         rows.sort((a, b) => {
             let aValue = a.getElementsByTagName('td')[columnIndex].textContent;
             let bValue = b.getElementsByTagName('td')[columnIndex].textContent;
-            return aValue.localeCompare(bValue);
+            if(sortMode=='asc') {
+                return aValue.localeCompare(bValue);              
+            } else {
+                return bValue.localeCompare(aValue);
+            }
         });
     }
     
@@ -154,4 +179,4 @@ function sort() {
         row.getElementsByTagName('td')[0].textContent = cardNum + '.';
         resultsBody.appendChild(row);
     });
-}   
+}

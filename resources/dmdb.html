@@ -40,8 +40,10 @@
 							<option value="dune_gecko">Dune Gecko</option>
 							<option value="earth_dragon">Earth Dragon</option>
 							<option value="earth_eater">Earth Eater</option>
+							<option value="feathernoid">Feathernoid</option>
 							<option value="fire_bird">Fire Bird</option>
 							<option value="fishy">Fish</option>
+							<option value="gargoyle">Gargoyle</option>
 							<option value="gel_fish">Gel Fish</option>
 							<option value="ghost">Ghost</option>
 							<option value="gianto">Giant</option>
@@ -70,6 +72,7 @@
 							<option value="snow_faerie">Snow Faerie</option>
 							<option value="soltrooper">Soltrooper</option>
 							<option value="spirit_quartz">Spirit Quartz</option>
+							<option value="splash_queen">Splash Queen</option>
 							<option value="starlight_tree">Starlight Tree</option>
 							<option value="survivor">Survivor</option>
 							<option value="tree_folk">Tree Folk</option>
@@ -212,7 +215,7 @@
 								<option value="" selected>All Categories</option>
 								<option value="draw">Draw cards</option>
 								<option value="ramp">Ramp (add cards to mana)</option>
-								<option value="tap_opp">Tap creature</option>
+								<option value="tap_opp">Tap opponent's creature</option>
 								<option value="untaps">Untap creature</option>
 								<option value="attack_untapped">Attack untapped creatures</option>
 							<optgroup label="Effect trigger categories">
@@ -327,15 +330,19 @@
 						</div>
 					</td>
 					<td class="vert-td">
-						<select id="sort_by" style="width:200px">
-							<option class="other" value="set">Sort by Set and Collector #</option>
-							<option class="other" value="name">Sort by Name</option>
-							<option class="other" value="civilization">Sort by Civilization</option>
-							<option class="other" value="cost">Sort by Cost</option>
-							<option class="other" value="type">Sort by Type</option>
-							<option class="other" value="race">Sort by Race</option>
-							<option class="other" value="power">Sort by Power</option>
-							<option class="other" value="rarity">Sort by Rarity</option>
+						<select id="sort_by" name="sort_by" style="width:200px">
+							<option value="set">Sort by Set and Collector #</option>
+							<option value="civilization">Sort by Civilization</option>
+							<option value="cost">Sort by Cost</option>
+							<option value="card_name">Sort by Name</option>
+							<option value="power">Sort by Power</option>
+							<option value="race">Sort by Race</option>
+							<option value="rarity">Sort by Rarity</option>
+							<option value="card_type">Sort by Type</option>
+						</select>
+						<select id="sort_mode" name="mode" style="width:48px">
+							<option value="asc">ASC</option>
+							<option value="desc">DES</option>
 						</select>
 						<input type="button" onclick="sort()" value="Sort">
 						<br>

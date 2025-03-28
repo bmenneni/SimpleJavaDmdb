@@ -21,6 +21,10 @@ select optgroup {
 	color: #ffffff;
 	font-weight: bold;
 }
+.small-headline {
+	color: #ffffff;
+	font-weight: bold;
+}
 .small-symbol {
 	font-family: "Noto Sans Symbols", "Segoe UI Symbol", sans-serif;
 	font-size: 8pt;
