@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
 	<meta charset="utf-8">
@@ -6,9 +7,8 @@
 	<script src="dmdb-scripts.js" defer></script>
 </head>
 <body>
-<p class="headline">NEW: English Sets DM-13 to DM-17 have been added, and card images now display when hovering over a search result. Check it out!</p>
 <div id="left-panel-div">
-<img src="dmdb_banner.jpg">
+<img src="dmdb_banner.jpg" alt="Duel Masters banner">
 <form id="filter-form" action="/search" method="get" accept-charset="utf-8">
 	<table id="filter-table">
 		<tbody>
@@ -176,10 +176,17 @@
 							<option value="fire">Fire</option>
 							<option value="nature">Nature</option>
 						</select>
+						<div style="display: inline-block; vertical-align: top; font-size: 10pt; width: 100px">
+							<input type="radio" class="match_filter" name="match_civ" value="exact" checked>
+							<label for="exact">Match exact &nbsp; &nbsp; &nbsp; civs selected</label><br>
+							<br>
+							<input type="radio" class="match_filter" name="match_civ" value="any">
+							<label for="any">Match any &nbsp; &nbsp; &nbsp; &nbsp; civs selected</label><br>
+						</div>
 						<br>
 						<i>Filter by Civilizations</i>
 						<sub class="small-symbol" onclick="toggleInfoBox(event)">&#x24d8;</sub>
-						<div id="civ-search-info">When choosing to filter by more than one civilization, the search will return multi-civ cards that contain all of the chosen civilizations.</div>
+						<div id="civ-search-info">To search specifically for multi-civ cards, select all the civs that the multi-civ cards belong to, and check the "Match exact civs selected" button.</div>
 					</td>
 					<td>
 						<select id="keyword_filter" name="keywords" multiple size="6" style="width:135px">

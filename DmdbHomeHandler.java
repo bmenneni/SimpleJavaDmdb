@@ -28,7 +28,7 @@ public class DmdbHomeHandler implements HttpHandler {
 		String requestPath = exchange.getRequestURI().getPath();
 		String requestMethod = exchange.getRequestMethod();
 		
-		if("/".equals(requestPath)) {
+		if("/".equals(requestPath)&&("GET".equals(requestMethod)||"HEAD".equals(requestMethod))) {
 			exchange.getResponseHeaders().set("Content-Type", "text/html; charset=UTF-8");
 			if("GET".equals(requestMethod)) {
 				exchange.sendResponseHeaders(200, baseHtml.length());
@@ -41,7 +41,7 @@ public class DmdbHomeHandler implements HttpHandler {
 			}
 		}
 		else if("HEAD".equals(requestMethod)) exchange.sendResponseHeaders(404, -1);
-		else {
+		else if("GET".equals(requestMethod)) {
 			File fil = new File("resources" + requestPath);
 			if(fil.exists()) {
 				String fileContentType = getContentType(fil);
@@ -59,6 +59,13 @@ public class DmdbHomeHandler implements HttpHandler {
 					stream.write(errorMsg.getBytes());
 				}
 			}		
+		}
+		else {
+			String errorMsg = "Method not supported.";
+			exchange.sendResponseHeaders(501, errorMsg.length());
+			try(OutputStream stream = exchange.getResponseBody()) {
+				stream.write(errorMsg.getBytes());
+			}
 		}
 		exchange.close();
 	}

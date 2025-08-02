@@ -61,15 +61,21 @@ public class DmdbSearchHandler implements HttpHandler {
 		sqlQueryBuilder.append("SELECT * FROM Card");
 		boolean initialParam = true;
 		String compareOperator = "";
+		StringBuilder sorter = new StringBuilder();
+		String matchMode = "";
+		String sortMode = "";
+		if(paramsMap.containsKey("match_civ")) {
+			matchMode = paramsMap.get("match_civ").get(0);
+		}
 		Set<Map.Entry<String, List<String>>> paramsSet = paramsMap.entrySet();
 		for(Map.Entry<String, List<String>> entry : paramsSet) {
 			String sKey = entry.getKey();
 			List<String> sVals = entry.getValue();
-			if(initialParam&&!paramsSet.isEmpty()&&!"compare".equals(sKey)) {
+			if(initialParam&&!paramsSet.isEmpty()&&!"compare".equals(sKey)&&!"match_civ".equals(sKey)&&!"sort_by".equals(sKey)&&!"mode".equals(sKey)) {
 				sqlQueryBuilder.append(" WHERE ");
 				initialParam = false;
 			}
-			else if(!initialParam&&!"compare".equals(sKey)) {
+			else if(!initialParam&&!"compare".equals(sKey)&&!"match_civ".equals(sKey)&&!"sort_by".equals(sKey)&&!"mode".equals(sKey)) {
 				sqlQueryBuilder.append(" AND ");
 			}
 			if("compare".equals(sKey)&&compareOperator.equals("")) {
@@ -137,20 +143,63 @@ public class DmdbSearchHandler implements HttpHandler {
 					sqlQueryBuilder.append(sKey + "='" + sVals.get(0) + "'");
 				}
 			}
-			else if("civilization".equals(sKey)||"keywords".equals(sKey)||"categories".equals(sKey)) {
+			else if("civilization".equals(sKey)) {
+				if("exact".equals(matchMode)) {
+					if(sVals.size()==1) {
+						String civname = sVals.get(0);
+						civname = civname.substring(0,1).toUpperCase() + civname.substring(1);
+						sqlQueryBuilder.append(sKey + "='" + civname + "'");
+					} else {
+						String[] civArr = new String[sVals.size()];
+						civArr = sVals.toArray(civArr);
+						sqlQueryBuilder.append("(");
+						for(int i = 0; i<civArr.length; i++) {
+							sqlQueryBuilder.append(sKey + " LIKE \"%" + civArr[i] + "%\" AND ");
+						}
+						int delimiterCount = civArr.length-1;
+						sqlQueryBuilder.append("(LENGTH(civilization) - LENGTH(REPLACE(civilization, '/', ''))) = " + delimiterCount);
+						sqlQueryBuilder.append(")");
+					}
+				} else {
+					String[] arr = new String[sVals.size()];
+					arr = sVals.toArray(arr);
+					for(int i = 0; i<arr.length; i++) {
+						if(i>0) sqlQueryBuilder.append(" OR ");
+						sqlQueryBuilder.append(sKey + " LIKE \"%" + arr[i] + "%\"");
+					}
+				}
+			}
+			else if("keywords".equals(sKey)||"categories".equals(sKey)) {
 				String[] arr = new String[sVals.size()];
 				arr = sVals.toArray(arr);
 				for(int i = 0; i<arr.length; i++) {
-					if(i>0) {
-						sqlQueryBuilder.append(" AND ");
-					}
+					if(i>0) sqlQueryBuilder.append(" AND ");
 					sqlQueryBuilder.append(sKey + " LIKE \"%" + arr[i] + "%\"");
 				}
 			}
 			else if("race".equals(sKey)||"card_type".equals(sKey)) {
 				sqlQueryBuilder.append(sKey + " LIKE \"%" + sVals.get(0) + "%\""); 
 			}
+			else if("sort_by".equals(sKey)) {
+				if("rarity".equals(sVals.get(0))) {
+					sorter.append(" ORDER BY CASE WHEN rarity='NR' THEN 0")
+						  .append(" WHEN rarity='C' THEN 1")
+						  .append(" WHEN rarity='U' THEN 2")
+						  .append(" WHEN rarity='R' THEN 3")
+						  .append(" WHEN rarity='VR' THEN 4")
+						  .append(" WHEN rarity='SR' THEN 5")
+						  .append(" end;");
+				}
+				else sorter.append(" ORDER BY " + sVals.get(0));
+			}
+			else if("mode".equals(sKey)) {
+				sortMode = sVals.get(0);
+			}
 		}
+		String sortString = sorter.toString();
+		sqlQueryBuilder.append(sortString);
+		sqlQueryBuilder.append(" " + sortMode);
+		if(sortString.length()>0) sqlQueryBuilder.append(" NULLS LAST");
 		String sqlQuery = sqlQueryBuilder.toString();
 		System.out.println(sqlQuery);
 		Statement statement = conn.createStatement();
@@ -160,7 +209,8 @@ public class DmdbSearchHandler implements HttpHandler {
 	
 	public String buildResultsTable(ResultSet rs) throws SQLException {
 		StringBuilder resultsTableBuilder = new StringBuilder();
-		resultsTableBuilder.append("<table id=\"results-table\">\n")
+		resultsTableBuilder.append("<p class=\"small-headline\">TIP: Shift-click on a search result to open the card image in a new window.</p>\n")
+						   .append("<table id=\"results-table\">\n")
 						   .append("<thead>\n\t<tr>\n\t\t<th>\n\t\t\t<b>#</b>\n\t\t</th>\n")
 						   .append("\t\t<th>\n\t\t\t<b>Name</b>\n\t\t</th>\n")
 						   .append("\t\t<th>\n\t\t\t<b>Civilization</b>\n\t\t</th>\n")
@@ -271,8 +321,22 @@ public class DmdbSearchHandler implements HttpHandler {
 					}
 					else htmlResponseBuilder.append(line + "\n");
 				}
+				else if(line.contains("match_filter")&&params.containsKey("match_civ")) {
+					String matchMode = params.get("match_civ").get(0);
+					String[] arr = line.split("\"");
+					String val = arr[arr.length-2];
+					if(line.contains("checked")&&!(val.equals(matchMode))) {
+						String[] nonchecked = line.split("checked");
+						htmlResponseBuilder.append(nonchecked[0] + nonchecked[1] + "\n");
+					}
+					else if(!(line.contains("checked"))&&val.equals(matchMode)) {
+						String[] checked = line.split(">");
+						htmlResponseBuilder.append(checked[0] + " checked>" + "\n");
+					}
+					else htmlResponseBuilder.append(line + "\n");
+				}
 				else if(line.contains("/form")) {
-					htmlResponseBuilder.append(line).append("\n<br>\n").append(resultsTable);
+					htmlResponseBuilder.append(line).append("\n").append(resultsTable);
 				}
 				else htmlResponseBuilder.append(line + "\n");
 			}

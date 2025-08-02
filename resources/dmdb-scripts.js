@@ -8,6 +8,8 @@ document.addEventListener("click", (event) => {
 document.getElementById("filter-form").addEventListener("submit", function (event) {
     const form = event.target;
     const selectElements = form.querySelectorAll("select");
+    const civFilter = document.getElementById("civ_filter");
+    const civMatch = document.querySelectorAll(".match_filter");
     const searchByName = document.getElementById("search-term");
     const sortParameter = document.getElementById("sort_by");
     const sortMode = document.getElementById("sort_mode");
@@ -16,6 +18,11 @@ document.getElementById("filter-form").addEventListener("submit", function (even
             select.removeAttribute("name");
         }
     });
+    if(civFilter.value.length===0) {
+        civMatch.forEach((element) => {
+            element.removeAttribute("name");
+        });
+    }
     if(searchByName.value.length===0) {
         searchByName.removeAttribute("name");
     }
