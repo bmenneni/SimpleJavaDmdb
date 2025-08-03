@@ -11,8 +11,6 @@ document.getElementById("filter-form").addEventListener("submit", function (even
     const civFilter = document.getElementById("civ_filter");
     const civMatch = document.querySelectorAll(".match_filter");
     const searchByName = document.getElementById("search-term");
-    const sortParameter = document.getElementById("sort_by");
-    const sortMode = document.getElementById("sort_mode");
     selectElements.forEach((select) => {
         if(select.value.length===0) {
             select.removeAttribute("name");
@@ -25,10 +23,6 @@ document.getElementById("filter-form").addEventListener("submit", function (even
     }
     if(searchByName.value.length===0) {
         searchByName.removeAttribute("name");
-    }
-    if(sortParameter.value=='set') {
-        sortParameter.removeAttribute("name");
-        if(sortMode.value=='asc') sortMode.removeAttribute("name");
     }
 });
 

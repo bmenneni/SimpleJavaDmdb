@@ -64,9 +64,8 @@ public class DmdbSearchHandler implements HttpHandler {
 		StringBuilder sorter = new StringBuilder();
 		String matchMode = "";
 		String sortMode = "";
-		if(paramsMap.containsKey("match_civ")) {
-			matchMode = paramsMap.get("match_civ").get(0);
-		}
+		if(paramsMap.containsKey("match_civ")) matchMode = paramsMap.get("match_civ").get(0);
+		if(paramsMap.containsKey("mode")) sortMode = paramsMap.get("mode").get(0);
 		Set<Map.Entry<String, List<String>>> paramsSet = paramsMap.entrySet();
 		for(Map.Entry<String, List<String>> entry : paramsSet) {
 			String sKey = entry.getKey();
@@ -192,14 +191,13 @@ public class DmdbSearchHandler implements HttpHandler {
 				}
 				else sorter.append(" ORDER BY " + sVals.get(0));
 			}
-			else if("mode".equals(sKey)) {
-				sortMode = sVals.get(0);
-			}
 		}
 		String sortString = sorter.toString();
-		sqlQueryBuilder.append(sortString);
-		sqlQueryBuilder.append(" " + sortMode);
-		if(sortString.length()>0) sqlQueryBuilder.append(" NULLS LAST");
+		if(sortString.length()>0) {
+			sqlQueryBuilder.append(sortString);
+			if(sortMode.length()>0) sqlQueryBuilder.append(" " + sortMode);
+			sqlQueryBuilder.append(" NULLS LAST");
+		} else if(sortMode.length()>0) sqlQueryBuilder.append(" ORDER BY card_id " + sortMode);
 		String sqlQuery = sqlQueryBuilder.toString();
 		System.out.println(sqlQuery);
 		Statement statement = conn.createStatement();

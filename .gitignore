@@ -1,6 +1,10 @@
+*.gitignore
 *.class
 *.jar
 *.sql
 *.sqbpro
 *.xlsx
+*.toml
+Dockerfile
 JAR-app/
+.github/
