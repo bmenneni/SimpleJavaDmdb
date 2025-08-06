@@ -88,3 +88,11 @@ select optgroup {
 .results-row > td {
 	padding: 3px;
 }
+@media(max-width: 1365px) {
+	body {
+		margin-left: 15px;
+	}
+	#left-panel-div {
+		margin-right: 20px;
+	}
+}

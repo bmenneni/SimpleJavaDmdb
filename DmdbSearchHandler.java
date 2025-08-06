@@ -160,12 +160,14 @@ public class DmdbSearchHandler implements HttpHandler {
 						sqlQueryBuilder.append(")");
 					}
 				} else {
+					sqlQueryBuilder.append("(");
 					String[] arr = new String[sVals.size()];
 					arr = sVals.toArray(arr);
 					for(int i = 0; i<arr.length; i++) {
 						if(i>0) sqlQueryBuilder.append(" OR ");
 						sqlQueryBuilder.append(sKey + " LIKE \"%" + arr[i] + "%\"");
 					}
+					sqlQueryBuilder.append(")");
 				}
 			}
 			else if("keywords".equals(sKey)||"categories".equals(sKey)) {
