@@ -94,7 +94,7 @@ public class DmdbSearchHandler implements HttpHandler {
 				else sqlQueryBuilder.append(sKey + "=" + sVals.get(0));
 			}
 			else if("rarity".equals(sKey)) {
-				sqlQueryBuilder.append(sKey + "= '" + sVals.get(0).toUpperCase() + "'");
+				sqlQueryBuilder.append(sKey + "='" + sVals.get(0) + "'");
 			}
 			else if("card_name".equals(sKey)) {
 				char[] chars = sVals.get(0).toCharArray();
@@ -211,16 +211,16 @@ public class DmdbSearchHandler implements HttpHandler {
 		StringBuilder resultsTableBuilder = new StringBuilder();
 		resultsTableBuilder.append("<p class=\"small-headline\">TIP: Shift-click on a search result to open the card image in a new window.</p>\n")
 						   .append("<table id=\"results-table\">\n")
-						   .append("<thead>\n\t<tr>\n\t\t<th>\n\t\t\t<b>#</b>\n\t\t</th>\n")
-						   .append("\t\t<th>\n\t\t\t<b>Name</b>\n\t\t</th>\n")
-						   .append("\t\t<th>\n\t\t\t<b>Civilization</b>\n\t\t</th>\n")
-						   .append("\t\t<th>\n\t\t\t<b>Cost</b>\n\t\t</th>\n")
-						   .append("\t\t<th>\n\t\t\t<b>Type</b>\n\t\t</th>\n")
-						   .append("\t\t<th>\n\t\t\t<b>Race</b>\n\t\t</th>\n")
-						   .append("\t\t<th>\n\t\t\t<b>Power</b>\n\t\t</th>\n")
-						   .append("\t\t<th>\n\t\t\t<b>Rarity</b>\n\t\t</th>\n")
-						   .append("\t\t<th>\n\t\t\t<b>Col #</b>\n\t\t</th>\n")
-						   .append("\t\t<th>\n\t\t\t<b>Set</b>\n\t\t</th>\n\t</tr>\n</thead>\n<tbody>\n");
+						   .append("<thead>\n\t<tr>\n\t\t<th>#</th>\n")
+						   .append("\t\t<th>Name</th>\n")
+						   .append("\t\t<th>Civilization</th>\n")
+						   .append("\t\t<th>Cost</th>\n")
+						   .append("\t\t<th>Type</th>\n")
+						   .append("\t\t<th>Race</th>\n")
+						   .append("\t\t<th>Power</th>\n")
+						   .append("\t\t<th>Rarity</th>\n")
+						   .append("\t\t<th>Col #</th>\n")
+						   .append("\t\t<th>Set</th>\n\t</tr>\n</thead>\n<tbody>\n");
 		int rowCount = 0;
 		while (rs.next()) {
 			rowCount++;
@@ -245,23 +245,25 @@ public class DmdbSearchHandler implements HttpHandler {
 							   .append("\t\t<td>" + rs.getInt("cost") + "</td>\n")
 							   .append("\t\t<td>" + rs.getString("card_type") + "</td>\n");
 			String race = rs.getString("race");
-			StringBuilder raceBuilder = new StringBuilder();
 			if(race!=null) {
-				raceBuilder.append(race.substring(0,1).toUpperCase());
-				for(int i = 1; i<race.length(); i++) {
-					if(race.charAt(i)=='_') {
-						raceBuilder.append(' ');
-					}
-					else if(race.charAt(i-1)=='_' || race.charAt(i-1)=='/') {
-						raceBuilder.append(race.substring(i,i+1).toUpperCase());
-					}
+				StringBuilder raceBuilder = new StringBuilder();
+				String[] rarr = race.split("/");
+				for(int i = 0; i<rarr.length; i++) {
+					String str = rarr[i];
+					if("fishy".equals(str)) raceBuilder.append("Fish");
+					else if("gianto".equals(str)) raceBuilder.append("Giant");
 					else {
-						raceBuilder.append(race.charAt(i));
+						raceBuilder.append(str.substring(0,1).toUpperCase());
+						for(int j = 1; j<str.length(); j++) {
+							if(str.charAt(j)=='_') raceBuilder.append(' ');
+							else if(str.charAt(j-1)=='_') raceBuilder.append(str.substring(j,j+1).toUpperCase());
+							else raceBuilder.append(str.charAt(j));
+						}
 					}
+					if(i<rarr.length-1) raceBuilder.append('/');
 				}
-			}
-			race = raceBuilder.toString();
-			if(race.endsWith("Fishy")||race.endsWith("Gianto")) race = race.substring(0,race.length()-1);
+				race = raceBuilder.toString();
+			} else race = "";
 			resultsTableBuilder.append("\t\t<td>" + race + "</td>\n");
 			String card_power = rs.getString("power");
 			if(card_power==null) {
@@ -271,22 +273,22 @@ public class DmdbSearchHandler implements HttpHandler {
 			if(rs.getString("rarity").equals("NR")) {
 				resultsTableBuilder.append("\t\t<td class=\"center-td\" title=\"No Rarity\">NR</td>\n");
 			} else {
-				String rarity = rs.getString("rarity").toLowerCase();
+				String rarity = rs.getString("rarity");
 				String rarityFullName = "";
 				switch(rarity) {
-					case "c":
+					case "C":
 						rarityFullName = "Common";
 						break;
-					case "u":
+					case "U":
 						rarityFullName = "Uncommon";
 						break;
-					case "r":
+					case "R":
 						rarityFullName = "Rare";
 						break;
-					case "vr":
+					case "VR":
 						rarityFullName = "Very Rare";
 						break;
-					case "sr":
+					case "SR":
 						rarityFullName = "Super Rare";
 				}
 				resultsTableBuilder.append("\t\t<td class=\"center-td\"><img src=\"icons/rarity-" + rarity + ".png\" title=\"" + rarityFullName + "\"></td>\n");
