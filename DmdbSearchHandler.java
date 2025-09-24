@@ -145,9 +145,7 @@ public class DmdbSearchHandler implements HttpHandler {
 			else if("civilization".equals(sKey)) {
 				if("exact".equals(matchMode)) {
 					if(sVals.size()==1) {
-						String civname = sVals.get(0);
-						civname = civname.substring(0,1).toUpperCase() + civname.substring(1);
-						sqlQueryBuilder.append(sKey + "='" + civname + "'");
+						sqlQueryBuilder.append(sKey + "='" + sVals.get(0) + "'");
 					} else {
 						String[] civArr = new String[sVals.size()];
 						civArr = sVals.toArray(civArr);
@@ -183,12 +181,12 @@ public class DmdbSearchHandler implements HttpHandler {
 			}
 			else if("sort_by".equals(sKey)) {
 				if("rarity".equals(sVals.get(0))) {
-					sorter.append(" ORDER BY CASE WHEN rarity='NR' THEN 0")
-						  .append(" WHEN rarity='C' THEN 1")
-						  .append(" WHEN rarity='U' THEN 2")
-						  .append(" WHEN rarity='R' THEN 3")
-						  .append(" WHEN rarity='VR' THEN 4")
-						  .append(" WHEN rarity='SR' THEN 5")
+					sorter.append(" ORDER BY CASE WHEN rarity='nr' THEN 0")
+						  .append(" WHEN rarity='c' THEN 1")
+						  .append(" WHEN rarity='u' THEN 2")
+						  .append(" WHEN rarity='r' THEN 3")
+						  .append(" WHEN rarity='vr' THEN 4")
+						  .append(" WHEN rarity='sr' THEN 5")
 						  .append(" end;");
 				}
 				else sorter.append(" ORDER BY " + sVals.get(0));
@@ -240,8 +238,16 @@ public class DmdbSearchHandler implements HttpHandler {
 			if(cardname.length()>10&&"Uberdragon".equals(cardname.substring(0,10))) {
 				cardname = "\u00DCber" + cardname.substring(4);
 			}
-			resultsTableBuilder.append("\t\t<td>" + cardname + "</td>\n")
-							   .append("\t\t<td>" + rs.getString("civilization") + "</td>\n")
+			resultsTableBuilder.append("\t\t<td>" + cardname + "</td>\n");
+			String[] civs = rs.getString("civilization").split("/");
+			StringBuilder civIconBuilder = new StringBuilder();
+			for(String civ : civs) {
+				civIconBuilder.append("<img src=\"civ-icons/").append(civ).append(".webp\" title=\"")
+							  .append(civ.substring(0,1).toUpperCase()).append(civ.substring(1))
+							  .append("\">");
+			}
+			String civIconStr = civIconBuilder.toString();
+			resultsTableBuilder.append("\t\t<td class=\"center-td\">").append(civIconStr).append("</td>\n")
 							   .append("\t\t<td>" + rs.getInt("cost") + "</td>\n")
 							   .append("\t\t<td>" + rs.getString("card_type") + "</td>\n");
 			String race = rs.getString("race");
@@ -270,25 +276,25 @@ public class DmdbSearchHandler implements HttpHandler {
 				card_power = "";
 			}
 			resultsTableBuilder.append("\t\t<td>" + card_power + "</td>\n");
-			if(rs.getString("rarity").equals("NR")) {
+			if(rs.getString("rarity").equals("nr")) {
 				resultsTableBuilder.append("\t\t<td class=\"center-td\" title=\"No Rarity\">NR</td>\n");
 			} else {
 				String rarity = rs.getString("rarity");
 				String rarityFullName = "";
 				switch(rarity) {
-					case "C":
+					case "c":
 						rarityFullName = "Common";
 						break;
-					case "U":
+					case "u":
 						rarityFullName = "Uncommon";
 						break;
-					case "R":
+					case "r":
 						rarityFullName = "Rare";
 						break;
-					case "VR":
+					case "vr":
 						rarityFullName = "Very Rare";
 						break;
-					case "SR":
+					case "sr":
 						rarityFullName = "Super Rare";
 				}
 				resultsTableBuilder.append("\t\t<td class=\"center-td\"><img src=\"icons/rarity-" + rarity + ".png\" title=\"" + rarityFullName + "\"></td>\n");
