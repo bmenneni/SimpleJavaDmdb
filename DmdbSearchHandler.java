@@ -2,7 +2,6 @@ import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,17 +13,11 @@ import java.util.*;
 
 public class DmdbSearchHandler implements HttpHandler {
 	
-	private Connection conn;	
-	
-	public DmdbSearchHandler() throws SQLException {
-		conn = DriverManager.getConnection("jdbc:sqlite:duelmasters.db");
-	}
-	
 	public void handle(HttpExchange exchange) throws IOException {
 		try {
 			HashMap<String, List<String>> params = parseQueryParams(exchange.getRequestURI().getQuery());
-			ResultSet rs = queryDmdb(params);
-			String resultsTable = buildResultsTable(rs);
+			String sqlQuery = getDmdbQuery(params);
+			String resultsTable = buildResultsTable(sqlQuery);
 			String htmlResponse = buildHtmlResponse("resources/dmdb.html", params, resultsTable);
 			exchange.getResponseHeaders().set("Content-Type", "text/html; charset=UTF-8");
 			exchange.sendResponseHeaders(200, htmlResponse.getBytes("UTF-8").length);
@@ -56,7 +49,7 @@ public class DmdbSearchHandler implements HttpHandler {
 		return paramsMap;
 	}
 	
-	public ResultSet queryDmdb(HashMap<String, List<String>> paramsMap) throws SQLException {
+	public String getDmdbQuery(HashMap<String, List<String>> paramsMap) throws SQLException {
 		StringBuilder sqlQueryBuilder = new StringBuilder();
 		sqlQueryBuilder.append("SELECT * FROM Card");
 		boolean initialParam = true;
@@ -200,12 +193,10 @@ public class DmdbSearchHandler implements HttpHandler {
 		} else if(sortMode.length()>0) sqlQueryBuilder.append(" ORDER BY card_id " + sortMode);
 		String sqlQuery = sqlQueryBuilder.toString();
 		System.out.println(sqlQuery);
-		Statement statement = conn.createStatement();
-		ResultSet rs = statement.executeQuery(sqlQuery);
-		return rs;
+		return sqlQuery;
 	}
 	
-	public String buildResultsTable(ResultSet rs) throws SQLException {
+	public String buildResultsTable(String sqlQuery) throws SQLException {
 		StringBuilder resultsTableBuilder = new StringBuilder();
 		resultsTableBuilder.append("<p class=\"small-headline\">TIP: Shift-click on a search result to open the card image in a new window.</p>\n")
 						   .append("<table id=\"results-table\">\n")
@@ -219,90 +210,94 @@ public class DmdbSearchHandler implements HttpHandler {
 						   .append("\t\t<th>Rarity</th>\n")
 						   .append("\t\t<th>Col #</th>\n")
 						   .append("\t\t<th>Set</th>\n\t</tr>\n</thead>\n<tbody>\n");
-		int rowCount = 0;
-		while (rs.next()) {
-			rowCount++;
-			resultsTableBuilder.append("\t<tr class=\"results-row\" ");
-			String card_id = rs.getString("card_id");
-			if(card_id.length()<4) {
-				StringBuilder idBuilder = new StringBuilder();
-				for(int i = 0; i<4-card_id.length(); i++) {
-					idBuilder.append('0');
-				}
-				idBuilder.append(card_id);
-				card_id = idBuilder.toString();
-			}
-			resultsTableBuilder.append("data-id=\"" + card_id + "\">\n")
-							   .append("\t\t<td>" + rowCount + ". </td>\n");
-			String cardname = rs.getString("card_name");
-			if(cardname.length()>10&&"Uberdragon".equals(cardname.substring(0,10))) {
-				cardname = "\u00DCber" + cardname.substring(4);
-			}
-			resultsTableBuilder.append("\t\t<td>" + cardname + "</td>\n");
-			String[] civs = rs.getString("civilization").split("/");
-			StringBuilder civIconBuilder = new StringBuilder();
-			for(String civ : civs) {
-				civIconBuilder.append("<img src=\"civ-icons/").append(civ).append(".webp\" title=\"")
-							  .append(civ.substring(0,1).toUpperCase()).append(civ.substring(1))
-							  .append("\">");
-			}
-			String civIconStr = civIconBuilder.toString();
-			resultsTableBuilder.append("\t\t<td class=\"center-td\">").append(civIconStr).append("</td>\n")
-							   .append("\t\t<td>" + rs.getInt("cost") + "</td>\n")
-							   .append("\t\t<td>" + rs.getString("card_type") + "</td>\n");
-			String race = rs.getString("race");
-			if(race!=null) {
-				StringBuilder raceBuilder = new StringBuilder();
-				String[] rarr = race.split("/");
-				for(int i = 0; i<rarr.length; i++) {
-					String str = rarr[i];
-					if("fishy".equals(str)) raceBuilder.append("Fish");
-					else if("gianto".equals(str)) raceBuilder.append("Giant");
-					else {
-						raceBuilder.append(str.substring(0,1).toUpperCase());
-						for(int j = 1; j<str.length(); j++) {
-							if(str.charAt(j)=='_') raceBuilder.append(' ');
-							else if(str.charAt(j-1)=='_') raceBuilder.append(str.substring(j,j+1).toUpperCase());
-							else raceBuilder.append(str.charAt(j));
-						}
+		try(Connection conn = DatabaseConnectionManager.getConnection()) {
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sqlQuery);
+			int rowCount = 0;
+			while (rs.next()) {
+				rowCount++;
+				resultsTableBuilder.append("\t<tr class=\"results-row\" ");
+				String card_id = rs.getString("card_id");
+				if(card_id.length()<4) {
+					StringBuilder idBuilder = new StringBuilder();
+					for(int i = 0; i<4-card_id.length(); i++) {
+						idBuilder.append('0');
 					}
-					if(i<rarr.length-1) raceBuilder.append('/');
+					idBuilder.append(card_id);
+					card_id = idBuilder.toString();
 				}
-				race = raceBuilder.toString();
-			} else race = "";
-			resultsTableBuilder.append("\t\t<td>" + race + "</td>\n");
-			String card_power = rs.getString("power");
-			if(card_power==null) {
-				card_power = "";
-			}
-			resultsTableBuilder.append("\t\t<td>" + card_power + "</td>\n");
-			if(rs.getString("rarity").equals("nr")) {
-				resultsTableBuilder.append("\t\t<td class=\"center-td\" title=\"No Rarity\">NR</td>\n");
-			} else {
-				String rarity = rs.getString("rarity");
-				String rarityFullName = "";
-				switch(rarity) {
-					case "c":
-						rarityFullName = "Common";
-						break;
-					case "u":
-						rarityFullName = "Uncommon";
-						break;
-					case "r":
-						rarityFullName = "Rare";
-						break;
-					case "vr":
-						rarityFullName = "Very Rare";
-						break;
-					case "sr":
-						rarityFullName = "Super Rare";
+				resultsTableBuilder.append("data-id=\"" + card_id + "\">\n")
+								   .append("\t\t<td>" + rowCount + ". </td>\n");
+				String cardname = rs.getString("card_name");
+				if(cardname.length()>10&&"Uberdragon".equals(cardname.substring(0,10))) {
+					cardname = "\u00DCber" + cardname.substring(4);
 				}
-				resultsTableBuilder.append("\t\t<td class=\"center-td\"><img src=\"icons/rarity-" + rarity + ".png\" title=\"" + rarityFullName + "\"></td>\n");
+				resultsTableBuilder.append("\t\t<td>" + cardname + "</td>\n");
+				String[] civs = rs.getString("civilization").split("/");
+				StringBuilder civIconBuilder = new StringBuilder();
+				for(String civ : civs) {
+					civIconBuilder.append("<img src=\"civ-icons/").append(civ).append(".webp\" title=\"")
+								  .append(civ.substring(0,1).toUpperCase()).append(civ.substring(1))
+								  .append("\">");
+				}
+				String civIconStr = civIconBuilder.toString();
+				resultsTableBuilder.append("\t\t<td class=\"center-td\">").append(civIconStr).append("</td>\n")
+								   .append("\t\t<td>" + rs.getInt("cost") + "</td>\n")
+								   .append("\t\t<td>" + rs.getString("card_type") + "</td>\n");
+				String race = rs.getString("race");
+				if(race!=null) {
+					StringBuilder raceBuilder = new StringBuilder();
+					String[] rarr = race.split("/");
+					for(int i = 0; i<rarr.length; i++) {
+						String str = rarr[i];
+						if("fishy".equals(str)) raceBuilder.append("Fish");
+						else if("gianto".equals(str)) raceBuilder.append("Giant");
+						else {
+							raceBuilder.append(str.substring(0,1).toUpperCase());
+							for(int j = 1; j<str.length(); j++) {
+								if(str.charAt(j)=='_') raceBuilder.append(' ');
+								else if(str.charAt(j-1)=='_') raceBuilder.append(str.substring(j,j+1).toUpperCase());
+								else raceBuilder.append(str.charAt(j));
+							}
+						}
+						if(i<rarr.length-1) raceBuilder.append('/');
+					}
+					race = raceBuilder.toString();
+				} else race = "";
+				resultsTableBuilder.append("\t\t<td>" + race + "</td>\n");
+				String card_power = rs.getString("power");
+				if(card_power==null) {
+					card_power = "";
+				}
+				resultsTableBuilder.append("\t\t<td>" + card_power + "</td>\n");
+				if(rs.getString("rarity").equals("nr")) {
+					resultsTableBuilder.append("\t\t<td class=\"center-td\" title=\"No Rarity\">NR</td>\n");
+				} else {
+					String rarity = rs.getString("rarity");
+					String rarityFullName = "";
+					switch(rarity) {
+						case "c":
+							rarityFullName = "Common";
+							break;
+						case "u":
+							rarityFullName = "Uncommon";
+							break;
+						case "r":
+							rarityFullName = "Rare";
+							break;
+						case "vr":
+							rarityFullName = "Very Rare";
+							break;
+						case "sr":
+							rarityFullName = "Super Rare";
+					}
+					resultsTableBuilder.append("\t\t<td class=\"center-td\"><img src=\"icons/rarity-" + rarity + ".png\" title=\"" + rarityFullName + "\"></td>\n");
+				}
+				resultsTableBuilder.append("\t\t<td>" + rs.getString("coll_num") + "</td>\n");
+				String card_set = rs.getString("card_set");
+				resultsTableBuilder.append("\t\t<td class=\"center-td\"><img src=\"icons/" + card_set + ".png\" title=\"" + card_set.toUpperCase() + "\"></td>\n")
+								   .append("\t</tr>\n");
 			}
-			resultsTableBuilder.append("\t\t<td>" + rs.getString("coll_num") + "</td>\n");
-			String card_set = rs.getString("card_set");
-			resultsTableBuilder.append("\t\t<td class=\"center-td\"><img src=\"icons/" + card_set + ".png\" title=\"" + card_set.toUpperCase() + "\"></td>\n")
-							   .append("\t</tr>\n");
 		}
 		resultsTableBuilder.append("</tbody>\n</table>\n");
 		return resultsTableBuilder.toString();
