@@ -41,14 +41,17 @@ body {
 	object-fit: contain;
 }
 #card-info-container {
-	margin-inline: 15px;
+	margin-inline: 25px;
+	overflow-y: auto;
 }
 #rules-text {
-	font-size: 10pt;
 	margin-left: 10px;
 	margin-right: 5px;
 	margin-top: -0.5em;
 	list-style-type: square;
+}
+#rules-text li {
+	margin-bottom: 10px;
 }
 #toggle-btn {
 	border-width: 3px;
@@ -59,14 +62,18 @@ body {
 	right: 10px;
 	position: absolute;
 }
-#toggle-btn:hover {
-	border-width: 2px;
-	box-shadow: 0 6px 4px 0 rgba(0,0,0,0.24);
-}
 #toggle-btn:active {
 	box-shadow: 0 4px 3px 0 rgba(0,0,0,0.24);
 	transform: translateY(2px);
 }
+
+@media(hover : hover) {
+	#toggle-btn:hover {
+		border-width: 2px;
+		box-shadow: 0 6px 4px 0 rgba(0,0,0,0.24);
+	}
+}
+
 @media(max-width: 1279px) {
 	body {
 		display: block;
