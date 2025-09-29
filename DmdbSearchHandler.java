@@ -9,13 +9,16 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.nio.charset.StandardCharsets;
+import java.net.URLDecoder;
 import java.util.*;
 
 public class DmdbSearchHandler implements HttpHandler {
 	
 	public void handle(HttpExchange exchange) throws IOException {
 		try {
-			HashMap<String, List<String>> params = parseQueryParams(exchange.getRequestURI().getQuery());
+			String rawQuery = exchange.getRequestURI().getRawQuery();
+			HashMap<String, List<String>> params = parseQueryParams(URLDecoder.decode(rawQuery, StandardCharsets.UTF_8));
 			String sqlQuery = getDmdbQuery(params);
 			String resultsTable = buildResultsTable(sqlQuery);
 			String htmlResponse = buildHtmlResponse("resources/dmdb.html", params, resultsTable);
@@ -51,14 +54,22 @@ public class DmdbSearchHandler implements HttpHandler {
 	
 	public String getDmdbQuery(HashMap<String, List<String>> paramsMap) throws SQLException {
 		StringBuilder sqlQueryBuilder = new StringBuilder();
-		sqlQueryBuilder.append("SELECT * FROM Card");
 		boolean initialParam = true;
+		boolean nameSearch = true;
 		String compareOperator = "";
-		StringBuilder sorter = new StringBuilder();
 		String matchMode = "";
 		String sortMode = "";
+		StringBuilder sorter = new StringBuilder();
 		if(paramsMap.containsKey("match_civ")) matchMode = paramsMap.get("match_civ").get(0);
 		if(paramsMap.containsKey("mode")) sortMode = paramsMap.get("mode").get(0);
+		if(paramsMap.containsKey("search_term")) {
+			String st = paramsMap.get("search_term").get(0);
+			if(st.length()>3&&st.charAt(0)=='\u0060'&&st.charAt(st.length()-1)=='\u0060') {
+				nameSearch = false;
+			}
+		}
+		if(nameSearch) sqlQueryBuilder.append("SELECT * FROM Card");
+		else sqlQueryBuilder.append("SELECT * FROM Card JOIN RulesText USING (card_id)");
 		Set<Map.Entry<String, List<String>>> paramsSet = paramsMap.entrySet();
 		for(Map.Entry<String, List<String>> entry : paramsSet) {
 			String sKey = entry.getKey();
@@ -90,21 +101,15 @@ public class DmdbSearchHandler implements HttpHandler {
 				sqlQueryBuilder.append(sKey + "='" + sVals.get(0) + "'");
 			}
 			else if("search_term".equals(sKey)) {
-				char[] chars = sVals.get(0).toCharArray();
-				for(int i = 0; i<chars.length; i++) {
-					switch(chars[i]) {
-						case '+':
-							chars[i]=' ';
-							break;
-						case '"':
-							chars[i]='\'';
-							break;
-						case '\u00DC':
-							chars[i]='U';
-					}
+				String searchTerm = sVals.get(0);
+				if(nameSearch) {
+					searchTerm = searchTerm.replace('\u00DC', 'U');
+					searchTerm = searchTerm.replace("'", "''");
+					sqlQueryBuilder.append("card_name LIKE '%" + searchTerm + "%'");
+				} else {
+					searchTerm = searchTerm.substring(1,searchTerm.length()-1);
+					sqlQueryBuilder.append("card_text LIKE '%" + searchTerm + "%'");
 				}
-				String cardname = new String(chars);
-				sqlQueryBuilder.append("card_name LIKE \"%" + cardname + "%\"");
 			}
 			else if("card_set".equals(sKey)) {
 				boolean tcgOnly = false;
