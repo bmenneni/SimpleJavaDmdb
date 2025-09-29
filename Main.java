@@ -10,6 +10,7 @@ public class Main {
 		HttpServer myServer = HttpServer.create(new InetSocketAddress(myAddress, 8080), 0);
 		HttpContext homeContext = myServer.createContext("/", new DmdbHomeHandler());
 		HttpContext searchContext = myServer.createContext("/search", new DmdbSearchHandler());
+		HttpContext viewCardContext = myServer.createContext("/cardview", new DmdbCardViewHandler());
 		myServer.start();
 		System.out.println("Server started on port 8080.");
 	}

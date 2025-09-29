@@ -1,0 +1,185 @@
+0001: Hanusa, Radiance, Elemental
+0002: Urth, Purifying Elemental
+0003: Aqua Sniper
+0005: Deathliger, Lion of Chaos
+0008: Scarlet Skyterror
+0009: Deathblade Beetle
+0012: Dia Nork, Moonlight Guardian
+0014: Frei, Vizier of Air
+0016: Holy Awe
+0019: La Ura Giga, Sky Guardian
+0020: Lah, Purification Enforcer
+0023: Miele, Vizier of Lightning
+0028: Senatine Jade Tree
+0031: Szubs Kin, Twilight Guardian
+0033: Aqua Hulcus
+0050: Spiral Gate
+0056: Bloody Squito
+0067: Gigargon
+0073: Terror Pit
+0077: Armored Walker Urherion
+0079: Bolshack Dragon
+0080: Brawler Zyler
+0087: Fatal Attacker Horvath
+0089: Gatling Skyterror
+0090: Immortal Baron, Vorg
+0095: Rothus, the Traveler
+0100: Bronze-Arm Tribe
+0105: Fear Fang
+0122: Crystal Paladin
+0124: Armored Blaster Valdios
+0125: Fighter Dual Fang
+0155: Horrid Worm
+0157: Marrow Ooze, the Twister
+0160: Bolzard Dragon
+0168: Mini Titan Gett
+0170: Barkwhip, the Smasher
+0185: Earthstomp Giant
+0203: Legendary Bynor
+0220: Baby Zoppe
+0228: Überdragon Jabaha
+0239: Sniper Mosquito
+0243: Ballom, Master of Death
+0246: Alcadeias, Lord of Spirits
+0248: Trox, General of Destruction
+0261: Sarius, Vizier of Suppression
+0264: Aqua Guard
+0288: Magmarex
+0300: Torcon
+0301: Syrius, Firmament Elemental
+0304: Billion-Degree Dragon
+0306: La Byle, Seeker of the Winds
+0309: Bladerush Skyterror Q
+0321: Aqua Surfer
+0328: Spikestrike Ichthys Q
+0341: Blazosaur Q
+0360: Smash Horn Q
+0363: Crystal Jouster
+0365: Daidalos, General of Fury
+0367: Bolmeteus Steel Dragon
+0370: Ultra Mantis, Scourge of Fate
+0436: Schuka, Duke of Amnesia
+0445: Bazagazeal Dragon
+0447: Cocco Lupia
+0453: Phantom Dragon's Flame
+0455: Pyrofighter Magnus
+0457: Rikabu's Screwdriver
+0461: Bliss Totem, Avatar of Luck
+0472: Illusory Berry
+0484: Sky Crusher, the Agitator
+0485: Headlong Giant
+0487: King Benthos
+0494: Kizar Basiku, the Outrageous
+0515: Phantasmal Horror Gigazabal
+0516: Propeller Mutant
+0521: Apocalypse Vise
+0527: Kooc Pollon
+0529: Valkrowzer, Ultra Rock Beast
+0541: Nastasha, Channeler of Suns
+0543: Super Necrodragon Abzo Dolba
+0544: Überdragon Bajula
+0545: Super Terradragon Bailas Gale
+0546: Kuukai, Finder of Karma
+0549: Magmadragon Jagalzor
+0574: Gachack, Mechanical Doll
+0578: Necrodragon Giland
+0583: Kyrstron, Lair Delver
+0589: Totto Pipicchi
+0596: Quixotic Hero Swine Snout
+0600: Terradragon Regarion
+0601: Petrova, Channeler of Suns
+0602: Aqua Master
+0605: Stratosphere Giant
+0610: Vreemah, Freaky Mojo Totem
+0647: Shock Trooper Mykee
+0679: Bombazar, Dragon of Destiny
+0743: Phantom Dragon's Flame
+0771: Soderlight, the Cold Bladerush
+0775: Gonta, the Warrior Savage
+0778: Lukia Lex, Pinnacle Guardian
+0781: Warlord Ailzonius
+0787: Heavyweight Dragon
+0803: Lucky Ball
+0830: Ninja Pumpkin
+0843: Cruel Naga, Avatar of Fate
+0845: Aura Pegasus, Avatar of Life
+0850: Soul Phoenix, Avatar of Unity
+0880: Spectral Horn Glitalis
+0901: Eternal Phoenix, Dragonflame Phoenix
+0902: Auzesu, Demonic Elemental
+0917: Spiritual Star Dragon
+0965: Dorballom, Lord of Demons
+0967: Bolberg Cross Dragon
+0970: Powered Stallion
+0971: Elupheus, Lord of Spirits
+1030: Chitta Peloru
+1081: Alphadios, Lord of Spirits
+1089: Metalchaos Dragon
+1144: Überdragon Valkyrias
+1203: Dual Shock Dragon
+1331: Rinpao, King of Speed Eating
+1382: Omegablack Z, Invincible Giant
+1419: Hopstep Battan
+1464: Prisoned Pakoneko
+1503: Necrodragon Guljeneraid
+1507: Spell Great Blue, Blue Divine Dragon
+1508: Babelginus, Demonic Dragon
+1510: Legendary Sante Gat De Paco
+1624: Ulpheus, Dragonic Elemental
+1627: Bolmeteus Musha Dragon
+1755: Super Spark
+1758: Super Trash Train, Fuuma Devil
+1804: Ballom Emperor, Lord of Demons
+1805: Bolshack Yamato Dragon
+1806: King Alcadeias, Holy Gaia
+1865: Bolpheus Heaven, Super Holy Dragon
+1866: Zero Phoenix, Phoenix of Darkness
+1909: Qurian
+1934: Bolbalzak "Sword Flash" Dragon
+1938: Perfect Galaxy, Immortality Elemental
+1947: Za Yes, Light Divine Dragon
+1949: Chief De Baula, Machine King of Mystic Light
+1969: Dragon Gear - Zangeki Mach Armor
+1976: Leopold the 2nd, God of Mystic Light
+1977: Lightning Kid, Divine Armaments Elemental
+1984: Cutie Heart
+1988: Ludvica the 2nd, God of Mystic Light
+2000: Huckle Kirin Sawyer, Jungle Governor
+2012: La Ura Giga, Sky Guardian
+2049: Alexander the 3rd, Emperor of the Demonic Eye
+2093: Tensai Janit of the Hidden Blade
+2108: Heavy, Dragon God
+2109: Metal, Dragon God
+2112: Supernova DEATH Dragerion
+2118: Valkyrias Musashi, Ultimate Battle Dragon
+2150: Brunhilde, Ghost Knight
+2167: Bucket Bucket, Chopping Snow Faerie
+2173: Shiden Galaxy, Super Champ
+2235: Bell Hell De Gaul, Footprint of the Reaper
+2236: Drag Moon, the Enlightened
+2237: Bolshack NEX
+2301: Spear Lupia
+2305: Kijima Giant
+2351: Saint Bolshack, Elemental Dragon Knight
+2353: HEAVEN, White Knight Lord of Spirits
+2355: XENOM, the Reaper King
+2362: Asura, the Great Enigma
+2380: Peace Lupia
+2401: Lunar Kuroro
+2408: Immortal Baron, Vorg (Other)
+2416: Bolshack Cross NEX
+2435: Gou Daigo, Amazing Artiste
+2479: Galaxy Operation Theta, the Super Enlightened
+2489: Darkness Romanov, the Enlightened
+2507: Sunshine NEX, the Enlightened
+9081: Magmadragon Balga Geyser
+9093: Magmadragon Gardos
+9103: Bolmeteus Sapphire Dragon
+9133: Galzark, Divine Destruction Dragon Knight
+9140: Nero Gryphis, Mystic Light Emperor
+9148: Ailfreet, Holy Gates Elemental
+9149: Balga Raiser, the Dragonic Meteor
+9150: Geometeus Infinite Dragon
+9154: Lupia Lapia
+9159: Bolmeteus "Kensei" Dragon
+9164: Überdragon Sunburst NEX

@@ -2,6 +2,7 @@
 <html>
 <head>
 	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Duel Masters Card Database</title>
 	<link rel="stylesheet" href="dmdb-styles.css">
 	<script src="dmdb-scripts.js" defer></script>
@@ -10,423 +11,423 @@
 <div id="left-panel-div">
 <img src="dmdb_banner.jpg" alt="Duel Masters banner">
 <form id="filter-form" action="/search" method="get" accept-charset="utf-8">
-	<table id="filter-table">
-		<tbody>
-				<tr>	
-					<td class="left-td">
-						<select id="race_filter" name="race" style="width:150px">
-							<option value="">All Races</option>
-							<option value="angel_command">Angel Command</option>
-							<option value="apollonia_dragon">Apollonia Dragon</option>
-							<option value="arc_seraphim">Arc Seraphim</option>
-							<option value="armored_dragon">Armored Dragon</option>
-							<option value="armored_wyvern">Armored Wyvern</option>
-							<option value="armorloid">Armorloid</option>
-							<option value="balloon_mushroom">Balloon Mushroom</option>
-							<option value="beast_folk">Beast Folk</option>
-							<option value="berserker">Berserker</option>
-							<option value="big_muscle">Big Muscle</option>
-							<option value="blue_monster">Blue Monster</option>
-							<option value="brain_jacker">Brain Jacker</option>
-							<option value="brave_spirit">Brave Spirit</option>
-							<option value="chimera">Chimera</option>
-							<option value="colony_beetle">Colony Beetle</option>
-							<option value="cosmo_walker">Cosmo Walker</option>
-							<option value="cyber_cluster">Cyber Cluster</option>
-							<option value="cyber_command">Cyber Command</option>
-							<option value="cyber_lord">Cyber Lord</option>
-							<option value="cyber_moon">Cyber Moon</option>
-							<option value="cyber_virus">Cyber Virus</option>
-							<option value="dark_lord">Dark Lord</option>
-							<option value="dark_monster">Dark Monster</option>
-							<option value="death_puppet">Death Puppet</option>
-							<option value="deep_marine">Deep Marine</option>
-							<option value="demon_command">Demon Command</option>
-							<option value="devil_mask">Devil Mask</option>
-							<option value="dragonoid">Dragonoid</option>
-							<option value="dreammate">Dreammate</option>
-							<option value="dune_gecko">Dune Gecko</option>
-							<option value="dynamo">Dynamo</option>
-							<option value="earth_dragon">Earth Dragon</option>
-							<option value="earth_eater">Earth Eater</option>
-							<option value="emerald_monster">Emerald Monster</option>
-							<option value="feathernoid">Feathernoid</option>
-							<option value="fire_bird">Fire Bird</option>
-							<option value="fishy">Fish</option>
-							<option valuue="flame_monster">Flame Monster</option>
-							<option value="gaia_command">Gaia Command</option>
-							<option value="gargoyle">Gargoyle</option>
-							<option value="gel_fish">Gel Fish</option>
-							<option value="ghost">Ghost</option>
-							<option value="gianto">Giant</option>
-							<option value="giant_insect">Giant Insect</option>
-							<option value="gladiator">Gladiator</option>
-							<option value="god">God</option>
-							<option value="grand_devil">Grand Devil</option>
-							<option value="great_mecha_king">Great Mecha King</option>
-							<option value="guardian">Guardian</option>
-							<option value="hedrian">Hedrian</option>
-							<option value="horned_beast">Horned Beast</option>
-							<option value="human">Human</option>
-							<option value="initiate">Initiate</option>
-							<option value="knight">Knight</option>
-							<option value="leviathan">Leviathan</option>
-							<option value="light_bringer">Light Bringer</option>
-							<option value="liquid_people">Liquid People</option>
-							<option value="living_dead">Living Dead</option>
-							<option value="lost_crusader">Lost Crusader</option>
-							<option value="lunatic_emperor">Lunatic Emperor</option>
-							<option value="machine_eater">Machine Eater</option>
-							<option value="machine_hero">Machine Hero</option>
-							<option value="mecha_del_sol">Mecha Del Sol</option>
-							<option value="mecha_thunder">Mecha Thunder</option>
-							<option value="melt_warrior">Melt Warrior</option>
-							<option value="merfolk">Merfolk</option>
-							<option value="mystery_totem">Mystery Totem</option>
-							<option value="origin">Origin</option>
-							<option value="pandora's_box">Pandora's Box</option>
-							<option value="parasite_worm">Parasite Worm</option>
-							<option value="phoenix">Phoenix</option>
-							<option value="poseidia_dragon">Poseidia Dragon</option>
-							<option value="rainbow_phantom">Rainbow Phantom</option>
-							<option value="rock_beast">Rock Beast</option>
-							<option value="saint_head">Saint Head</option>
-							<option value="samurai">Samurai</option>
-							<option value="sea_hacker">Sea Hacker</option>
-							<option value="shine_monster">Shine Monster</option>
-							<option value="shinobi">Shinobi</option>
-							<option value="snow_faerie">Snow Faerie</option>
-							<option value="soltrooper">Soltrooper</option>
-							<option value="spirit_quartz">Spirit Quartz</option>
-							<option value="splash_queen">Splash Queen</option>
-							<option value="starlight_tree">Starlight Tree</option>
-							<option value="survivor">Survivor</option>
-							<option value="tree_folk">Tree Folk</option>
-							<option value="tyranno_drake">Tyranno Drake</option>
-							<option value="volcano_dragon">Volcano Dragon</option>
-							<option value="wild_veggies">Wild Veggies</option>
-							<option value="wonder_trick">Wonder Trick</option>
-							<option value="xenoparts">Xenoparts</option>
-							<option value="vehicle_bee">Vehicle Bee</option>
-							<option value="zombie_dragon">Zombie Dragon</option>
-						</select>
-						<br>
-						<i>Filter by Race</i>
-					</td>
-					<td>
-						<select id="compare_filter" name="compare" style="width:48px">
-							<option value="">=</option>
-							<option value="greater_or_equal">>=</option>
-							<option value="less_or_equal"><=</option>
-						</select>
-						<select id="cost_filter" name="cost" style="width:48px">
-							<option value="">All</option>
-							<option value="1">1</option>
-							<option value="2">2</option>
-							<option value="3">3</option>
-							<option value="4">4</option>
-							<option value="5">5</option>
-							<option value="6">6</option>
-							<option value="7">7</option>
-							<option value="8">8</option>
-							<option value="9">9</option>
-							<option value="10">10</option>
-							<option value="11">11</option>
-							<option value="12">12</option>
-							<option value="13">13</option>
-							<option value="14">14</option>
-						</select>
-						<br>
-						<i>Filter by Cost</i>
-					</td>
-					<td rowspan="2">
-						<select id="set_filter" name="card_set" multiple style="width:300px">
-							<option value="" selected>All Sets</option>
-							<option value="tcg_only">Original TCG Sets Only</option>
-							<option value="promo">Exclusive Promos</option>
-							<option value="dm-01">DM-01 Base Set</option>
-							<option value="dm-02">DM-02 Evo-Crushinators of Doom</option>
-							<option value="dm-03">DM-03 Rampage of the Super Warriors</option>
-							<option value="dm-04">DM-04 Shadowclash of Blinding Night</option>
-							<option value="dm-05">DM-05 Survivors of the Megapocalypse</option>
-							<option value="dm-06">DM-06 Stomp-a-trons of Invincible Wrath</option>
-							<option value="dm-07">DM-07 Thundercharge of Ultra Destruction</option>
-							<option value="dm-08">DM-08 Epic Dragons of Hyperchaos</option>
-							<option value="dm-09">DM-09 Fatal Brood of Infinite Ruin</option>
-							<option value="dm-10">DM-10 Shockwaves of the Shattered Rainbow</option>
-							<option value="dm-11">DM-11 Blast-o-splosion of Gigantic Rage</option>
-							<option value="dm-12">DM-12 Thrash of the Hybrid Megacreatures</option>
-							<option value="dm-13">DM-13 Maelstrom of Mutated Monstrosities</option>
-							<option value="dm-14">DM-14 Grinding Gears of Gigadevastation</option>
-							<option value="dm-15">DM-15 Attack of the Apex Accelerators</option>
-							<option value="dm-16">DM-16 Zerg-a-crushers of Zero Mercy</option>
-							<option value="dm-17">DM-17 Culmination of Chaotic Catastrophe</option>
-							<option value="dm-19">DM-19 Scourge of the Seismic Supernovas</option>
-							<option value="dm-20">DM-20 Explosive Energons of Extreme Enmity</option>
-							<option value="dm-21">DM-21 Takedown of the Thriller Terminators</option>
-							<option value="dm-22">DM-22 Draco-Destructors of Deathly Demise</option>
-							<option value="dm-23">DM-23 Bold Behemoths of the Bionic Bigbang</option>
-							<option value="dm-24">DM-24 Gruesome Genesis of the Great Gods</option>
-							<option value="dm-25">DM-25 Victorious Vision of Violent Valhalla</option>
-							<option value="dm-26">DM-26 Melee of the Multicolored Megadeuses</option>
-							<option value="dm-27">DM-27 Perfect Purgatory of the Powermongers</option>
-							<option value="dm-28">DM-28 World-beaters of Wicked Belligerence</option>
-							<option value="dm-29">DM-29 Savage Strike of the Superninjas</option>
-							<option value="dm-30">DM-30 Stronghold of Dominating Dyna-heroes</option>
-							<option value="dm-31">DM-31 Origin of the Marauding Megatitans</option>
-							<option value="dm-32">DM-32 Evolution of the Enlightened Emperors</option>
-							<option value="dm-33">DM-33 Rise of the Rambunctious Reapers</option>
-							<option value="dm-34">DM-34 Clobber-trons of Cross Carnage</option>
-							<option value="dm-35">DM-35 Ultralords of Unceasing Upheaval</option>
-						</select>
-						<br>
-						<i>Filter by Set</i>
-					</td>
-				</tr>
-				<!--Beginning of second row in search filter table. -->
-				<tr>
-					<td class="left-td">
-						<select id="type_filter" name="card_type" style="width:150px">
-							<option value="">All Types</option>
-							<option value="spell">Spell</option>
-							<option value="castle">Castle</option>
-							<option value="creature">Creature</option>
-							<option value="cross_gear">Cross Gear</option>
-							<option value="evolution_creature">Evolution Creature</option>
-							<option value="evolution_cross_gear">Evolution Cross Gear</option>
-						</select>
-						<br>
-						<i>Filter by Type</i>
-					</td>
-					<td>
-						<select id="rarity_filter" name="rarity" style="width:100px">
-							<option value="">All Rarities</option>
-							<option value="nr">No Rarity</option>
-							<option value="c">Common</option>
-							<option value="u">Uncommon</option>
-							<option value="r">Rare</option>
-							<option value="vr">Very Rare</option>
-							<option value="sr">Super Rare</option>
-						</select>
-						<br>
-						<i>Filter by Rarity</i>
-					</td>
-				</tr>
-				<!-- Beginning of third row in search filter table. -->
-				<tr>
-					<td class="left-td">
-						<select id="civ_filter" name="civilization" multiple size="6" style="width:150px">
-							<option value="" selected>All Civilizations</option>
-							<option value="light">Light</option>
-							<option value="water">Water</option>
-							<option value="darkness">Darkness</option>
-							<option value="fire">Fire</option>
-							<option value="nature">Nature</option>
-						</select>
-						<div style="display: inline-block; vertical-align: top; font-size: 10pt; width: 100px">
-							<input type="radio" class="match_filter" name="match_civ" value="any" checked>
-							<label for="any">Match any &nbsp; &nbsp; &nbsp; &nbsp; civs selected</label><br>
-							<br>
-							<input type="radio" class="match_filter" name="match_civ" value="exact">
-							<label for="exact">Match exact &nbsp; &nbsp; &nbsp; civs selected</label><br>
-						</div>
-						<br>
-						<i>Filter by Civilizations</i>
-						<sub class="small-symbol" onclick="toggleInfoBox(event)">&#x24d8;</sub>
-						<div id="civ-search-info">To search specifically for multi-civ cards, select all the civs that the multi-civ cards belong to, and check the "Match exact civs selected" button.</div>
-					</td>
-					<td>
-						<select id="keyword_filter" name="keywords" multiple size="6" style="width:135px">
-							<option value="" selected>All Keywords</option>
-							<option value="accelerator">Accelerator</option>
-							<option value="blocker">Blocker</option>
-							<option value="break_bonus">Break Bonus</option>
-							<option value="charger">Charger</option>
-							<option value="crew_break">Crew Breaker</option>
-							<option value="cyclone">Cyclone</option>
-							<option value="deck_evo">Deck Evolution</option>
-							<option value="double_break">Double Breaker</option>
-							<option value="dynamo">Dynamo</option>
-							<option value="fort_energy">Fort Energy</option>
-							<option value="graveyard_evo">Grave Evolution</option>
-							<option value="gravity_zero">Gravity Zero</option>
-							<option value="hand_evo">Hand Evolution</option>
-							<option value="knight_magic">Knight Magic</option>
-							<option value="launcher_energy">Launcher Energy</option>
-							<option value="life_gate">Life Gate</option>
-							<option value="lost_prism">Lost Prism</option>
-							<option value="mana_evo">Mana Evolution</option>
-							<option value="metamorph">Metamorph</option>
-							<option value="meteorburn">Meteorburn</option>
-							<option value="ninja_strike">Ninja Strike</option>
-							<option value="over_drive">Over Drive</option>
-							<option value="power_attack">Power Attacker</option>
-							<option value="quattro_breaker">Quattro Breaker</option>
-							<option value="saver">Saver</option>
-							<option value="shield_force">Shield Force</option>
-							<option value="shield_plus">Shield Plus</option>
-							<option value="shield_trigger">Shield Trigger</option>
-							<option value="silent_skill">Silent Skill</option>
-							<option value="slayer">Slayer</option>
-							<option value="soulshift">Soulshift</option>
-							<option value="speed_attack">Speed Attacker</option>
-							<option value="stealth">Stealth</option>
-							<option value="strike_back">Strike Back</option>
-							<option value="survivor_kw">Survivor</option>
-							<option value="sympathy">Sympathy</option>
-							<option value="tap_ability">Tap Ability</option>
-							<option value="thrilling_three">Thrilling Three</option>
-							<option value="triple_break">Triple Breaker</option>
-							<option value="turbo_rush">Turbo Rush</option>
-							<option value="ultimate_evo">Ultimate Evolution</option>
-							<option value="vortex_evo">Vortex Evolution</option>
-							<option value="wave_striker">Wave Striker</option>
-							<option value="world_breaker">World Breaker</option>
-						</select>
-						<br>
-						<i>Filter by Keyword</i>
-					</td>
-					<td>
-						<select id="category_filter" name="categories" multiple size="6" style="width:300px">
-								<option value="" selected>All Categories</option>
-								<option value="draw">Draw cards</option>
-								<option value="ramp">Ramp (add cards to mana)</option>
-								<option value="tap_opp">Tap opponent's creature</option>
-								<option value="untaps">Untap creature</option>
-								<option value="attack_untapped">Attack untapped creatures</option>
-							<optgroup label="Effect trigger categories">
-								<option value="etb_effect">ETB (enter battle zone) effect</option>
-								<option value="atk_effect">Attack effect</option>
-								<option value="destruction_effect">Destruction effect</option>
-								<option value="leavebz_effect">Leave the battle zone effect</option>
-								<option value="block_effect">Block effect</option>
-								<option value="blocked_effect">Blocked effect</option>
-							</optgroup>
-							<optgroup label="Removal categories">
-								<option value="removal_destroy_creature">Destroy creature</option>
-								<option value="removal_bounce">Bounce creature</option>
-								<option value="removal_to_mana">Send creature to mana</option>
-								<option value="removal_power_based">Power-based removal</option>
-								<option value="spot_removal">Spot removal</option>
-								<option value="mass_removal">Mass removal</option>
-								<option value="cross_gear_removal">Cross gear removal</option>
-								<option value="removal">All removal effects</option>
-							</optgroup>
-							<optgroup label="Attack restriction categories">
-								<option value="cant_attack_any">Can't attack (unconditional)</option>
-								<option value="cant_attack_players">Can't attack players</option>
-								<option value="cant_attack_creatures">Can't attack creatures</option>
-								<option value="cant_attack">All attack restrictions</option>
-							</optgroup>
-								<option value="must_attack">Must attack if able</option>
-								<option value="must_block">Must block if able</option>
-								<option value="destroy_creature_own">Destroy your own creature</option>
-								<option value="suicide">Destroyed upon winning a battle</option>
-								<option value="break_more_shields">Break more shields</option>
-								<option value="breaks_when_blocked">Break shield when blocked</option>
-								<option value="anti_blocker">Anti-blocker</option>
-								<option value="unblockable_anypower">Unblockable</option>
-								<option value="unblockable_power_based">Unblockable (power-based)</option>
-								<option value="unchoosable">Unchoosable</option>
-							<optgroup label="Search categories">
-								<option value="search_any">Search for any</option>
-								<option value="search_creature">Search for creature</option>
-								<option value="search_cross_gear">Search for cross gear</option>
-								<option value="search_spell">Search for spell</option>
-								<option value="search">All search</option>
-							</optgroup>
-								<option value="mana_instead_grave">Put in mana when would be destroyed</option>
-								<option value="hand_instead_grave">Returns to hand when would be destroyed</option>
-								<option value="bz_instead_grave">Stays in battle zone when would be destroyed</option>
-								<option value="returns_to_hand">Returns to hand at end of turn</option>
-								<option value="reduce_cost">Reduce mana cost</option>
-							<optgroup label="Discard categories">
-								<option value="discard_opp">Discard from opponent's hand</option>
-								<option value="discard_own">Discard from your own hand</option>
-								<option value="anti_discard">Counteract discard effects</option>
-							</optgroup>
-								<option value="mana_to_hand_opp">Send opponent's mana to hand</option>
-								<option value="mana_to_hand_own">Send own mana to hand</option>
-								<option value="manaburn_opp">Send opponent's mana to grave</option>
-								<option value="manaburn_own">Send own mana to grave</option>
-								<option value="grave_to_hand_creature">Get creature from grave</option>
-								<option value="grave_to_hand_spell">Get spell from grave</option>
-							<optgroup label="Support categories">
-								<option value="tribal">Tribal support (race-based effects)</option>
-								<option value="tribal_dragons">Tribal Dragon support</option>
-								<option value="support_civ">Civ-based support</option>
-								<option value="support_mono">Mono-civ support</option>
-								<option value="civ_hate">Civ-based hate (anti-support)</option>
-								<option value="support_evo">Evolution support</option>
-								<option value="support_cross_gear">Cross gear support</option>
-							</optgroup>
-							<optgroup label="Give power or abilities">
-								<option value="gives_power">Give power to creature</option>
-								<option value="gives_unblockable">Give unblockable</option>
-								<option value="gives_blocker">Give 'blocker'</option>
-								<option value="gives_slayer">Give 'slayer'</option>
-								<option value="gives">All give effects</option>
-							</optgroup>
-							<optgroup label="Shield interaction effects">
-								<option value="add_shield">Add card to shields</option>
-								<option value="shields_to_hand">Put card from shields to hand</option>
-								<option value="shields_to_grave_own">Send own shields to grave</option>
-								<option value="shields_to_grave_opp">Send opponent's shields to grave</option>
-								<option value="anti_shield_trigger">Counteract shield trigger effects</option>
-								<option value="save_shields">Save shields</option>
-							</optgroup>
-							<optgroup label="Peek effects">
-								<option value="peek_shield">Peek at shield</option>
-								<option value="peek_hand">Peek at opponent's hand</option>
-								<option value="peek_topdeck">Peek at top of deck</option>
-							</optgroup>
-							<optgroup label="Other metacategories">
-								<option value="targets">Targeting effects</option>
-								<option value="nontargeting">Nontargeting effects</option>
-								<option value="oppchooses">Opponent chooses</option>
-							</optgroup>
-						</select>
-						<br>
-						<i>Filter by Category</i>
-					</td>
-				</tr>
-				<!-- Beginning of fourth row in search filter table. -->
-				<tr>
-					<td id="name-field-td" class="vert-td">
-						<input id="search-term" name="card_name" type="text" size="35" maxlength="35">
-						<br>
-						<label for="search-term"><i>Search for a card by name.</i></label>
-					</td>
-					<td class="vert-td">
-						<div style="display: inline-block;">
-							<input type="submit" value="Search!">
-						</div>
-						<div style="display: inline-block; margin-left: 5px;">
-							<input type="button" onclick="resetPage()" value="Reset">
-						</div>
-					</td>
-					<td class="vert-td">
-						<select id="sort_by" name="sort_by" style="width:200px">
-							<option value="">Sort by Set and Collector #</option>
-							<option value="civilization">Sort by Civilization</option>
-							<option value="cost">Sort by Cost</option>
-							<option value="card_name">Sort by Name</option>
-							<option value="power">Sort by Power</option>
-							<option value="race">Sort by Race</option>
-							<option value="rarity">Sort by Rarity</option>
-							<option value="card_type">Sort by Type</option>
-						</select>
-						<select id="sort_mode" name="mode" style="width:48px">
-							<option value="">ASC</option>
-							<option value="desc">DES</option>
-						</select>
-						<input type="button" onclick="sort()" value="Sort">
-						<br>
-						<i>Pick sort order</i>
-					</td>
-				</tr>
-		</tbody>
-	</table>
+<table id="filter-table">
+<tbody>
+		<tr>	
+			<td class="left-td">
+				<select id="race_filter" name="race" style="width:150px">
+					<option value="">All Races</option>
+					<option value="angel_command">Angel Command</option>
+					<option value="apollonia_dragon">Apollonia Dragon</option>
+					<option value="arc_seraphim">Arc Seraphim</option>
+					<option value="armored_dragon">Armored Dragon</option>
+					<option value="armored_wyvern">Armored Wyvern</option>
+					<option value="armorloid">Armorloid</option>
+					<option value="balloon_mushroom">Balloon Mushroom</option>
+					<option value="beast_folk">Beast Folk</option>
+					<option value="berserker">Berserker</option>
+					<option value="big_muscle">Big Muscle</option>
+					<option value="blue_monster">Blue Monster</option>
+					<option value="brain_jacker">Brain Jacker</option>
+					<option value="brave_spirit">Brave Spirit</option>
+					<option value="chimera">Chimera</option>
+					<option value="colony_beetle">Colony Beetle</option>
+					<option value="cosmo_walker">Cosmo Walker</option>
+					<option value="cyber_cluster">Cyber Cluster</option>
+					<option value="cyber_command">Cyber Command</option>
+					<option value="cyber_lord">Cyber Lord</option>
+					<option value="cyber_moon">Cyber Moon</option>
+					<option value="cyber_virus">Cyber Virus</option>
+					<option value="dark_lord">Dark Lord</option>
+					<option value="dark_monster">Dark Monster</option>
+					<option value="death_puppet">Death Puppet</option>
+					<option value="deep_marine">Deep Marine</option>
+					<option value="demon_command">Demon Command</option>
+					<option value="devil_mask">Devil Mask</option>
+					<option value="dragonoid">Dragonoid</option>
+					<option value="dreammate">Dreammate</option>
+					<option value="dune_gecko">Dune Gecko</option>
+					<option value="dynamo">Dynamo</option>
+					<option value="earth_dragon">Earth Dragon</option>
+					<option value="earth_eater">Earth Eater</option>
+					<option value="emerald_monster">Emerald Monster</option>
+					<option value="feathernoid">Feathernoid</option>
+					<option value="fire_bird">Fire Bird</option>
+					<option value="fishy">Fish</option>
+					<option valuue="flame_monster">Flame Monster</option>
+					<option value="gaia_command">Gaia Command</option>
+					<option value="gargoyle">Gargoyle</option>
+					<option value="gel_fish">Gel Fish</option>
+					<option value="ghost">Ghost</option>
+					<option value="gianto">Giant</option>
+					<option value="giant_insect">Giant Insect</option>
+					<option value="gladiator">Gladiator</option>
+					<option value="god">God</option>
+					<option value="grand_devil">Grand Devil</option>
+					<option value="great_mecha_king">Great Mecha King</option>
+					<option value="guardian">Guardian</option>
+					<option value="hedrian">Hedrian</option>
+					<option value="horned_beast">Horned Beast</option>
+					<option value="human">Human</option>
+					<option value="initiate">Initiate</option>
+					<option value="knight">Knight</option>
+					<option value="leviathan">Leviathan</option>
+					<option value="light_bringer">Light Bringer</option>
+					<option value="liquid_people">Liquid People</option>
+					<option value="living_dead">Living Dead</option>
+					<option value="lost_crusader">Lost Crusader</option>
+					<option value="lunatic_emperor">Lunatic Emperor</option>
+					<option value="machine_eater">Machine Eater</option>
+					<option value="machine_hero">Machine Hero</option>
+					<option value="mecha_del_sol">Mecha Del Sol</option>
+					<option value="mecha_thunder">Mecha Thunder</option>
+					<option value="melt_warrior">Melt Warrior</option>
+					<option value="merfolk">Merfolk</option>
+					<option value="mystery_totem">Mystery Totem</option>
+					<option value="origin">Origin</option>
+					<option value="pandora's_box">Pandora's Box</option>
+					<option value="parasite_worm">Parasite Worm</option>
+					<option value="phoenix">Phoenix</option>
+					<option value="poseidia_dragon">Poseidia Dragon</option>
+					<option value="rainbow_phantom">Rainbow Phantom</option>
+					<option value="rock_beast">Rock Beast</option>
+					<option value="saint_head">Saint Head</option>
+					<option value="samurai">Samurai</option>
+					<option value="sea_hacker">Sea Hacker</option>
+					<option value="shine_monster">Shine Monster</option>
+					<option value="shinobi">Shinobi</option>
+					<option value="snow_faerie">Snow Faerie</option>
+					<option value="soltrooper">Soltrooper</option>
+					<option value="spirit_quartz">Spirit Quartz</option>
+					<option value="splash_queen">Splash Queen</option>
+					<option value="starlight_tree">Starlight Tree</option>
+					<option value="survivor">Survivor</option>
+					<option value="tree_folk">Tree Folk</option>
+					<option value="tyranno_drake">Tyranno Drake</option>
+					<option value="volcano_dragon">Volcano Dragon</option>
+					<option value="wild_veggies">Wild Veggies</option>
+					<option value="wonder_trick">Wonder Trick</option>
+					<option value="xenoparts">Xenoparts</option>
+					<option value="vehicle_bee">Vehicle Bee</option>
+					<option value="zombie_dragon">Zombie Dragon</option>
+				</select>
+				<br>
+				<i>Filter by Race</i>
+			</td>
+			<td>
+				<select id="compare_filter" name="compare" style="width:48px">
+					<option value="">=</option>
+					<option value="greater_or_equal">>=</option>
+					<option value="less_or_equal"><=</option>
+				</select>
+				<select id="cost_filter" name="cost" style="width:48px">
+					<option value="">All</option>
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="7">7</option>
+					<option value="8">8</option>
+					<option value="9">9</option>
+					<option value="10">10</option>
+					<option value="11">11</option>
+					<option value="12">12</option>
+					<option value="13">13</option>
+					<option value="14">14</option>
+				</select>
+				<br>
+				<i>Filter by Cost</i>
+			</td>
+			<td rowspan="2">
+				<select id="set_filter" name="card_set" multiple style="width:300px">
+					<option value="" selected>All Sets</option>
+					<option value="tcg_only">Original TCG Sets Only</option>
+					<option value="promo">Exclusive Promos</option>
+					<option value="dm-01">DM-01 Base Set</option>
+					<option value="dm-02">DM-02 Evo-Crushinators of Doom</option>
+					<option value="dm-03">DM-03 Rampage of the Super Warriors</option>
+					<option value="dm-04">DM-04 Shadowclash of Blinding Night</option>
+					<option value="dm-05">DM-05 Survivors of the Megapocalypse</option>
+					<option value="dm-06">DM-06 Stomp-a-trons of Invincible Wrath</option>
+					<option value="dm-07">DM-07 Thundercharge of Ultra Destruction</option>
+					<option value="dm-08">DM-08 Epic Dragons of Hyperchaos</option>
+					<option value="dm-09">DM-09 Fatal Brood of Infinite Ruin</option>
+					<option value="dm-10">DM-10 Shockwaves of the Shattered Rainbow</option>
+					<option value="dm-11">DM-11 Blast-o-splosion of Gigantic Rage</option>
+					<option value="dm-12">DM-12 Thrash of the Hybrid Megacreatures</option>
+					<option value="dm-13">DM-13 Maelstrom of Mutated Monstrosities</option>
+					<option value="dm-14">DM-14 Grinding Gears of Gigadevastation</option>
+					<option value="dm-15">DM-15 Attack of the Apex Accelerators</option>
+					<option value="dm-16">DM-16 Zerg-a-crushers of Zero Mercy</option>
+					<option value="dm-17">DM-17 Culmination of Chaotic Catastrophe</option>
+					<option value="dm-19">DM-19 Scourge of the Seismic Supernovas</option>
+					<option value="dm-20">DM-20 Explosive Energons of Extreme Enmity</option>
+					<option value="dm-21">DM-21 Takedown of the Thriller Terminators</option>
+					<option value="dm-22">DM-22 Draco-Destructors of Deathly Demise</option>
+					<option value="dm-23">DM-23 Bold Behemoths of the Bionic Bigbang</option>
+					<option value="dm-24">DM-24 Gruesome Genesis of the Great Gods</option>
+					<option value="dm-25">DM-25 Victorious Vision of Violent Valhalla</option>
+					<option value="dm-26">DM-26 Melee of the Multicolored Megadeuses</option>
+					<option value="dm-27">DM-27 Perfect Purgatory of the Powermongers</option>
+					<option value="dm-28">DM-28 World-beaters of Wicked Belligerence</option>
+					<option value="dm-29">DM-29 Savage Strike of the Superninjas</option>
+					<option value="dm-30">DM-30 Stronghold of Dominating Dyna-heroes</option>
+					<option value="dm-31">DM-31 Origin of the Marauding Megatitans</option>
+					<option value="dm-32">DM-32 Evolution of the Enlightened Emperors</option>
+					<option value="dm-33">DM-33 Rise of the Rambunctious Reapers</option>
+					<option value="dm-34">DM-34 Clobber-trons of Cross Carnage</option>
+					<option value="dm-35">DM-35 Ultralords of Unceasing Upheaval</option>
+				</select>
+				<br>
+				<i>Filter by Set</i>
+			</td>
+		</tr>
+		<!--Beginning of second row in search filter table. -->
+		<tr>
+			<td class="left-td">
+				<select id="type_filter" name="card_type" style="width:150px">
+					<option value="">All Types</option>
+					<option value="spell">Spell</option>
+					<option value="castle">Castle</option>
+					<option value="creature">Creature</option>
+					<option value="cross_gear">Cross Gear</option>
+					<option value="evolution_creature">Evolution Creature</option>
+					<option value="evolution_cross_gear">Evolution Cross Gear</option>
+				</select>
+				<br>
+				<i>Filter by Type</i>
+			</td>
+			<td>
+				<select id="rarity_filter" name="rarity" style="width:100px">
+					<option value="">All Rarities</option>
+					<option value="nr">No Rarity</option>
+					<option value="c">Common</option>
+					<option value="u">Uncommon</option>
+					<option value="r">Rare</option>
+					<option value="vr">Very Rare</option>
+					<option value="sr">Super Rare</option>
+				</select>
+				<br>
+				<i>Filter by Rarity</i>
+			</td>
+		</tr>
+		<!-- Beginning of third row in search filter table. -->
+		<tr>
+			<td class="left-td">
+				<select id="civ_filter" name="civilization" multiple size="6" style="width:150px">
+					<option value="" selected>All Civilizations</option>
+					<option value="light">Light</option>
+					<option value="water">Water</option>
+					<option value="darkness">Darkness</option>
+					<option value="fire">Fire</option>
+					<option value="nature">Nature</option>
+				</select>
+				<div style="display: inline-block; vertical-align: top; font-size: 10pt; width: 100px">
+					<input type="radio" class="match_filter" name="match_civ" value="any" checked>
+					<label for="any">Match any &nbsp; &nbsp; &nbsp; &nbsp; civs selected</label><br>
+					<br>
+					<input type="radio" class="match_filter" name="match_civ" value="exact">
+					<label for="exact">Match exact &nbsp; &nbsp; &nbsp; civs selected</label><br>
+				</div>
+				<br>
+				<i>Filter by Civilizations</i>
+				<sub class="small-symbol" onclick="toggleInfoBox(event)">&#x24d8;</sub>
+				<div id="civ-search-info">To search specifically for multi-civ cards, select all the civs that the multi-civ cards belong to, and check the "Match exact civs selected" button.</div>
+			</td>
+			<td>
+				<select id="keyword_filter" name="keywords" multiple size="6" style="width:135px">
+					<option value="" selected>All Keywords</option>
+					<option value="accelerator">Accelerator</option>
+					<option value="blocker">Blocker</option>
+					<option value="break_bonus">Break Bonus</option>
+					<option value="charger">Charger</option>
+					<option value="crew_break">Crew Breaker</option>
+					<option value="cyclone">Cyclone</option>
+					<option value="deck_evo">Deck Evolution</option>
+					<option value="double_break">Double Breaker</option>
+					<option value="dynamo">Dynamo</option>
+					<option value="fort_energy">Fort Energy</option>
+					<option value="graveyard_evo">Grave Evolution</option>
+					<option value="gravity_zero">Gravity Zero</option>
+					<option value="hand_evo">Hand Evolution</option>
+					<option value="knight_magic">Knight Magic</option>
+					<option value="launcher_energy">Launcher Energy</option>
+					<option value="life_gate">Life Gate</option>
+					<option value="lost_prism">Lost Prism</option>
+					<option value="mana_evo">Mana Evolution</option>
+					<option value="metamorph">Metamorph</option>
+					<option value="meteorburn">Meteorburn</option>
+					<option value="ninja_strike">Ninja Strike</option>
+					<option value="over_drive">Over Drive</option>
+					<option value="power_attack">Power Attacker</option>
+					<option value="quattro_breaker">Quattro Breaker</option>
+					<option value="saver">Saver</option>
+					<option value="shield_force">Shield Force</option>
+					<option value="shield_plus">Shield Plus</option>
+					<option value="shield_trigger">Shield Trigger</option>
+					<option value="silent_skill">Silent Skill</option>
+					<option value="slayer">Slayer</option>
+					<option value="soulshift">Soulshift</option>
+					<option value="speed_attack">Speed Attacker</option>
+					<option value="stealth">Stealth</option>
+					<option value="strike_back">Strike Back</option>
+					<option value="survivor_kw">Survivor</option>
+					<option value="sympathy">Sympathy</option>
+					<option value="tap_ability">Tap Ability</option>
+					<option value="thrilling_three">Thrilling Three</option>
+					<option value="triple_break">Triple Breaker</option>
+					<option value="turbo_rush">Turbo Rush</option>
+					<option value="ultimate_evo">Ultimate Evolution</option>
+					<option value="vortex_evo">Vortex Evolution</option>
+					<option value="wave_striker">Wave Striker</option>
+					<option value="world_breaker">World Breaker</option>
+				</select>
+				<br>
+				<i>Filter by Keyword</i>
+			</td>
+			<td>
+				<select id="category_filter" name="categories" multiple size="6" style="width:300px">
+						<option value="" selected>All Categories</option>
+						<option value="draw">Draw cards</option>
+						<option value="ramp">Ramp (add cards to mana)</option>
+						<option value="tap_opp">Tap opponent's creature</option>
+						<option value="untaps">Untap creature</option>
+						<option value="attack_untapped">Attack untapped creatures</option>
+					<optgroup label="Effect trigger categories">
+						<option value="etb_effect">ETB (enter battle zone) effect</option>
+						<option value="atk_effect">Attack effect</option>
+						<option value="destruction_effect">Destruction effect</option>
+						<option value="leavebz_effect">Leave the battle zone effect</option>
+						<option value="block_effect">Block effect</option>
+						<option value="blocked_effect">Blocked effect</option>
+					</optgroup>
+					<optgroup label="Removal categories">
+						<option value="removal_destroy_creature">Destroy creature</option>
+						<option value="removal_bounce">Bounce creature</option>
+						<option value="removal_to_mana">Send creature to mana</option>
+						<option value="removal_power_based">Power-based removal</option>
+						<option value="spot_removal">Spot removal</option>
+						<option value="mass_removal">Mass removal</option>
+						<option value="cross_gear_removal">Cross gear removal</option>
+						<option value="removal">All removal effects</option>
+					</optgroup>
+					<optgroup label="Attack restriction categories">
+						<option value="cant_attack_any">Can't attack (unconditional)</option>
+						<option value="cant_attack_players">Can't attack players</option>
+						<option value="cant_attack_creatures">Can't attack creatures</option>
+						<option value="cant_attack">All attack restrictions</option>
+					</optgroup>
+						<option value="must_attack">Must attack if able</option>
+						<option value="must_block">Must block if able</option>
+						<option value="destroy_creature_own">Destroy your own creature</option>
+						<option value="suicide">Destroyed upon winning a battle</option>
+						<option value="break_more_shields">Break more shields</option>
+						<option value="breaks_when_blocked">Break shield when blocked</option>
+						<option value="anti_blocker">Anti-blocker</option>
+						<option value="unblockable_anypower">Unblockable</option>
+						<option value="unblockable_power_based">Unblockable (power-based)</option>
+						<option value="unchoosable">Unchoosable</option>
+					<optgroup label="Search categories">
+						<option value="search_any">Search for any</option>
+						<option value="search_creature">Search for creature</option>
+						<option value="search_cross_gear">Search for cross gear</option>
+						<option value="search_spell">Search for spell</option>
+						<option value="search">All search</option>
+					</optgroup>
+						<option value="mana_instead_grave">Put in mana when would be destroyed</option>
+						<option value="hand_instead_grave">Returns to hand when would be destroyed</option>
+						<option value="bz_instead_grave">Stays in battle zone when would be destroyed</option>
+						<option value="returns_to_hand">Returns to hand at end of turn</option>
+						<option value="reduce_cost">Reduce mana cost</option>
+					<optgroup label="Discard categories">
+						<option value="discard_opp">Discard from opponent's hand</option>
+						<option value="discard_own">Discard from your own hand</option>
+						<option value="anti_discard">Counteract discard effects</option>
+					</optgroup>
+						<option value="mana_to_hand_opp">Send opponent's mana to hand</option>
+						<option value="mana_to_hand_own">Send own mana to hand</option>
+						<option value="manaburn_opp">Send opponent's mana to grave</option>
+						<option value="manaburn_own">Send own mana to grave</option>
+						<option value="grave_to_hand_creature">Get creature from grave</option>
+						<option value="grave_to_hand_spell">Get spell from grave</option>
+					<optgroup label="Support categories">
+						<option value="tribal">Tribal support (race-based effects)</option>
+						<option value="tribal_dragons">Tribal Dragon support</option>
+						<option value="support_civ">Civ-based support</option>
+						<option value="support_mono">Mono-civ support</option>
+						<option value="civ_hate">Civ-based hate (anti-support)</option>
+						<option value="support_evo">Evolution support</option>
+						<option value="support_cross_gear">Cross gear support</option>
+					</optgroup>
+					<optgroup label="Give power or abilities">
+						<option value="gives_power">Give power to creature</option>
+						<option value="gives_unblockable">Give unblockable</option>
+						<option value="gives_blocker">Give 'blocker'</option>
+						<option value="gives_slayer">Give 'slayer'</option>
+						<option value="gives">All give effects</option>
+					</optgroup>
+					<optgroup label="Shield interaction effects">
+						<option value="add_shield">Add card to shields</option>
+						<option value="shields_to_hand">Put card from shields to hand</option>
+						<option value="shields_to_grave_own">Send own shields to grave</option>
+						<option value="shields_to_grave_opp">Send opponent's shields to grave</option>
+						<option value="anti_shield_trigger">Counteract shield trigger effects</option>
+						<option value="save_shields">Save shields</option>
+					</optgroup>
+					<optgroup label="Peek effects">
+						<option value="peek_shield">Peek at shield</option>
+						<option value="peek_hand">Peek at opponent's hand</option>
+						<option value="peek_topdeck">Peek at top of deck</option>
+					</optgroup>
+					<optgroup label="Other metacategories">
+						<option value="targets">Targeting effects</option>
+						<option value="nontargeting">Nontargeting effects</option>
+						<option value="oppchooses">Opponent chooses</option>
+					</optgroup>
+				</select>
+				<br>
+				<i>Filter by Category</i>
+			</td>
+		</tr>
+		<!-- Beginning of fourth row in search filter table. -->
+		<tr>
+			<td id="name-field-td" class="vert-td">
+				<input id="search-term" name="search_term" type="text" size="35" maxlength="100">
+				<br>
+				<label for="search-term"><i>Search for a card by name.</i></label>
+			</td>
+			<td class="vert-td">
+				<div style="display: inline-block;">
+					<input type="submit" value="Search!">
+				</div>
+				<div style="display: inline-block; margin-left: 5px;">
+					<input type="button" onclick="resetPage()" value="Reset">
+				</div>
+			</td>
+			<td class="vert-td">
+				<select id="sort_by" name="sort_by" style="width:200px">
+					<option value="">Sort by Set and Collector #</option>
+					<option value="civilization">Sort by Civilization</option>
+					<option value="cost">Sort by Cost</option>
+					<option value="card_name">Sort by Name</option>
+					<option value="power">Sort by Power</option>
+					<option value="race">Sort by Race</option>
+					<option value="rarity">Sort by Rarity</option>
+					<option value="card_type">Sort by Type</option>
+				</select>
+				<select id="sort_mode" name="mode" style="width:48px">
+					<option value="">ASC</option>
+					<option value="desc">DES</option>
+				</select>
+				<input type="button" onclick="sort()" value="Sort">
+				<br>
+				<i>Pick sort order</i>
+			</td>
+		</tr>
+</tbody>
+</table>
 </form>
 </div>
 <div id="image-panel-div">

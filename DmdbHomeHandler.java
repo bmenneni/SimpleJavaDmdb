@@ -7,7 +7,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.File;
 import java.nio.file.Files;
-import java.net.URI;
 
 public class DmdbHomeHandler implements HttpHandler {
 	

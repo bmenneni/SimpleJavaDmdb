@@ -89,7 +89,7 @@ public class DmdbSearchHandler implements HttpHandler {
 			else if("rarity".equals(sKey)) {
 				sqlQueryBuilder.append(sKey + "='" + sVals.get(0) + "'");
 			}
-			else if("card_name".equals(sKey)) {
+			else if("search_term".equals(sKey)) {
 				char[] chars = sVals.get(0).toCharArray();
 				for(int i = 0; i<chars.length; i++) {
 					switch(chars[i]) {
@@ -104,7 +104,7 @@ public class DmdbSearchHandler implements HttpHandler {
 					}
 				}
 				String cardname = new String(chars);
-				sqlQueryBuilder.append(sKey + " LIKE \"%" + cardname + "%\"");
+				sqlQueryBuilder.append("card_name LIKE \"%" + cardname + "%\"");
 			}
 			else if("card_set".equals(sKey)) {
 				boolean tcgOnly = false;
@@ -198,8 +198,7 @@ public class DmdbSearchHandler implements HttpHandler {
 	
 	public String buildResultsTable(String sqlQuery) throws SQLException {
 		StringBuilder resultsTableBuilder = new StringBuilder();
-		resultsTableBuilder.append("<p class=\"small-headline\">TIP: Shift-click on a search result to open the card image in a new window.</p>\n")
-						   .append("<table id=\"results-table\">\n")
+		resultsTableBuilder.append("<br>\n<table id=\"results-table\">\n")
 						   .append("<thead>\n\t<tr>\n\t\t<th>#</th>\n")
 						   .append("\t\t<th>Name</th>\n")
 						   .append("\t\t<th>Civilization</th>\n")
@@ -210,9 +209,9 @@ public class DmdbSearchHandler implements HttpHandler {
 						   .append("\t\t<th>Rarity</th>\n")
 						   .append("\t\t<th>Col #</th>\n")
 						   .append("\t\t<th>Set</th>\n\t</tr>\n</thead>\n<tbody>\n");
-		try(Connection conn = DatabaseConnectionManager.getConnection()) {
-			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery(sqlQuery);
+		Connection conn = DatabaseConnectionManager.getConnection();
+		try(Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sqlQuery)) {
 			int rowCount = 0;
 			while (rs.next()) {
 				rowCount++;
@@ -347,7 +346,7 @@ public class DmdbSearchHandler implements HttpHandler {
 		return htmlResponseBuilder.toString();
 	}
 	
-	public void sendErrorResponse(HttpExchange exchange, int statusCode, String errorMessage) throws IOException {
+	void sendErrorResponse(HttpExchange exchange, int statusCode, String errorMessage) throws IOException {
 		exchange.sendResponseHeaders(statusCode, errorMessage.length());
 		try (OutputStream stream = exchange.getResponseBody()) {
 			stream.write(errorMessage.getBytes());

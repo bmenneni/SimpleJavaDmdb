@@ -30,7 +30,7 @@ document.getElementById("results-table").querySelectorAll("tbody tr").forEach(ro
     const card_id = row.dataset.id;
     const card_image = document.getElementById("card-image");
     const image_panel = card_image.parentElement;
-    const imgURL = "https://d2d61uxafrrtdf.cloudfront.net/" + card_id + ".webp";
+    const imgURL = "https://img.duelmasters.us/" + card_id + ".webp";
     row.addEventListener("mouseenter", function() {
         card_image.src = imgURL;
         image_panel.style.display = "inline-block";
@@ -39,14 +39,8 @@ document.getElementById("results-table").querySelectorAll("tbody tr").forEach(ro
         image_panel.style.display = "none";
     });
     row.addEventListener("click", function(event) {
-        if(event.shiftKey) {
-            window.open(imgURL, '_blank');
-        }
-        else {
-            const card_name = row.getElementsByTagName('td')[1].textContent;
-            const wikiURL = "https://duelmasters.fandom.com/wiki/" + card_name;
-            window.open(wikiURL, '_blank');
-        }
+        const cardviewURL = "http://localhost:8080/cardview/" + card_id;
+        window.open(cardviewURL, '_blank');
     });
 });
 
