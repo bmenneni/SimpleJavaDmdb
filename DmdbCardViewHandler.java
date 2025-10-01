@@ -156,7 +156,7 @@ public class DmdbCardViewHandler implements HttpHandler {
 			} else cardViewBuilder.append(">\n");
 			cardViewBuilder.append("\t\t</div>\n\t\t<div id=\"card-info-container\">\n")
 						   .append("\t\t\t<p><b>Name:</b> <a href=\"https://duelmasters.fandom.com/wiki/")
-						   .append(card_name).append("\"").append(card_name).append("</a></p>\n")
+						   .append(card_name).append("\">").append(card_name).append("</a></p>\n")
 						   .append("\t\t\t<p><b>Civilization:</b> ");
 			for(int i = 0; i<civs.length; i++) {
 				String civ = civs[i];

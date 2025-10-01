@@ -240,7 +240,7 @@ public class DmdbSearchHandler implements HttpHandler {
 				String[] civs = rs.getString("civilization").split("/");
 				StringBuilder civIconBuilder = new StringBuilder();
 				for(String civ : civs) {
-					civIconBuilder.append("<img src=\icons/civs/").append(civ).append(".webp\" title=\"")
+					civIconBuilder.append("<img src=\"/icons/civs/").append(civ).append(".webp\" title=\"")
 								  .append(civ.substring(0,1).toUpperCase()).append(civ.substring(1))
 								  .append("\">");
 				}
