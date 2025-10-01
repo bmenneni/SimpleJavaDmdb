@@ -156,12 +156,12 @@ public class DmdbCardViewHandler implements HttpHandler {
 			} else cardViewBuilder.append(">\n");
 			cardViewBuilder.append("\t\t</div>\n\t\t<div id=\"card-info-container\">\n")
 						   .append("\t\t\t<p><b>Name:</b> <a href=\"https://duelmasters.fandom.com/wiki/")
-						   .append(card_name).append("\" target=\"_blank\">").append(card_name).append("</a></p>\n")
+						   .append(card_name).append("\"").append(card_name).append("</a></p>\n")
 						   .append("\t\t\t<p><b>Civilization:</b> ");
 			for(int i = 0; i<civs.length; i++) {
 				String civ = civs[i];
 				cardViewBuilder.append(civ.substring(0,1).toUpperCase()).append(civ.substring(1))
-							   .append(" <img src=\"/civ-icons/").append(civ).append(".webp\">");
+							   .append(" <img src=\"/icons/civs/").append(civ).append(".webp\">");
 				if(i<civs.length-1) cardViewBuilder.append(" / ");
 			}
 			cardViewBuilder.append("</p>\n")
@@ -193,7 +193,7 @@ public class DmdbCardViewHandler implements HttpHandler {
 			if(card_text.length()>0) {
 				//System.out.println("Card text for " + card_name + ":");
 				String[] textArr = card_text.split("\u25A0");
-				cardViewBuilder.append("\t\t\t<p><b>Card Text:</b></p>\n")
+				cardViewBuilder.append("\t\t\t<p><b>Card Rules Text:</b></p>\n")
 							   .append("\t\t\t<ul id=\"rules-text\">\n");
 				for(String textItem : textArr) {
 					if(textItem.length()>4) {

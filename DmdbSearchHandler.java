@@ -240,7 +240,7 @@ public class DmdbSearchHandler implements HttpHandler {
 				String[] civs = rs.getString("civilization").split("/");
 				StringBuilder civIconBuilder = new StringBuilder();
 				for(String civ : civs) {
-					civIconBuilder.append("<img src=\"civ-icons/").append(civ).append(".webp\" title=\"")
+					civIconBuilder.append("<img src=\icons/civs/").append(civ).append(".webp\" title=\"")
 								  .append(civ.substring(0,1).toUpperCase()).append(civ.substring(1))
 								  .append("\">");
 				}
@@ -295,11 +295,11 @@ public class DmdbSearchHandler implements HttpHandler {
 						case "sr":
 							rarityFullName = "Super Rare";
 					}
-					resultsTableBuilder.append("\t\t<td class=\"center-td\"><img src=\"icons/rarity-" + rarity + ".png\" title=\"" + rarityFullName + "\"></td>\n");
+					resultsTableBuilder.append("\t\t<td class=\"center-td\"><img src=\"icons/rarities/rarity-" + rarity + ".png\" title=\"" + rarityFullName + "\"></td>\n");
 				}
 				resultsTableBuilder.append("\t\t<td>" + rs.getString("coll_num") + "</td>\n");
 				String card_set = rs.getString("card_set");
-				resultsTableBuilder.append("\t\t<td class=\"center-td\"><img src=\"icons/" + card_set + ".png\" title=\"" + card_set.toUpperCase() + "\"></td>\n")
+				resultsTableBuilder.append("\t\t<td class=\"center-td\"><img src=\"icons/sets/" + card_set + ".png\" title=\"" + card_set.toUpperCase() + "\"></td>\n")
 								   .append("\t</tr>\n");
 			}
 		}
