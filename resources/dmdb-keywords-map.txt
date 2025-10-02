@@ -1,0 +1,18 @@
+Blocker::Blocker;;<img src="/icons/keywords/blocker.webp" class="bullet-img"> Blocker;;null
+Shield trigger::Shield trigger;;<img src="/icons/keywords/shield-trigger.webp" class="bullet-img"> Shield trigger;;null
+Survivor::Survivor ability.);;<img src="/icons/keywords/survivor.webp"> ability.)\n\t\t\t\t\t\t<p><img src="/icons/keywords/survivor.webp">;;</p>\n\t\t\t\t</li>\n
+tap ability::tap ability.;;<img src="/icons/keywords/tap-ability.webp"> ability.\n\t\t\t\t\t\t<p><img src="/icons/keywords/tap-ability.webp">;;</p>\n\t\t\t\t</li>\n
+Turbo rush::turbo rush ability until the end of the turn.);;<img src="/icons/keywords/turbo-rush.webp"> ability until the end of the turn.)\n\t\t\t\t\t\t<p><img src="/icons/keywords/turbo-rush.webp"> ;;</p>\n\t\t\t\t</li>\n
+Silent skill::silent skill ability.);;<img src="/icons/keywords/silent-skill.webp"> ability.)\n\t\t\t\t\t\t<p><img src="/icons/keywords/silent-skill.webp"> ;;</p>\n\t\t\t\t</li>\n
+Wave striker::wave striker ability.);;<img src="/icons/keywords/wave-striker.webp"> ability.)\n\t\t\t\t\t\t<p><img src="/icons/keywords/wave-striker.webp"> ;;</p>\n\t\t\t\t</li>\n
+Accelerator::accelerator ability.);;<img src="/icons/keywords/accelerator.webp"> ability.)\n\t\t\t\t\t\t<p><img src="/icons/keywords/accelerator.webp"> ;;</p>\n\t\t\t\t</li>\n
+Fort Energy::fort energy ability.);;<img src="/icons/keywords/fort-energy.webp"> ability.)\n\t\t\t\t\t\t<p><img src="/icons/keywords/fort-energy.webp"> ;;</p>\n\t\t\t\t</li>\n
+Break Bonus::break bonus ability.);;<img src="/icons/keywords/break-bonus.webp"> ability.)\n\t\t\t\t\t\t<p><img src="/icons/keywords/break-bonus.webp"> ;;</p>\n\t\t\t\t</li>\n
+{knight_magic}::{knight_magic};;<img src="/icons/keywords/knight-magic.webp" class="bullet-img">;;null
+Knight Magic::Knight Magic ability;;<img src="/icons/keywords/knight-magic.webp"> ability;;null
+Metamorph::metamorph ability.);;<img src="/icons/keywords/metamorph.webp"> ability.)\n\t\t\t\t\t\t<p><img src="/icons/keywords/metamorph.webp"> ;;</p>\n\t\t\t\t</li>\n
+Over Drive::over drive ability.);;<img src="/icons/keywords/over-drive.webp"> ability.)\n\t\t\t\t\t\t<p><img src="/icons/keywords/over-drive.webp"> ;;</p>\n\t\t\t\t</li>\n
+{over_drive}::{over_drive};;<p><img src="/icons/keywords/over-drive.webp">;;</p>\n\t\t\t\t</li>\n
+Shield Force::shield force ability.);;<img src="/icons/keywords/shield-force.webp"> ability.)\n\t\t\t\t\t\t<p><img src="/icons/keywords/shield-force.webp"> ;;</p>\n\t\t\t\t</li>\n
+Strike Back::Strike Back;;<img src="/icons/keywords/strike-back.webp" class="bullet-img"> Strike Back;;null
+Thrilling Three::thrilling three ability once. Then put the revealed cards on the bottom of your deck in any order.);;<img src="/icons/keywords/thrilling-three.webp"> ability once. Then put the revealed cards on the bottom of your deck in any order.)\n\t\t\t\t\t\t<p><img src="/icons/keywords/thrilling-three.webp"> ;;</p>\n\t\t\t\t</li>\n
