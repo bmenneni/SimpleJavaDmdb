@@ -1,6 +1,5 @@
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpExchange;
-
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.io.IOException;
@@ -12,10 +11,13 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DmdbCardViewHandler implements HttpHandler {
 	
 	final int[] cardVideoIds;
+	final HashMap<String, String[]> keywordMap;
 	String baseQuery = "SELECT card_name, cost, civilization, card_type, race, power, card_text FROM Card JOIN RulesText USING (card_id) WHERE card_id=";
 	
 	public DmdbCardViewHandler() {
@@ -32,6 +34,23 @@ public class DmdbCardViewHandler implements HttpHandler {
 			cardVideoIds[i] = card_id;
 		}
 		Arrays.sort(cardVideoIds);
+		keywordMap = new HashMap<>();
+		List<String> keywordList = new ArrayList<String>();
+		try {
+			keywordList = Files.readAllLines(Paths.get("resources/dmdb-keywords-map.txt"));
+		} catch(IOException ioe) {
+			ioe.printStackTrace();
+		}
+		for(String s : keywordList) {
+			String[] pair = s.split("::");
+			String[] vals = pair[1].split(";;");
+			for(int i = 1; i<3; i++) {
+				vals[i] = vals[i].replace("\\n","\n");
+				vals[i] = vals[i].replace("\\t","\t");
+			}
+			if(vals.length!=3) throw new RuntimeException("Invalid keyword map. Check string values.");
+			keywordMap.put(pair[0], vals);
+		}
 	}
 	
 	public void handle(HttpExchange exchange) throws IOException {
@@ -196,11 +215,20 @@ public class DmdbCardViewHandler implements HttpHandler {
 				cardViewBuilder.append("\t\t\t<p><b>Card Rules Text:</b></p>\n")
 							   .append("\t\t\t<ul id=\"rules-text\">\n");
 				for(String textItem : textArr) {
-					if(textItem.length()>4) {
+					if(textItem.length()>1) {
 						//System.out.println("Text Item: " + textItem + " (Length = " + textItem.length() + ")");
+						String textFoot = "\n\t\t\t\t</li>\n";
+						for(Map.Entry<String, String[]> entry : keywordMap.entrySet()) {
+							if(textItem.contains(entry.getKey())) {
+								textItem = textItem.replace(entry.getValue()[0],entry.getValue()[1]);
+								if(!"null".equals(entry.getValue()[2])) {
+									textFoot = entry.getValue()[2];
+								}
+							}
+						}
 						textItem = textItem.replace("(", "<i>(");
 						textItem = textItem.replace(")", ")</i>");
-						cardViewBuilder.append("\t\t\t\t<li>").append(textItem).append("</li>\n");
+						cardViewBuilder.append("\t\t\t\t<li>\n\t\t\t\t\t").append(textItem).append(textFoot);
 					}
 				}
 				cardViewBuilder.append("\t\t\t</ul>\n");

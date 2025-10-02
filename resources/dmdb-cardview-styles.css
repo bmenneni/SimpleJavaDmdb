@@ -53,6 +53,14 @@ body {
 #rules-text li {
 	margin-bottom: 10px;
 }
+li:has(.bullet-img) {
+	list-style-type: none;
+	margin-left: -1rem;
+}
+#rules-text li p {
+	margin-top: 0.5rem;
+	margin-left: 1rem;
+}
 #toggle-btn {
 	border-width: 3px;
 	border-radius: 18px;
