@@ -1,8 +1,15 @@
+const baseUrl = window.location.origin;
+const cardInfobox = document.getElementById("civ-search-info");
+const searchInfobox = document.getElementById("search-term-info");
+const resultsTable = document.getElementById("results-table");
+
 document.addEventListener("click", (event) => {
-	const infobox = document.getElementById("civ-search-info");
-	if(infobox.style.display == "block" && !infobox.contains(event.target)) {
-		infobox.style.display = "none";
+	if(cardInfobox.style.display == 'block' && !cardInfobox.contains(event.target)) {
+		cardInfobox.style.display = 'none';
 	}
+    if(searchInfobox.style.display == 'block' && !searchInfobox.contains(event.target)) {
+        searchInfobox.style.display = 'none';
+    }
 });
 
 document.getElementById("filter-form").addEventListener("submit", function (event) {
@@ -26,32 +33,38 @@ document.getElementById("filter-form").addEventListener("submit", function (even
     }
 });
 
-document.getElementById("results-table").querySelectorAll("tbody tr").forEach(row => {
-    const card_id = row.dataset.id;
-    const card_image = document.getElementById("card-image");
-    const image_panel = card_image.parentElement;
-    const imgURL = "https://img.duelmasters.us/" + card_id + ".webp";
-    row.addEventListener("mouseenter", function() {
-        card_image.src = imgURL;
-        image_panel.style.display = "inline-block";
+if(resultsTable) {
+    resultsTable.querySelectorAll("tbody tr").forEach(row => {
+        const card_id = row.dataset.id;
+        const card_image = document.getElementById("card-image");
+        const image_panel = card_image.parentElement;
+        const imgURL = "https://img.duelmasters.us/" + card_id + ".webp";
+        row.addEventListener("mouseenter", function() {
+            card_image.src = imgURL;
+            image_panel.style.display = "inline-block";
+        });
+        row.addEventListener("mouseleave", function() {
+            image_panel.style.display = "none";
+        });
+        row.addEventListener("click", function(event) {
+            const cardviewUrl = new URL("/cardview/" + card_id, baseUrl);
+            window.open(cardviewUrl, '_blank');
+        });
     });
-    row.addEventListener("mouseleave", function() {
-        image_panel.style.display = "none";
-    });
-    row.addEventListener("click", function(event) {
-        const cardviewURL = "http://localhost:8080/cardview/" + card_id;
-        window.open(cardviewURL, '_blank');
-    });
-});
+}
 
-function toggleInfoBox(event) {
+function toggleCardInfoBox(event) {
     event.stopPropagation();
-    const infobox = document.getElementById("civ-search-info");
-    infobox.style.display = "block";
+    cardInfobox.style.display = "block";
+}
+
+function toggleSearchTermInfoBox(event) {
+    event.stopPropagation();
+    searchInfobox.style.display = "block";
 }
 
 function resetPage() {
-	window.location = window.location.origin;
+	window.location = baseUrl;
 }
 
 function sort() {
@@ -76,13 +89,15 @@ function sort() {
             break;
         case 'power':
             columnIndex = 6;
+            break;
+        case 'rarity':
+            columnIndex = 7;
     }
     
-    const resultsTable = document.getElementById("results-table");
     const resultsBody = resultsTable.querySelector('tbody');
     const rows = Array.from(resultsBody.getElementsByTagName('tr'));
 
-    if(sortParameter=='set') {
+    if(sortParameter=='') {
         rows.sort((a, b) => {
             if(sortMode=='desc') {
                 return b.dataset.id - a.dataset.id;
@@ -92,14 +107,25 @@ function sort() {
         });
     }
 
+    else if(sortParameter=='civilization') {
+        rows.sort((a, b) => {
+            let aValue = a.getElementsByTagName('td')[columnIndex].querySelector('img').getAttribute('title');
+            let bValue = b.getElementsByTagName('td')[columnIndex].querySelector('img').getAttribute('title');
+            if(sortMode=='desc') {
+                return bValue.localeCompare(aValue);              
+            } else {
+                return aValue.localeCompare(bValue);
+            }
+        });
+    }
+
     else if(sortParameter=='rarity') {
         function getRarityValue(row) {
-            let rarity;
-            let rarityValue;
-            if(row.dataset.id>9005) {
-                rarityValue = 0;
-            } else {
-                rarity = row.querySelector('img').title;
+            const rarityElement = row.getElementsByTagName('td')[columnIndex].querySelector('img');
+            let rarityValue = 0;
+            let rarity = "";
+            if(rarityElement) {
+                rarity = rarityElement.getAttribute('title');
             }
             switch(rarity) {
                 case "Common":
@@ -119,10 +145,10 @@ function sort() {
             }
             return rarityValue;
         }
-        if(sortMode=='asc') {
-            rows.sort((a, b) => getRarityValue(a) - getRarityValue(b));
-        } else {
+        if(sortMode=='desc') {
             rows.sort((a, b) => getRarityValue(b) - getRarityValue(a));
+        } else {
+            rows.sort((a, b) => getRarityValue(a) - getRarityValue(b));
         }
     }
 
@@ -142,26 +168,28 @@ function sort() {
             let bInt;
             if((a.getElementsByTagName('td')[columnIndex].textContent)==="") {
                 aInt = -100;
+            } else {
+                aInt = parseInt(a.getElementsByTagName('td')[columnIndex].textContent);
             }
-            else aInt = parseInt(a.getElementsByTagName('td')[columnIndex].textContent);
             if((b.getElementsByTagName('td')[columnIndex].textContent)==="") {
                 bInt = -100;
+            } else {
+                bInt = parseInt(b.getElementsByTagName('td')[columnIndex].textContent);
             }
-            else bInt = parseInt(b.getElementsByTagName('td')[columnIndex].textContent);
-            if(sortMode=='asc') {
-                return aInt - bInt;
-            } else return bInt - aInt;
-        });     
+            if(sortMode=='desc') {
+                return bInt - aInt;
+            } else return aInt - bInt;
+        });
     }
 
     else {
         rows.sort((a, b) => {
             let aValue = a.getElementsByTagName('td')[columnIndex].textContent;
             let bValue = b.getElementsByTagName('td')[columnIndex].textContent;
-            if(sortMode=='asc') {
-                return aValue.localeCompare(bValue);              
+            if(sortMode=='desc') {
+                return bValue.localeCompare(aValue);              
             } else {
-                return bValue.localeCompare(aValue);
+                return aValue.localeCompare(bValue);
             }
         });
     }
