@@ -17,8 +17,16 @@ public class DmdbSearchHandler implements HttpHandler {
 	
 	public void handle(HttpExchange exchange) throws IOException {
 		try {
+			String path = exchange.getRequestURI().getPath();
+			if(!"/search".equals(path)) {
+				exchange.sendResponseHeaders(404, -1);
+				exchange.close();
+				return;
+			}
 			String rawQuery = exchange.getRequestURI().getRawQuery();
-			HashMap<String, List<String>> params = parseQueryParams(URLDecoder.decode(rawQuery, StandardCharsets.UTF_8));
+			String decodedQuery = "";
+			if(rawQuery!=null) decodedQuery = URLDecoder.decode(rawQuery, StandardCharsets.UTF_8);
+			HashMap<String, List<String>> params = parseQueryParams(decodedQuery);
 			String sqlQuery = getDmdbQuery(params);
 			String resultsTable = buildResultsTable(sqlQuery);
 			String htmlResponse = buildHtmlResponse("resources/dmdb.html", params, resultsTable);
